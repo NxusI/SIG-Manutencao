@@ -70,14 +70,65 @@ O sistema utilizará uma arquitetura moderna baseada em JavaScript, com foco em 
 
 ---
 
-## ✨ Principais Funcionalidades
+✨ Principais Funcionalidades (Requisitos Funcionais)
 
-* **Registro de Ordens de Serviço (OS):** Criação de OS formais para equipamentos internos e serviços da comunidade, substituindo o acordo verbal.
-* **Gerenciamento de Fluxo:** Acompanhamento do status da OS (Diagnóstico, Aguardando Confirmação, Em Reparo, Pronto para Entrega).
-* **Controle de Prazos e Garantias:** Registro de datas de diagnóstico, conclusão e garantia formal (3 meses).
-* **Módulo Financeiro:** Registro de gastos (peças), receita (serviços) e geração de relatórios de lucro/desempenho da célula de Manutenção.
-* **Histórico e Consulta:** Facilidade para o técnico-gestor consultar o histórico de reparos por equipamento ou cliente.
+🔑 Módulo de Autenticação e Gestão de Usuários
 
+[ ] Permitir que o gestor realize o login (autenticação) com usuario e senha.
+
+[ ] Permitir que o gestor recupere ou edite sua senha.
+
+[ ] Permitir o cadastro de um novo gestor ou a remoção de um gestor existente.
+
+👤 Módulo de Cadastro e Início de Atendimento
+
+[] Cadastrar novos clientes (nome, e-mail, telefone e endereço).
+
+[ ] Registrar uma solicitação de manutenção (equipamento, problema relatado).
+
+[ ] Gerar um "chamado" automaticamente após o registro de uma nova solicitação.
+
+[ ] Classificar o chamado registrado por níveis de prioridade (alta, normal).
+
+[ ] Vincular o "chamado" ao responsável pela execução do serviço.
+
+⚙️ Gestão de Fluxo e Status
+
+[ ] Gerenciar o status do chamado, incluindo os estágios Aguardando Confirmação do Cliente e Em Reparo.
+
+[ ] Notificar o gestor sobre chamados que excederem o prazo de 3 dias para diagnóstico/orçamento.
+
+[ ] Permitir o registro de notas e atualizações no histórico do chamado.
+
+🧾 Ordem de Serviço (OS) e Finalização
+
+[ ] Permitir que o responsável preencha os dados de orçamento previsto na OS.
+
+[ ] Permitir a finalização da OS após a conclusão e aprovação do cliente.
+
+[ ] Registrar na OS o total gasto com materiais/insumos.
+
+[ ] Registrar na OS o valor final cobrado pelo serviço.
+
+[ ] Marcar o "chamado" como concluído no sistema.
+
+📨 Comunicação Automatizada
+
+[ ] Enviar uma comunicação automática (e-mail) ao cliente com o orçamento, solicitando a confirmação do serviço.
+
+[ ] Enviar automaticamente a OS finalizada para o e-mail do cliente.
+
+[ ] Integrar o sistema a um serviço de disparo automático de e-mails.
+
+📊 Dashboard Gerencial (KPIs)
+
+[ ] Apresentar um painel gerencial (dashboard) dinâmico para gestores.
+
+[ ] Exibir métricas-chave, como o volume de serviços prestados.
+
+[ ] Exibir os custos operacionais e o lucro total e por serviço.
+
+[ ] Exibir o tempo médio de resolução dos chamados.
 ---
 
 ## 🚧 Status do Projeto
