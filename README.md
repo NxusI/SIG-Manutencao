@@ -75,10 +75,10 @@ O sistema utilizará uma arquitetura moderna baseada em JavaScript, com foco em 
 
 ---
 
-✨ Principais Funcionalidades
+## ✨ Principais Funcionalidades
 
 
-🔑 Módulo de Autenticação e Gestão de Usuários
+### 🔑 Módulo de Autenticação e Gestão de Usuários
 
 
 [ ] Permitir que o gestor realize o login (autenticação) com usuario e senha.
@@ -87,7 +87,7 @@ O sistema utilizará uma arquitetura moderna baseada em JavaScript, com foco em 
 
 [ ] Permitir o cadastro de um novo gestor ou a remoção de um gestor existente.
 
-👤 Módulo de Cadastro e Início de Atendimento
+### 👤 Módulo de Cadastro e Início de Atendimento
 
 [ ] Cadastrar novos clientes (nome, e-mail, telefone e endereço).
 
@@ -99,9 +99,7 @@ O sistema utilizará uma arquitetura moderna baseada em JavaScript, com foco em 
 
 [ ] Vincular o "chamado" ao responsável pela execução do serviço.
 
-
-⚙️ Gestão de Fluxo e Status
-
+### ⚙️ Gestão de Fluxo e Status
 
 [ ] Gerenciar o status do chamado, incluindo os estágios Aguardando Confirmação do Cliente e Em Reparo.
 
@@ -109,9 +107,7 @@ O sistema utilizará uma arquitetura moderna baseada em JavaScript, com foco em 
 
 [ ] Permitir o registro de notas e atualizações no histórico do chamado.
 
-
-🧾 Ordem de Serviço (OS) e Finalização
-
+### 🧾 Ordem de Serviço (OS) e Finalização
 
 [ ] Permitir que o responsável preencha os dados de orçamento previsto na OS.
 
@@ -123,9 +119,7 @@ O sistema utilizará uma arquitetura moderna baseada em JavaScript, com foco em 
 
 [ ] Marcar o "chamado" como concluído no sistema.
 
-
-📨 Comunicação Automatizada
-
+### 📨 Comunicação Automatizada
 
 [ ] Enviar uma comunicação automática (e-mail) ao cliente com o orçamento, solicitando a confirmação do serviço.
 
@@ -133,9 +127,7 @@ O sistema utilizará uma arquitetura moderna baseada em JavaScript, com foco em 
 
 [ ] Integrar o sistema a um serviço de disparo automático de e-mails.
 
-
-📊 Dashboard Gerencial
-
+### 📊 Dashboard Gerencial
 
 [ ] Apresentar um painel gerencial (dashboard) dinâmico para gestores.
 
