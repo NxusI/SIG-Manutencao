@@ -77,7 +77,9 @@ O sistema utilizará uma arquitetura moderna baseada em JavaScript, com foco em 
 
 ✨ Principais Funcionalidades
 
+
 🔑 Módulo de Autenticação e Gestão de Usuários
+
 
 [ ] Permitir que o gestor realize o login (autenticação) com usuario e senha.
 
@@ -97,7 +99,9 @@ O sistema utilizará uma arquitetura moderna baseada em JavaScript, com foco em 
 
 [ ] Vincular o "chamado" ao responsável pela execução do serviço.
 
+
 ⚙️ Gestão de Fluxo e Status
+
 
 [ ] Gerenciar o status do chamado, incluindo os estágios Aguardando Confirmação do Cliente e Em Reparo.
 
@@ -105,7 +109,9 @@ O sistema utilizará uma arquitetura moderna baseada em JavaScript, com foco em 
 
 [ ] Permitir o registro de notas e atualizações no histórico do chamado.
 
+
 🧾 Ordem de Serviço (OS) e Finalização
+
 
 [ ] Permitir que o responsável preencha os dados de orçamento previsto na OS.
 
@@ -117,7 +123,9 @@ O sistema utilizará uma arquitetura moderna baseada em JavaScript, com foco em 
 
 [ ] Marcar o "chamado" como concluído no sistema.
 
+
 📨 Comunicação Automatizada
+
 
 [ ] Enviar uma comunicação automática (e-mail) ao cliente com o orçamento, solicitando a confirmação do serviço.
 
@@ -125,7 +133,9 @@ O sistema utilizará uma arquitetura moderna baseada em JavaScript, com foco em 
 
 [ ] Integrar o sistema a um serviço de disparo automático de e-mails.
 
+
 📊 Dashboard Gerencial
+
 
 [ ] Apresentar um painel gerencial (dashboard) dinâmico para gestores.
 
@@ -139,7 +149,7 @@ O sistema utilizará uma arquitetura moderna baseada em JavaScript, com foco em 
 
 ## 📄 Documentação Técnica
 
-* 📝 **Relatório Técnico:** [Acessar Relatório]([LINK_PARA O SEU RELATÓRIO])
+* 📝 **Relatório Técnico:** [Acessar Relatório]([LINK PARA O RELATÓRIO])
 
 ---
 
