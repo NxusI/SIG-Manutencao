@@ -33,20 +33,6 @@
 Este projeto é desenvolvido pela equipe **Nexus One** da **Universidade Federal do Ceará (UFC Virtual)**.
 
 * [**🔗 Perfil da Organização no GitHub**](https://github.com/NxusI)
-* **📄 Membros e Funções:** Consulte o [README](https://github.com/NxusI/.github/blob/main/profile/README.md) da Organização para a lista completa de membros e orientadores.
-
----
-
-## :busts_in_silhouette: Equipe Nexus One
-
-| **NOME** | **FUNÇÃO** | **GitHub** |
-| :--- | :--- | :--- |
-| Brunna Raiany Moura Dos Santos | Design - prototipaçao | [GitHub](https://github.com/brunnaraiany) |
-| Fernando De Oliveira Barros | Design - Prototipaçao - Front | [GitHub](https://github.com/fernandobarolli) |
-| Gabriel Vitor Sales Nascimento | Banco de Dados - Back | [GitHub](https://github.com/PokeGV) |
-| Maria Leydiane De Melo Conceição | Gestão - Design - Prototipaçao - Front - Back | [GitHub](https://github.com/l4addy) |
-| Samuel Bruno Silva Secunde | Banco de Dados - Back | [GitHub](https://github.com/samuelsecunde) |
-| Túlio de Oliveira Vasconcelos | Design - Prototipaçao - Front | [GitHub](https://github.com/tuliolivas) |
  
  ---
 
@@ -61,12 +47,22 @@ O sistema utilizará uma arquitetura moderna baseada em JavaScript, com foco em 
 
 ### Frontend
 > Utiliza o framework Next.js e React, com bibliotecas ShadCN/UI e Lucide Icons para componentes modernos e acessíveis.
+
+| Componente | Tecnologia | Referência Oficial |
+| :--- | :--- | :--- |
+| **Frontend** | ![Next.js](https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=next.js&logoColor=white) / ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB) | [cite_start][Documentação do Next.js](https://nextjs.org/docs)  |
+| **UI/UX** | ShadCN/UI e Lucide Icons | [cite_start][ShadCN/UI Docs](https://ui.shadcn.com/)  |
+| **Backend** | ![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=node.js&logoColor=white) / ![Express.js](https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white) | [cite_start][Site Oficial do Node.js](https://nodejs.org/en/download/) [cite: 35] |
+| **Banco de Dados** | ![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white) | [cite_start][Página de Download do MySQL](https://dev.mysql.com/downloads/)[cite: 37] |
+
+
 ![Next.js](https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=next.js&logoColor=white)
 ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
 ![ShadCN/UI](https://img.shields.io/badge/ShadCN%2FUI-000000?style=for-the-badge&logo=react&logoColor=white)
 
 ### Backend
 > Construído com Node.js e Express.
+
 ![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=node.js&logoColor=white)
 ![Express.js](https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white)
 
@@ -93,3 +89,32 @@ O sistema utilizará uma arquitetura moderna baseada em JavaScript, com foco em 
 
 * **Status:** 🚧 Em Desenvolvimento (Fase de [Design/Protótipo/Implementação Inicial])
 * **Contribuição:** Se você faz parte da equipe Nexus One, por favor, siga o nosso **fluxo de trabalho de branches** e o **padrão de commits semânticos**.
+
+## 🛠️ Tecnologias Utilizadas
+
+O sistema utilizará uma arquitetura moderna baseada em JavaScript, com foco em componentes acessíveis e desempenho.
+
+| Componente | Tecnologia | Referência Oficial |
+| :--- | :--- | :--- |
+| **Frontend** | ![Next.js](https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=next.js&logoColor=white) / ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB) | [cite_start][Documentação do Next.js](https://nextjs.org/docs)  |
+| **UI/UX** | ShadCN/UI e Lucide Icons | [cite_start][ShadCN/UI Docs](https://ui.shadcn.com/)  |
+| **Backend** | ![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=node.js&logoColor=white) / ![Express.js](https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white) | [cite_start][Site Oficial do Node.js](https://nodejs.org/en/download/) [cite: 35] |
+| **Banco de Dados** | ![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white) | [cite_start][Página de Download do MySQL](https://dev.mysql.com/downloads/)[cite: 37] |
+
+---
+
+## 🚀 Como Executar o Projeto
+
+Para configurar e rodar o **SIG-Manutenção** em seu ambiente local, siga os passos abaixo.
+
+### Pré-requisitos
+Certifique-se de ter as seguintes dependências instaladas:
+* [cite_start]**Node.js (LTS recomendado):** Necessário para rodar o Backend (Express [cite: 35][cite_start]) e o Frontend (Next.js ).
+* **Gerenciador de Pacotes:** NPM ou Yarn.
+* [cite_start]**Servidor MySQL:** Para o banco de dados[cite: 37].
+
+### 1. Clonagem e Navegação
+Clone o repositório e navegue até a pasta do projeto:
+```bash
+git clone [https://docs.github.com/pt/repositories/creating-and-managing-repositories/about-repositories](https://docs.github.com/pt/repositories/creating-and-managing-repositories/about-repositories)
+cd SIG-Manutencao
