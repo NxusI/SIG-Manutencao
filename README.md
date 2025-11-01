@@ -45,13 +45,17 @@ Este código está sobre a licença GNU GPL 3.0. Para mais informações, veja o
 
 O sistema utilizará uma arquitetura moderna baseada em JavaScript, com foco em componentes acessíveis e desempenho.
 
-| Componente | Tecnologia | Referência Oficial |
-| :--- | :--- | :--- |
-| **Frontend** | ![Next.js] + ![React] | [Site Oficial do Next.js](https://nextjs.org/) [Site Oficial do React](https://pt-br.react.dev/) |
-| **UI/UX** | ![ShadCN/UI] e ![Lucide Icons] | [Site Oficial do ShadCN/UI](https://ui.shadcn.com/) [Site Oficial do Lucide Icons](https://lucide.dev/icons/) |
-| **Backend** | ![Node.js] + ![Express.js] | [Site Oficial do Node.js](https://nodejs.org/pt) [Site Oficial do Express.js](https://expressjs.com/)  |
-| **Banco de Dados** | ![MySQL] | [Site Oficial do MySQL](https://www.mysql.com/) |
+## 🛠️ Tecnologias Utilizadas
 
+O sistema utilizará uma arquitetura moderna baseada em JavaScript, com foco em componentes acessíveis e desempenho.
+
+| Componente | Tecnologia |
+| :--- | :--- |
+| **Frontend** | [ ![Next.js](https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=next.js&logoColor=white) ](https://nextjs.org/) [ ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB) ](https://react.dev/) |
+| **UI/UX** | [ ![ShadCN/UI](https://img.shields.io/badge/ShadCN%2FUI-000000?style=for-the-badge&logo=react&logoColor=white) ](https://ui.shadcn.com/)  [Lucide Icons](https://lucide.dev/icons/)|
+| **Backend** | [ ![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=node.js&logoColor=white) ](https://nodejs.org/en/download/) [ ![Express.js](https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white) ](https://expressjs.com/) |
+| **Banco de Dados** | [ ![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white) ](https://dev.mysql.com/downloads/) |
+| 
 ### Frontend
 > Utiliza o framework Next.js e React, com bibliotecas ShadCN/UI e Lucide Icons para componentes modernos e acessíveis.
 
