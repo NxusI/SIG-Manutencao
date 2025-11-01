@@ -3,12 +3,21 @@
 ###### Keywords: Projeto Integrado - Nexus One - Sistemas e Mídias Digitais - Universidade Federal do Ceará
 
 ## 🧭 Sumário
-* [📝 Sobre o Projeto](#-sobre-o-projeto)
-* [🤝 Quem Somos Nos!](#-quem-somos-nos)
-* [📜 Licença](#licenca)
-* [🛠️ Tecnologias Utilizadas](#tecnologias-utilizadas)
-* [✨ Principais Funcionalidades](#principais-funcionalidades)
-* [📄 Requisitos e Documentação](#requisitos-e-documentacao)
+- [⚙️ SIG-Manutenção: Sistema Integrado de Gestão da Célula de Manutenção](#️-sig-manutenção-sistema-integrado-de-gestão-da-célula-de-manutenção)
+          - [Keywords: Projeto Integrado - Nexus One - Sistemas e Mídias Digitais - Universidade Federal do Ceará](#keywords-projeto-integrado---nexus-one---sistemas-e-mídias-digitais---universidade-federal-do-ceará)
+  - [🧭 Sumário](#-sumário)
+  - [📝 Sobre o Projeto](#-sobre-o-projeto)
+    - [O Desafio](#o-desafio)
+    - [A Solução](#a-solução)
+  - [🤝 Quem Somos Nos!](#-quem-somos-nos)
+  - [📜 Licença](#-licença)
+  - [🛠️ Tecnologias Utilizadas](#️-tecnologias-utilizadas)
+    - [Frontend](#frontend)
+    - [Backend](#backend)
+    - [Banco de Dados](#banco-de-dados)
+    - [Integração](#integração)
+  - [📄 Documentação Técnica](#-documentação-técnica)
+  - [🚧 Status do Projeto](#-status-do-projeto)
 
 ---
 
@@ -36,14 +45,10 @@ Este projeto é desenvolvido pela equipe **Nexus One** da **Universidade Federal
  
  ---
 
-## :memo: Licença
+## 📜 Licença
 Este código está sobre a licença GNU GPL 3.0. Para mais informações, veja o [LICENSE](https://github.com/Servy-Sem-Parar/projetointegrado-SMD-Servy/blob/b08aef3957dea73682f38ad95597223cbdb51267/LICENSE).
 
 ---
-
-## 🛠️ Tecnologias Utilizadas
-
-O sistema utilizará uma arquitetura moderna baseada em JavaScript, com foco em componentes acessíveis e desempenho.
 
 ## 🛠️ Tecnologias Utilizadas
 
@@ -70,7 +75,7 @@ O sistema utilizará uma arquitetura moderna baseada em JavaScript, com foco em 
 
 ---
 
-✨ Principais Funcionalidades (Requisitos Funcionais)
+✨ Principais Funcionalidades
 
 🔑 Módulo de Autenticação e Gestão de Usuários
 
@@ -82,7 +87,7 @@ O sistema utilizará uma arquitetura moderna baseada em JavaScript, com foco em 
 
 👤 Módulo de Cadastro e Início de Atendimento
 
-[] Cadastrar novos clientes (nome, e-mail, telefone e endereço).
+[ ] Cadastrar novos clientes (nome, e-mail, telefone e endereço).
 
 [ ] Registrar uma solicitação de manutenção (equipamento, problema relatado).
 
@@ -96,7 +101,7 @@ O sistema utilizará uma arquitetura moderna baseada em JavaScript, com foco em 
 
 [ ] Gerenciar o status do chamado, incluindo os estágios Aguardando Confirmação do Cliente e Em Reparo.
 
-[ ] Notificar o gestor sobre chamados que excederem o prazo de 3 dias para diagnóstico/orçamento.
+[ ] Notificar o gestor sobre chamados próximos de exceder ou que excederem o prazo de 3 dias para diagnóstico/orçamento.
 
 [ ] Permitir o registro de notas e atualizações no histórico do chamado.
 
@@ -106,9 +111,9 @@ O sistema utilizará uma arquitetura moderna baseada em JavaScript, com foco em 
 
 [ ] Permitir a finalização da OS após a conclusão e aprovação do cliente.
 
-[ ] Registrar na OS o total gasto com materiais/insumos.
+[ ] Registrar na OS o total gasto.
 
-[ ] Registrar na OS o valor final cobrado pelo serviço.
+[ ] Registrar na OS o preço pelo serviço.
 
 [ ] Marcar o "chamado" como concluído no sistema.
 
@@ -120,15 +125,22 @@ O sistema utilizará uma arquitetura moderna baseada em JavaScript, com foco em 
 
 [ ] Integrar o sistema a um serviço de disparo automático de e-mails.
 
-📊 Dashboard Gerencial (KPIs)
+📊 Dashboard Gerencial
 
 [ ] Apresentar um painel gerencial (dashboard) dinâmico para gestores.
 
-[ ] Exibir métricas-chave, como o volume de serviços prestados.
+[ ] Exibir estatísticas chaves, como o volume de serviços prestados.
 
 [ ] Exibir os custos operacionais e o lucro total e por serviço.
 
 [ ] Exibir o tempo médio de resolução dos chamados.
+
+---
+
+## 📄 Documentação Técnica
+
+* 📝 **Relatório Técnico:** [Acessar Relatório]([LINK_PARA O SEU RELATÓRIO])
+
 ---
 
 ## 🚧 Status do Projeto
