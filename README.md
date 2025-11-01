@@ -3,11 +3,11 @@
 ###### Keywords: Projeto Integrado - Nexus One - Sistemas e Mídias Digitais - Universidade Federal do Ceará
 
 ## 🧭 Sumário
-* [📝 Sobre o Projeto](#sobre-o-projeto)
+* [📝 Sobre o Projeto](#-sobre-o-projeto)
+* [🤝 Quem Somos Nos!](#-quem-somos-nos)
+* [📜 Licença](#licenca)
 * [🛠️ Tecnologias Utilizadas](#tecnologias-utilizadas)
 * [✨ Principais Funcionalidades](#principais-funcionalidades)
-* [🤝 Equipe Nexus One](#equipe-nexus-one)
-* [📜 Licença](#licenca)
 * [📄 Requisitos e Documentação](#requisitos-e-documentacao)
 
 ---
@@ -32,8 +32,8 @@
 
 Este projeto é desenvolvido pela equipe **Nexus One** da **Universidade Federal do Ceará (UFC Virtual)**.
 
-* **🔗 Perfil da Organização no GitHub:** [Link do Profile da Organização]
-* **📄 Membros e Funções:** Consulte o README da Organização para a lista completa de membros e orientadores.
+* [**🔗 Perfil da Organização no GitHub**](https://github.com/NxusI)
+* **📄 Membros e Funções:** Consulte o [README](https://github.com/NxusI/.github/blob/main/profile/README.md) da Organização para a lista completa de membros e orientadores.
 
 ---
 
@@ -50,23 +50,32 @@ Este projeto é desenvolvido pela equipe **Nexus One** da **Universidade Federal
  
  ---
 
-<a name="license"></a>
-
 ## :memo: Licença
 Este código está sobre a licença GNU GPL 3.0. Para mais informações, veja o [LICENSE](https://github.com/Servy-Sem-Parar/projetointegrado-SMD-Servy/blob/b08aef3957dea73682f38ad95597223cbdb51267/LICENSE).
 
-## 🛠️ Tecnologias Utilizadas (Tech Stack)
+---
 
-**Frontend:**
-![Frontend Badge] (https://img.shields.io/badge/[SUA_LINGUAGEM_FRONT]-20232A?style=for-the-badge&logo=[logo_name]&logoColor=61DAFB)
-![Framework Frontend Badge] (https://img.shields.io/badge/[SEU_FRAMEWORK]-000000?style=for-the-badge&logo=[logo_name]&logoColor=FFFFFF)
+## 🛠️ Tecnologias Utilizadas
 
-**Backend:**
-![Backend Badge] (https://img.shields.io/badge/[SUA_LINGUAGEM_BACK]-000000?style=for-the-badge&logo=[logo_name]&logoColor=FFFFFF)
-![Framework Backend Badge] (https://img.shields.io/badge/[SEU_FRAMEWORK_BACK]-000000?style=for-the-badge&logo=[logo_name]&logoColor=FFFFFF)
+O sistema utilizará uma arquitetura moderna baseada em JavaScript, com foco em componentes acessíveis e desempenho.
 
-**Banco de Dados:**
-![Database Badge] (https://img.shields.io/badge/[SEU_BD]-4169E1?style=for-the-badge&logo=[logo_name]&logoColor=FFFFFF)
+### Frontend
+> Utiliza o framework Next.js e React, com bibliotecas ShadCN/UI e Lucide Icons para componentes modernos e acessíveis.
+![Next.js](https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=next.js&logoColor=white)
+![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+![ShadCN/UI](https://img.shields.io/badge/ShadCN%2FUI-000000?style=for-the-badge&logo=react&logoColor=white)
+
+### Backend
+> Construído com Node.js e Express.
+![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=node.js&logoColor=white)
+![Express.js](https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white)
+
+### Banco de Dados
+> MySQL, para armazenamento estruturado de clientes, chamados, OS e relatórios.
+![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white)
+
+### Integração
+> Implementa um serviço de disparo automático de e-mails para comunicação com o cliente.
 
 ---
 
