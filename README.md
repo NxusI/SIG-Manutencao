@@ -1,9 +1,16 @@
-<a name="inicio">
 # ⚙️ SIG-Manutenção: Sistema Integrado de Gestão da Célula de Manutenção
 
 ###### Keywords: Projeto Integrado - Nexus One - Sistemas e Mídias Digitais - Universidade Federal do Ceará
 
-<a name="sobre">
+## 🧭 Sumário
+* [📝 Sobre o Projeto](#sobre-o-projeto)
+* [🛠️ Tecnologias Utilizadas](#tecnologias-utilizadas)
+* [✨ Principais Funcionalidades](#principais-funcionalidades)
+* [🤝 Equipe Nexus One](#equipe-nexus-one)
+* [📜 Licença](#licenca)
+* [📄 Requisitos e Documentação](#requisitos-e-documentacao)
+
+---
 
 ## 📝 Sobre o Projeto
 
@@ -21,9 +28,7 @@
 
 ---
 
-<a name="equipe"></a>
-
-## 🤝 Equipe
+## 🤝 Quem Somos Nos!
 
 Este projeto é desenvolvido pela equipe **Nexus One** da **Universidade Federal do Ceará (UFC Virtual)**.
 
