@@ -148,7 +148,7 @@ O sistema utilizará uma arquitetura moderna baseada em JavaScript, com foco em 
 
 ## 📄 Documentação Técnica
 
-* 📝 **Relatório Técnico:** [Acessar Relatório]([LINK PARA O RELATÓRIO])
+* 📝 **Relatório Técnico:** [Acessar Relatório](https://github.com/NxusI/SIG-Manutencao/blob/main/relatorio/relatorio_tecnico_v.1.0.1.odt)
 
 ---
 
