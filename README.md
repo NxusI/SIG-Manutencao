@@ -3,12 +3,28 @@
 ###### Keywords: Projeto Integrado - Nexus One - Sistemas e Mídias Digitais - Universidade Federal do Ceará
 
 ## 🧭 Sumário
-* [📝 Sobre o Projeto](#-sobre-o-projeto)
-* [🤝 Quem Somos Nos!](#-quem-somos-nos)
-* [📜 Licença](#licenca)
-* [🛠️ Tecnologias Utilizadas](#tecnologias-utilizadas)
-* [✨ Principais Funcionalidades](#principais-funcionalidades)
-* [📄 Requisitos e Documentação](#requisitos-e-documentacao)
+- [⚙️ SIG-Manutenção: Sistema Integrado de Gestão da Célula de Manutenção](#️-sig-manutenção-sistema-integrado-de-gestão-da-célula-de-manutenção)
+          - [Keywords: Projeto Integrado - Nexus One - Sistemas e Mídias Digitais - Universidade Federal do Ceará](#keywords-projeto-integrado---nexus-one---sistemas-e-mídias-digitais---universidade-federal-do-ceará)
+  - [🧭 Sumário](#-sumário)
+  - [📝 Sobre o Projeto](#-sobre-o-projeto)
+    - [O Desafio](#o-desafio)
+    - [A Solução](#a-solução)
+  - [🤝 Quem Somos Nos!](#-quem-somos-nos)
+  - [📜 Licença](#-licença)
+  - [🛠️ Tecnologias Utilizadas](#️-tecnologias-utilizadas)
+    - [Frontend](#frontend)
+    - [Backend](#backend)
+    - [Banco de Dados](#banco-de-dados)
+    - [Integração](#integração)
+  - [✨ Principais Funcionalidades](#-principais-funcionalidades)
+    - [🔑 Módulo de Autenticação e Gestão de Usuários](#-módulo-de-autenticação-e-gestão-de-usuários)
+    - [👤 Módulo de Cadastro e Início de Atendimento](#-módulo-de-cadastro-e-início-de-atendimento)
+    - [⚙️ Gestão de Fluxo e Status](#️-gestão-de-fluxo-e-status)
+    - [🧾 Ordem de Serviço (OS) e Finalização](#-ordem-de-serviço-os-e-finalização)
+    - [📨 Comunicação Automatizada](#-comunicação-automatizada)
+    - [📊 Dashboard Gerencial](#-dashboard-gerencial)
+  - [📄 Documentação Técnica](#-documentação-técnica)
+  - [🚧 Status do Projeto](#-status-do-projeto)
 
 ---
 
@@ -36,14 +52,10 @@ Este projeto é desenvolvido pela equipe **Nexus One** da **Universidade Federal
  
  ---
 
-## :memo: Licença
+## 📜 Licença
 Este código está sobre a licença GNU GPL 3.0. Para mais informações, veja o [LICENSE](https://github.com/Servy-Sem-Parar/projetointegrado-SMD-Servy/blob/b08aef3957dea73682f38ad95597223cbdb51267/LICENSE).
 
 ---
-
-## 🛠️ Tecnologias Utilizadas
-
-O sistema utilizará uma arquitetura moderna baseada em JavaScript, com foco em componentes acessíveis e desempenho.
 
 ## 🛠️ Tecnologias Utilizadas
 
@@ -72,11 +84,71 @@ O sistema utilizará uma arquitetura moderna baseada em JavaScript, com foco em 
 
 ## ✨ Principais Funcionalidades
 
-* **Registro de Ordens de Serviço (OS):** Criação de OS formais para equipamentos internos e serviços da comunidade, substituindo o acordo verbal.
-* **Gerenciamento de Fluxo:** Acompanhamento do status da OS (Diagnóstico, Aguardando Confirmação, Em Reparo, Pronto para Entrega).
-* **Controle de Prazos e Garantias:** Registro de datas de diagnóstico, conclusão e garantia formal (3 meses).
-* **Módulo Financeiro:** Registro de gastos (peças), receita (serviços) e geração de relatórios de lucro/desempenho da célula de Manutenção.
-* **Histórico e Consulta:** Facilidade para o técnico-gestor consultar o histórico de reparos por equipamento ou cliente.
+
+### 🔑 Módulo de Autenticação e Gestão de Usuários
+
+
+[ ] Permitir que o gestor realize o login (autenticação) com usuario e senha.
+
+[ ] Permitir que o gestor recupere ou edite sua senha.
+
+[ ] Permitir o cadastro de um novo gestor ou a remoção de um gestor existente.
+
+### 👤 Módulo de Cadastro e Início de Atendimento
+
+[ ] Cadastrar novos clientes (nome, e-mail, telefone e endereço).
+
+[ ] Registrar uma solicitação de manutenção (equipamento, problema relatado).
+
+[ ] Gerar um "chamado" automaticamente após o registro de uma nova solicitação.
+
+[ ] Classificar o chamado registrado por níveis de prioridade (alta, normal).
+
+[ ] Vincular o "chamado" ao responsável pela execução do serviço.
+
+### ⚙️ Gestão de Fluxo e Status
+
+[ ] Gerenciar o status do chamado, incluindo os estágios Aguardando Confirmação do Cliente e Em Reparo.
+
+[ ] Notificar o gestor sobre chamados próximos de exceder ou que excederem o prazo de 3 dias para diagnóstico/orçamento.
+
+[ ] Permitir o registro de notas e atualizações no histórico do chamado.
+
+### 🧾 Ordem de Serviço (OS) e Finalização
+
+[ ] Permitir que o responsável preencha os dados de orçamento previsto na OS.
+
+[ ] Permitir a finalização da OS após a conclusão e aprovação do cliente.
+
+[ ] Registrar na OS o total gasto.
+
+[ ] Registrar na OS o preço pelo serviço.
+
+[ ] Marcar o "chamado" como concluído no sistema.
+
+### 📨 Comunicação Automatizada
+
+[ ] Enviar uma comunicação automática (e-mail) ao cliente com o orçamento, solicitando a confirmação do serviço.
+
+[ ] Enviar automaticamente a OS finalizada para o e-mail do cliente.
+
+[ ] Integrar o sistema a um serviço de disparo automático de e-mails.
+
+### 📊 Dashboard Gerencial
+
+[ ] Apresentar um painel gerencial (dashboard) dinâmico para gestores.
+
+[ ] Exibir estatísticas chaves, como o volume de serviços prestados.
+
+[ ] Exibir os custos operacionais e o lucro total e por serviço.
+
+[ ] Exibir o tempo médio de resolução dos chamados.
+
+---
+
+## 📄 Documentação Técnica
+
+* 📝 **Relatório Técnico:** [Acessar Relatório]([LINK PARA O RELATÓRIO])
 
 ---
 
