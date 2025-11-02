@@ -3,25 +3,25 @@
 ###### Keywords: Projeto Integrado - Nexus One - Sistemas e Mídias Digitais - Universidade Federal do Ceará
 
 ## 🧭 Sumário
-  *[📝 Sobre o Projeto](#-sobre-o-projeto)
+  -[📝 Sobre o Projeto](#-sobre-o-projeto)
     - [O Desafio](#o-desafio)
     - [A Solução](#a-solução)
-  * [🤝 Quem Somos Nos!](#-quem-somos-nos)
-  * [📜 Licença](#-licença)
-  * [🛠️ Tecnologias Utilizadas](#️-tecnologias-utilizadas)
+  - [🤝 Quem Somos Nos!](#-quem-somos-nos)
+  - [📜 Licença](#-licença)
+  - [🛠️ Tecnologias Utilizadas](#️-tecnologias-utilizadas)
     - [Frontend](#frontend)
     - [Backend](#backend)
     - [Banco de Dados](#banco-de-dados)
     - [Integração](#integração)
-  * [✨ Principais Funcionalidades](#-principais-funcionalidades)
+  - [✨ Principais Funcionalidades](#-principais-funcionalidades)
     - [🔑 Módulo de Autenticação e Gestão de Usuários](#-módulo-de-autenticação-e-gestão-de-usuários)
     - [👤 Módulo de Cadastro e Início de Atendimento](#-módulo-de-cadastro-e-início-de-atendimento)
     - [⚙️ Gestão de Fluxo e Status](#️-gestão-de-fluxo-e-status)
     - [🧾 Ordem de Serviço (OS) e Finalização](#-ordem-de-serviço-os-e-finalização)
     - [📨 Comunicação Automatizada](#-comunicação-automatizada)
     - [📊 Dashboard Gerencial](#-dashboard-gerencial)
-  * [📄 Documentação Técnica](#-documentação-técnica)
-  * [🚧 Status do Projeto](#-status-do-projeto)
+  - [📄 Documentação Técnica](#-documentação-técnica)
+  - [🚧 Status do Projeto](#-status-do-projeto)
 
 ---
 
@@ -51,11 +51,11 @@ Este projeto é desenvolvido pela equipe **Nexus One** da **Universidade Federal
 
 ## 📜 Licença
 
-Este projeto está licenciado sob a GNU General Public License v3.0.
+Este projeto está licenciado sob a **GNU General Public License v3.0**.
 
-Você pode encontrar o texto completo da licença no arquivo LICENSE na raiz do repositório.
+Você pode encontrar o texto completo da licença no arquivo `LICENSE` na raiz do repositório.
 
-Leia o texto completo da Licença GPLv3 aqui: [GNU GPLv3](https://www.gnu.org/licenses/gpl-3.0.en.html)
+[Leia o texto completo da Licença GPLv3 aqui.](https://www.gnu.org/licenses/gpl-3.0.en.html)
 
 ---
 
