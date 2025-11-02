@@ -53,7 +53,12 @@ Este projeto é desenvolvido pela equipe **Nexus One** da **Universidade Federal
  ---
 
 ## 📜 Licença
-Este código está sobre a licença GNU GPL 3.0. Para mais informações, veja o [LICENSE](https://github.com/Servy-Sem-Parar/projetointegrado-SMD-Servy/blob/b08aef3957dea73682f38ad95597223cbdb51267/LICENSE).
+
+Este projeto está licenciado sob a GNU General Public License v3.0.
+
+Você pode encontrar o texto completo da licença no arquivo LICENSE na raiz do repositório.
+
+Leia o texto completo da Licença GPLv3 aqui.: [GNU GPLv3](https://www.gnu.org/licenses/gpl-3.0.en.html)
 
 ---
 
