@@ -3,7 +3,7 @@
 ###### Keywords: Projeto Integrado - Nexus One - Sistemas e Mídias Digitais - Universidade Federal do Ceará
 
 ## 🧭 Sumário
-  -[📝 Sobre o Projeto](#-sobre-o-projeto)
+  - [📝 Sobre o Projeto](#-sobre-o-projeto)
     - [O Desafio](#o-desafio)
     - [A Solução](#a-solução)
   - [🤝 Quem Somos Nos!](#-quem-somos-nos)
@@ -55,7 +55,7 @@ Este projeto está licenciado sob a **GNU General Public License v3.0**.
 
 Você pode encontrar o texto completo da licença no arquivo `LICENSE` na raiz do repositório.
 
-[Leia o texto completo da Licença GPLv3 aqui.](https://www.gnu.org/licenses/gpl-3.0.en.html)
+[Alternativamente, acesse a Licença GPLv3 aqui.](https://www.gnu.org/licenses/gpl-3.0.en.html)
 
 ---
 
