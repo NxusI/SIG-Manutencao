@@ -86,6 +86,12 @@ O sistema utilizará uma arquitetura moderna baseada em JavaScript, com foco em 
 ### Integração
 > Implementa um serviço de disparo automático de e-mails para comunicação com o cliente.
 
+### Teste das Tecnologias
+
+> A prova de conceito inicial foi desenvolvida utilizando Next.js para o frontend e Node.js com Express.js para o backend, demonstrando a viabilidade técnica do projeto.
+
+[A demonstração da prova de conceito pode ser acessada aqui.](https://github.com/NxusI/Teste-Tecnologias)
+
 ---
 
 ## ✨ Principais Funcionalidades
