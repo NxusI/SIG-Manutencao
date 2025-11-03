@@ -1,9 +1,10 @@
 # ⚙️ SIG-Manutenção: Sistema Integrado de Gestão da Célula de Manutenção
-Keywords: Projeto Integrado - Nexus One - Sistemas e Mídias Digitais - Universidade Federal do Ceará
+Keywords: Nexus One - Instituto Robótica Sustentável - Projeto Integrado - Sistemas e Mídias Digitais - Universidade Federal do Ceará
 
-![Status](https://img.shields.io/badge/Status-Checkpoint_1-orange.svg) 
-![Licença](https://img.shields.io/badge/License-GPL_v3-blue.svg) 
-![Frontend](https://img.shields.io/badge/Frontend-Next.js%20%7C%20React-black.svg)
+[![Status](https://img.shields.io/badge/Status-Checkpoint_1-orange.svg)](#-status-do-projeto)
+[![Licença](https://img.shields.io/badge/License-GPL_v3-blue.svg)](#-licença)
+[![Backend](https://img.shields.io/badge/Backend-Node.js%20%7C%20Express.js-black.svg)](#backend)
+[![Frontend](https://img.shields.io/badge/Frontend-Next.js%20%7C%20React-black.svg)](#frontend)
 
 ## 🧭 Sumário
   - [📝 Sobre o Projeto](#-sobre-o-projeto)
