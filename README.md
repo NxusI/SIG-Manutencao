@@ -35,7 +35,7 @@ Keywords: Nexus One - Instituto Robótica Sustentável - Projeto Integrado - Sis
 
 ### O Desafio
 > A célula de Manutenção da ONG, responsável por gerar receita através de serviços de manutenção de hardware e fornecer insumos para as atividades educativas, carecia de um sistema unificado. Esta ausência resultava, entre outras coisa, em:
-* Fluxo de atendimento informal e ineficiente (contato via WhatsApp/presencial).
+* Fluxo de atendimento informal e ineficiente (demasiado verbal).
 * Falta de registro formal de prazos e garantias (3 dias para diagnóstico, 3 meses de garantia informal).
 * Inexistência de controle e documentação digitalizada de Ordens de Serviço (OS).
 * Dificuldade em realizar análises financeiras (receita, gastos e lucro da célula).
@@ -47,7 +47,7 @@ Keywords: Nexus One - Instituto Robótica Sustentável - Projeto Integrado - Sis
 
 ## 🤝 Sobre a Equipe
 
-Este projeto é desenvolvido pela equipe **Nexus One** da **Universidade Federal do Ceará (UFC Virtual)**.
+Este projeto é desenvolvido pela equipe **Nexus One**, alunos da **Universidade Federal do Ceará**.
 
 * [**🔗 Perfil da Organização no GitHub**](https://github.com/NxusI)
  
