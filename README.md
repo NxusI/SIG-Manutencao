@@ -156,6 +156,6 @@ O sistema utilizará uma arquitetura moderna baseada em JavaScript, com foco em 
 
 ## 🚧 Status do Projeto
 
-* **Status:** 🚧 Em Desenvolvimento (Fase de [Design/Protótipo/Implementação Inicial])
+* **Status:** 🚧 Em Desenvolvimento Status: 🚧 | Fase: **Prototipação Inicial e Prova de Conceito (Next.js/Node.js).**
 
 ---
