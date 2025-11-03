@@ -102,6 +102,7 @@ O sistema utilizará uma arquitetura moderna baseada em JavaScript, com foco em 
 
 ### 👤 Módulo de Cadastro e Início de Atendimento
 
+
 [ ] Cadastrar novos clientes (nome, e-mail, telefone e endereço).
 
 [ ] Registrar uma solicitação de manutenção (equipamento, problema relatado).
@@ -114,6 +115,7 @@ O sistema utilizará uma arquitetura moderna baseada em JavaScript, com foco em 
 
 ### ⚙️ Gestão de Fluxo e Status
 
+
 [ ] Gerenciar o status do chamado, incluindo os estágios Aguardando Confirmação do Cliente e Em Reparo.
 
 [ ] Notificar o gestor sobre chamados próximos de exceder ou que excederem o prazo de 3 dias para diagnóstico/orçamento.
@@ -121,6 +123,7 @@ O sistema utilizará uma arquitetura moderna baseada em JavaScript, com foco em 
 [ ] Permitir o registro de notas e atualizações no histórico do chamado.
 
 ### 🧾 Ordem de Serviço (OS) e Finalização
+
 
 [ ] Permitir que o responsável preencha os dados de orçamento previsto na OS.
 
@@ -134,6 +137,7 @@ O sistema utilizará uma arquitetura moderna baseada em JavaScript, com foco em 
 
 ### 📨 Comunicação Automatizada
 
+
 [ ] Enviar uma comunicação automática (e-mail) ao cliente com o orçamento, solicitando a confirmação do serviço.
 
 [ ] Enviar automaticamente a OS finalizada para o e-mail do cliente.
@@ -141,6 +145,7 @@ O sistema utilizará uma arquitetura moderna baseada em JavaScript, com foco em 
 [ ] Integrar o sistema a um serviço de disparo automático de e-mails.
 
 ### 📊 Dashboard Gerencial
+
 
 [ ] Apresentar um painel gerencial (dashboard) dinâmico para gestores.
 
@@ -152,7 +157,7 @@ O sistema utilizará uma arquitetura moderna baseada em JavaScript, com foco em 
 
 ---
 
-## 📄 Documentação Técnica
+## 📄 Documentação
 
 * 📝 **Relatório Técnico:** [Acessar Relatório](https://github.com/NxusI/SIG-Manutencao/blob/main/relatorio/relatorio_tecnico_v.1.0.1.odt)
 
@@ -160,6 +165,6 @@ O sistema utilizará uma arquitetura moderna baseada em JavaScript, com foco em 
 
 ## 🚧 Status do Projeto
 
-* **Status:** 🚧 Em Desenvolvimento Status: 🚧 | Fase: **Prototipação Inicial e Prova de Conceito (Next.js/Node.js).**
+* **Status:** 🚧 **Checkpoint 1 Concluído** | Fase: **Prototipação Inicial e Prova de Conceito (Next.js/Node.js).**
 
 ---
