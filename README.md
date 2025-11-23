@@ -17,14 +17,8 @@ Keywords: Nexus One - Instituto Robótica Sustentável - Projeto Integrado - Sis
     - [Backend](#backend)
     - [Banco de Dados](#banco-de-dados)
     - [Integração](#integração)
-  - [✨ Principais Funcionalidades](#-principais-funcionalidades)
-    - [🔑 Módulo de Autenticação e Gestão de Usuários](#-módulo-de-autenticação-e-gestão-de-usuários)
-    - [👤 Módulo de Cadastro e Início de Atendimento](#-módulo-de-cadastro-e-início-de-atendimento)
-    - [⚙️ Gestão de Fluxo e Status](#️-gestão-de-fluxo-e-status)
-    - [🧾 Ordem de Serviço (OS) e Finalização](#-ordem-de-serviço-os-e-finalização)
-    - [📨 Comunicação Automatizada](#-comunicação-automatizada)
-    - [📊 Dashboard Gerencial](#-dashboard-gerencial)
-  - [📄 Documentação Técnica](#-documentação-técnica)
+  - [✨ Escopo Funcional e Requisitos](#-escopo-funcional-e-requisitos)
+  - [📄 Documentação Completa](#-documentação-completa)
   - [🚧 Status do Projeto](#-status-do-projeto)
 
 ---
@@ -94,72 +88,81 @@ O sistema utilizará uma arquitetura moderna baseada em JavaScript, com foco em 
 
 ---
 
-## ✨ Principais Funcionalidades
+## ✨ Escopo Funcional e Requisitos
 
+O levantamento de requisitos foi realizado através de uma abordagem qualitativa, utilizando entrevistas semiestruturadas e observação direta no **Instituto Robótica Sustentável**. O sistema foi desenhado para atender dois perfis principais: o **Técnico Operacional**, focado em agilidade e redução de papelada, e o **Gestor/Supervisor**, focado em métricas e controle financeiro.
 
-### 🔑 Módulo de Autenticação e Gestão de Usuários
+### 🧩 Módulos do Sistema
 
-[ ] Permitir que o gestor realize o login (autenticação) com usuario e senha.
+Abaixo estão listados os requisitos funcionais (RF) organizados por módulos, conforme definido na especificação técnica do projeto.
 
-[ ] Permitir que o gestor recupere ou edite sua senha.
+#### 🔐 1. Módulo de Autenticação e Gestão de Usuários
+> *Foco: Segurança e controle de acesso hierárquico (Técnico vs. Supervisor).*
 
-[ ] Permitir o cadastro de um novo gestor ou a remoção de um gestor existente.
+| ID | Funcionalidade | Status |
+| :--- | :--- | :---: |
+| `RF001` | **Login Seguro:** Autenticação via usuário e senha. | 🚧 Em Desenv. |
+| `RF002` | **Gestão de Credenciais:** Alteração de senha pelo próprio usuário. | 📝 To Do |
+| `RF003` | **Cadastro de Usuários:** Inserção de novos colaboradores pelo gestor. | 📝 To Do |
+| `RF004` | **Edição de Perfil:** Atualização de permissões e dados cadastrais. | 📝 To Do |
+| `RF005` | **Desativação:** Remoção lógica de usuários do sistema. | 📝 To Do |
 
-### 👤 Módulo de Cadastro e Início de Atendimento
+#### 👤 2. Módulo de Cadastro e Atendimento
+> *Foco: Eliminar fichas de papel e padronizar a entrada de dados.*
 
-[ ] Cadastrar novos clientes (nome, e-mail, telefone e endereço).
+| ID | Funcionalidade | Status |
+| :--- | :--- | :---: |
+| `RF006` | **Gestão de Clientes:** CRUD completo (Nome, e-mail, telefone, endereço). | 📝 To Do |
+| `RF008` | **Solicitação de Serviço:** Registro do equipamento e problema relatado. | 📝 To Do |
+| `RF009` | **Abertura Automática:** Geração automática do "Chamado" após solicitação. | 📝 To Do |
+| `RF010` | **Matriz de Prioridade:** Classificação visual (Prioritário/Normal). | 📝 To Do |
+| `RF011` | **Atribuição:** Vínculo do chamado ao técnico responsável. | 📝 To Do |
 
-[ ] Registrar uma solicitação de manutenção (equipamento, problema relatado).
+#### 🔄 3. Gestão de Fluxo e Status
+> *Foco: Visibilidade do progresso em tempo real.*
 
-[ ] Gerar um "chamado" automaticamente após o registro de uma nova solicitação.
+| ID | Funcionalidade | Status |
+| :--- | :--- | :---: |
+| `RF012` | **Transição Automática:** Atualização de status ao vincular técnico. | 📝 To Do |
+| `RF013` | **Kanban de Chamados:** Agrupamento visual por status (Diagnóstico, Reparo, etc.). | 📝 To Do |
+| `RF014` | **Ordenação Inteligente:** Filtro automático por prioridade e data de criação. | 📝 To Do |
+| `RF017` | **Alertas de SLA:** Notificação de atraso em diagnósticos (> 3 dias). | 📝 To Do |
 
-[ ] Classificar o chamado registrado por níveis de prioridade (alta, normal).
+#### 🧾 4. Ordem de Serviço (OS) e Financeiro
+> *Foco: Profissionalização do orçamento e clareza fiscal.*
 
-[ ] Vincular o "chamado" ao responsável pela execução do serviço.
+| ID | Funcionalidade | Status |
+| :--- | :--- | :---: |
+| `RF018` | **Orçamentação:** Registro detalhado de peças e mão de obra. | 📝 To Do |
+| `RF019` | **Controle de Custos:** Registro do total gasto com insumos na OS. | 📝 To Do |
+| `RF020` | **Registro de Receita:** Definição do preço final cobrado do cliente. | 📝 To Do |
+| `RF021` | **Encerramento Técnico:** Finalização da OS e bloqueio de edição. | 📝 To Do |
 
-### ⚙️ Gestão de Fluxo e Status
+#### 📨 5. Comunicação Automatizada
+> *Foco: Reduzir o tempo gasto no WhatsApp/Telefone.*
 
-[ ] Gerenciar o status do chamado, incluindo os estágios Aguardando Confirmação do Cliente e Em Reparo.
+| ID | Funcionalidade | Status |
+| :--- | :--- | :---: |
+| `RF023` | **Envio de Orçamento:** E-mail automático solicitando aprovação do cliente. | 📝 To Do |
+| `RF024` | **Registro de Aprovação:** Input da resposta do cliente (Aceite/Recusa) no sistema. | 📝 To Do |
+| `RF026` | **Notificação de Conclusão:** E-mail automático informando finalização do reparo. | 📝 To Do |
 
-[ ] Notificar o gestor sobre chamados próximos de exceder ou que excederem o prazo de 3 dias para diagnóstico/orçamento.
+#### 📊 6. Dashboard Gerencial
+> *Foco: Tomada de decisão baseada em dados.*
 
-[ ] Permitir o registro de notas e atualizações no histórico do chamado.
-
-### 🧾 Ordem de Serviço (OS) e Finalização
-
-[ ] Permitir que o responsável preencha os dados de orçamento previsto na OS.
-
-[ ] Permitir a finalização da OS após a conclusão e aprovação do cliente.
-
-[ ] Registrar na OS o total gasto.
-
-[ ] Registrar na OS o preço pelo serviço.
-
-[ ] Marcar o "chamado" como concluído no sistema.
-
-### 📨 Comunicação Automatizada
-
-[ ] Enviar uma comunicação automática (e-mail) ao cliente com o orçamento, solicitando a confirmação do serviço.
-
-[ ] Enviar automaticamente a OS finalizada para o e-mail do cliente.
-
-[ ] Integrar o sistema a um serviço de disparo automático de e-mails.
-
-### 📊 Dashboard Gerencial
-
-[ ] Apresentar um painel gerencial (dashboard) dinâmico para gestores.
-
-[ ] Exibir estatísticas chaves, como o volume de serviços prestados.
-
-[ ] Exibir os custos operacionais e o lucro total e por serviço.
-
-[ ] Exibir o tempo médio de resolução dos chamados.
+| ID | Funcionalidade | Status |
+| :--- | :--- | :---: |
+| `RF029` | **Volumetria:** Estatísticas de serviços (Abertos vs. Concluídos). | 📝 To Do |
+| `RF030` | **Saúde Financeira:** Visão consolidada de Custos Operacionais vs. Lucro. | 📝 To Do |
+| `RF031` | **Eficiência:** Indicador de Tempo Médio de Resolução de chamados. | 📝 To Do |
 
 ---
 
-## 📄 Documentação
+## 📄 Documentação Completa
 
-* 📝 **Relatório Técnico:** [Acessar Relatório](https://github.com/NxusI/SIG-Manutencao/blob/main/relatorio/relatorio_tecnico_v.1.0.1.odt)
+Para detalhes aprofundados sobre as regras de negócio, diagramas e user stories, consulte o relatório técnico oficial.
+
+* 📝 **Relatório Técnico:** [Acessar Documento Completo (ODT)](https://github.com/NxusI/SIG-Manutencao/blob/main/relatorio/relatorio_tecnico_v.1.2.odt)
 
 ---
 
