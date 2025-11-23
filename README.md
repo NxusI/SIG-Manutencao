@@ -18,6 +18,13 @@ Keywords: Nexus One - Instituto Robótica Sustentável - Projeto Integrado - Sis
     - [Banco de Dados](#banco-de-dados)
     - [Integração](#integração)
   - [✨ Escopo Funcional e Requisitos](#-escopo-funcional-e-requisitos)
+    - [Módulos do Sistema](#-módulos-do-sistema)
+      - [1. Módulo de Autenticação e Gestão de Usuários](#-1-módulo-de-autenticação-e-gestão-de-usuários)
+      - [2. Módulo de Cadastro e Atendimento](#-2-módulo-de-cadastro-e-atendimento)
+      - [3. Gestão de Fluxo e Status](#-3-gestão-de-fluxo-e-status)
+      - [4. Ordem de Serviço (OS) e Financeiro](#-4-ordem-de-serviço-os-e-financeiro)
+      - [5. Comunicação Automatizada](#-5-comunicação-automatizada)
+      - [6. Dashboard Gerencial](#-6-dashboard-gerencial)
   - [📄 Documentação Completa](#-documentação-completa)
   - [🚧 Status do Projeto](#-status-do-projeto)
 
