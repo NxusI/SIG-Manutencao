@@ -169,7 +169,7 @@ Abaixo estão listados os requisitos funcionais (RF) organizados por módulos, c
 
 Para detalhes aprofundados sobre as regras de negócio, diagramas e user stories, consulte o relatório técnico oficial.
 
-* 📝 **Relatório Técnico:** [Acessar Documento Completo (ODT)](https://github.com/NxusI/SIG-Manutencao/blob/main/relatorio/relatorio_tecnico_v.1.2.odt)
+* 📝 **Relatório Técnico:** [Acessar Documento Completo (ODT)](https://github.com/NxusI/SIG-Manutencao/blob/main/documentos/relatorio_tecnico_v.1.2.odt)
 
 ---
 
