@@ -143,7 +143,8 @@ Abaixo estão listados os requisitos funcionais (RF) organizados por módulos, c
 | `RF018` | **Orçamentação:** Registro detalhado de peças e mão de obra. | 📝 To Do |
 | `RF019` | **Controle de Custos:** Registro do total gasto com insumos na OS. | 📝 To Do |
 | `RF020` | **Registro de Receita:** Definição do preço final cobrado do cliente. | 📝 To Do |
-| `RF021` | **Encerramento Técnico:** Finalização da OS e bloqueio de edição. | 📝 To Do |
+| `RF021` | **Encerramento Técnico:** Finalizar a OS após a conclusão do reparo. | 📝 To Do |
+| `RF022` | **Status Finalizado:** Atribuir o status 'Finalizado' ao Chamado automaticamente após finalização da OS (RF0016) | 📝 To Do |
 
 #### 📨 5. Comunicação Automatizada
 > *Foco: Reduzir o tempo gasto no WhatsApp/Telefone.*
