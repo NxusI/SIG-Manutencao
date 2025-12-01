@@ -1,3 +1,3 @@
-1-Criar dastabase mysql
-2-instalar, configurar e conectar o prisma a dastabase
-3-fazer crud básico com rotas para as OS
+1-Aplicação Teste - Completo
+2-RF01 - Completo
+3-RF02
