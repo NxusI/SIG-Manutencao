@@ -1,8 +1,9 @@
 import * as React from "react"
 import {
-  BookOpen,
+  Archive,
   Bot,
-  SquareTerminal,
+  FilePlusCorner,
+  FolderOpen,
 } from "lucide-react"
 
 import { NavMain } from "@/shared/components/nav-main"
@@ -25,66 +26,29 @@ const data = {
   },
   navMain: [
     {
-      title: "Playground",
+      title: "Cadastrar",
       url: "#",
-      icon: SquareTerminal,
-      isActive: true,
+      icon: FilePlusCorner,
       items: [
         {
-          title: "History",
-          url: "#",
+          title: "Clientes",
+          url: "/cadastrar/cliente",
         },
         {
-          title: "Starred",
-          url: "#",
-        },
-        {
-          title: "Settings",
-          url: "#",
+          title: "Usuários",
+          url: "/cadastrar/usuario",
         },
       ],
     },
     {
-      title: "Models",
-      url: "#",
-      icon: Bot,
-      items: [
-        {
-          title: "Genesis",
-          url: "#",
-        },
-        {
-          title: "Explorer",
-          url: "#",
-        },
-        {
-          title: "Quantum",
-          url: "#",
-        },
-      ],
+      title: "Chamados",
+      url: "/chamados",
+      icon: FolderOpen,
     },
     {
-      title: "Documentation",
-      url: "#",
-      icon: BookOpen,
-      items: [
-        {
-          title: "Introduction",
-          url: "#",
-        },
-        {
-          title: "Get Started",
-          url: "#",
-        },
-        {
-          title: "Tutorials",
-          url: "#",
-        },
-        {
-          title: "Changelog",
-          url: "#",
-        },
-      ],
+      title: "Ordem de Serviço",
+      url: "/ordem-servico",
+      icon: Archive,
     },
   ],
 }
@@ -94,7 +58,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
   return (
     <Sidebar collapsible="icon" {...props}>
-      <SidebarHeader className="flex justify-center items-center">
+      <SidebarHeader className="flex justify-center items-center mb-5 mt-3">
         <Image
           alt="Logo"
           src={open ? "/assets/logo.png" : "/assets/icon.png"}

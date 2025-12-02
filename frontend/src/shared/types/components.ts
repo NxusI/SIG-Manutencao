@@ -6,3 +6,8 @@ export interface AlertProps {
   position?: "top-right" | "bottom-right" | "bottom-left" | "top-left";
   onClose?: () => void;
 }
+
+export interface TableSkeletonProps{
+  rows: number;
+  columns: number;
+}

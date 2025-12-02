@@ -44,7 +44,6 @@ export function LoginForm({
         <Field>
           <FieldLabel htmlFor="email">Login</FieldLabel>
           <Input
-            type="email"
             value={login}
             onChange={(e) => setLogin(e.target.value)}
             required
