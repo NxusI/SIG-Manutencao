@@ -4,6 +4,12 @@ import jwt from 'jsonwebtoken';
 
 export const register = async (req, res) => {
     try {
+        const usuarioLogado = req.usuario;
+
+        if (usuarioLogado.perfil !== 'GESTOR' && usuarioLogado.perfil !== 'SUPERVISOR') {
+            return res.status(403).json({ message: "Acesso negado. Apenas gestores podem cadastrar usuários." });
+        }
+
         const { nome, login, email, senha, perfil } = req.body;
 
         if(!nome || !login || !email || !senha){

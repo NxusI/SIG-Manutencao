@@ -7,7 +7,7 @@ import { verificarToken } from '../middlewares/auth.middleware.js';
 
 const router = express.Router();
 
-router.post('/cadastro', register);
+router.post('/cadastro', verificarToken, register);
 router.post('/login', login);
 router.patch('/alterar-senha', verificarToken, alterarSenha);
 
