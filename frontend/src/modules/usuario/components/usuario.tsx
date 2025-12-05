@@ -5,10 +5,10 @@ import { CardTitle } from "@/shared/components/ui/card";
 import { formatDate } from "@/utils/formatters";
 import { Edit, Plus, Trash2 } from "lucide-react";
 import { useMemo, useState } from "react";
-import { ConfirmDialog } from "@/shared/components/comon/confirm-dialog";
 import CreateUsuario from "./create-form";
 import UpdateUsuario from "./update-form";
 import { DataTable } from "@/shared/components/comon/data-table";
+import { ConfirmDialog } from "@/shared/components/comon/confirm-dialog";
 
 const Usuarios = () => {
   const [page, setPage] = useState<number>(1);
