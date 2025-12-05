@@ -6,9 +6,9 @@ export const register = async (req, res) => {
     try {
         const usuarioLogado = req.usuario;
 
-        if (usuarioLogado.perfil !== 'GESTOR' && usuarioLogado.perfil !== 'SUPERVISOR') {
+        /*if (usuarioLogado.perfil !== 'GESTOR' && usuarioLogado.perfil !== 'SUPERVISOR') {
             return res.status(403).json({ message: "Acesso negado. Apenas gestores podem cadastrar usuários." });
-        }
+        }*/
 
         const { nome, login, email, senha, perfil } = req.body;
 
@@ -138,5 +138,58 @@ export const alterarSenha = async (req, res) => {
         console.error(error);
         return res.status(500).json({ message: "Erro interno." });
 
+    }
+}
+
+export const editarUsuario = async (req, res) => {
+    try {
+        const { nome, email, perfil } = req.body;
+        const {id} = req.params;
+
+        const verificaPerfil = req.usuario;
+
+        if (verificaPerfil.perfil !== 'GESTOR') {
+            return res.status(403).json({ message: "Acesso negado. Apenas gestores podem editar usuários." });
+        }
+
+        const idInt = parseInt(id);
+        if (isNaN(idInt)) {
+            return res.status(400).json({ message: "ID inválido." });
+        }
+
+        if (email) {
+            const emailExiste = await prisma.usuario.findUnique({ where: { email } });
+
+            if (emailExiste && emailExiste.id_usuario !== idInt) {
+                return res.status(400).json({ message: "Email já está em uso por outro usuário." });
+            }
+
+        }
+
+        const usuarioAtualizado = await prisma.usuario.update({
+            where: { idUsuario: idInt },
+            data: {
+                nome: nome || undefined, 
+                email: email || undefined,
+                perfil: perfil || undefined
+            }
+        });
+
+        return res.status(200).json({
+            message: "Usuário atualizado com sucesso!",
+            usuario: {
+                id: usuarioAtualizado.id_usuario,
+                nome: usuarioAtualizado.nome,
+                email: usuarioAtualizado.email,
+                perfil: usuarioAtualizado.perfil
+            }
+        });
+
+    } catch (error) {
+        if (error.code === 'P2025') {
+            return res.status(404).json({ message: "Usuário não encontrado." });
+        }
+        console.error("Erro ao editar:", error);
+        return res.status(500).json({ message: "Erro interno." });
     }
 }
