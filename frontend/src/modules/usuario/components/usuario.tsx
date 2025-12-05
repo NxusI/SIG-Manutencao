@@ -1,5 +1,4 @@
 import BaseModal from "@/shared/components/comon/base-modal";
-import { DataTable } from "@/shared/components/comon/data-table";
 import Pagination from "@/shared/components/comon/pagination";
 import { Button } from "@/shared/components/ui/button";
 import { CardTitle } from "@/shared/components/ui/card";
@@ -9,6 +8,7 @@ import { useMemo, useState } from "react";
 import { ConfirmDialog } from "@/shared/components/comon/confirm-dialog";
 import CreateUsuario from "./create-form";
 import UpdateUsuario from "./update-form";
+import { DataTable } from "@/shared/components/comon/data-table";
 
 const Usuarios = () => {
   const [page, setPage] = useState<number>(1);
