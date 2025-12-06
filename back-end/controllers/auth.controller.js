@@ -4,25 +4,41 @@ import jwt from 'jsonwebtoken';
 
 export const register = async (req, res) => {
     try {
-        // 1. Conta quantos usuários existem no banco
         const totalUsuarios = await prisma.usuario.count();
         
-        // 2. Lógica de Proteção Inteligente
         if (totalUsuarios > 0) {
-            // Se JÁ existem usuários, a rota se torna privada.
-            // Precisamos verificar se quem chamou a rota está logado e é GESTOR.
-            
-            // O middleware verificarToken deve popular req.usuario
-            if (!req.usuario) {
-                 return res.status(401).json({ message: "Token não fornecido ou inválido." });
+           const authHeader = req.headers.authorization;
+
+            if (!authHeader) {
+                return res.status(401).json({ message: "Token não fornecido." });
             }
 
-            if (req.usuario.perfil !== 'GESTOR') {
+            const parts = authHeader.split(' ');
+            if (parts.length !== 2) {
+                return res.status(401).json({ message: "Erro no Token." });
+            }
+
+            const [ scheme, token ] = parts;
+
+            if (!/^Bearer$/i.test(scheme)) {
+                return res.status(401).json({ message: "Token malformatado." });
+            }
+
+            try {
+                const secret = process.env.JWT_SECRET || 'segredo-super-secreto';
+                const decoded = jwt.verify(token, secret);
+                
+                req.usuario = decoded; 
+            } catch (err) {
+                return res.status(401).json({ message: "Token inválido ou expirado." });
+            }
+
+            if (req.usuario.tipo !== 'GESTOR') {
                 return res.status(403).json({ message: "Acesso negado. Apenas gestores podem cadastrar novos usuários." });
             }
         }
 
-        const { nome, login, email, senha, perfil } = req.body;
+        const { nome, login, email, senha, tipo } = req.body;
 
         if(!nome || !login || !email || !senha){
             return res.status(400).json({ mensagem: 'Dados inválidos ou faltando.'});
@@ -44,7 +60,7 @@ export const register = async (req, res) => {
                  login,
                  email,
                  senhaHash,
-                 perfil: perfil || TÉCNICO
+                 tipo: tipo || TÉCNICO
             }
         });
 
@@ -82,10 +98,14 @@ export const login = async (req, res) => {
             return res.status(401).json({ message: 'Credenciais inválidas'});
         }
 
+        if (usuarioExiste.ativo === false) {
+             return res.status(403).json({ message: 'Acesso revogado. Contate o administrador.'});
+        }
+
         const payload = {
             id: usuarioExiste.idUsuario,
             nome: usuarioExiste.nome,
-            perfil: usuarioExiste.perfil
+            tipo: usuarioExiste.tipo
         }
 
         const segredo = process.env.JWT_SECRET || 'segredo-super-secreto';
@@ -155,12 +175,12 @@ export const alterarSenha = async (req, res) => {
 
 export const editarUsuario = async (req, res) => {
     try {
-        const { nome, email, perfil } = req.body;
+        const { nome, email, tipo } = req.body;
         const {id} = req.params;
 
-        const verificaPerfil = req.usuario;
+        const verificaTipo = req.usuario;
 
-        if (verificaPerfil.perfil !== 'GESTOR') {
+        if (verificaTipo.tipo !== 'GESTOR') {
             return res.status(403).json({ message: "Acesso negado. Apenas gestores podem editar usuários." });
         }
 
@@ -183,7 +203,7 @@ export const editarUsuario = async (req, res) => {
             data: {
                 nome: nome || undefined, 
                 email: email || undefined,
-                perfil: perfil || undefined
+                tipo: tipo || undefined
             }
         });
 
@@ -193,7 +213,7 @@ export const editarUsuario = async (req, res) => {
                 id: usuarioAtualizado.id_usuario,
                 nome: usuarioAtualizado.nome,
                 email: usuarioAtualizado.email,
-                perfil: usuarioAtualizado.perfil
+                tipo: usuarioAtualizado.tipo
             }
         });
 
@@ -202,6 +222,93 @@ export const editarUsuario = async (req, res) => {
             return res.status(404).json({ message: "Usuário não encontrado." });
         }
         console.error("Erro ao editar:", error);
+        return res.status(500).json({ message: "Erro interno." });
+    }
+}
+
+export const removerUsuario = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const usuarioLogado = req.usuario;
+
+        // verificar permissão
+        if (usuarioLogado.tipo !== 'GESTOR') {
+            return res.status(403).json({ message: "Acesso negado. Apenas gestores podem remover usuários." });
+        }
+
+        const idInt = parseInt(id);
+        if (isNaN(idInt)) {
+            return res.status(400).json({ message: "ID inválido." });
+        }
+
+        // não pode deletar a própria conta
+        if (idInt === usuarioLogado.id) {
+            return res.status(400).json({ message: "Você não pode remover sua própria conta." });
+        }
+
+        // remoção lógica
+        // ao invés de .delete(), usamos .update() para mudar o status
+        await prisma.usuario.update({
+            where: { idUsuario: idInt },
+            data: { 
+                ativo: false
+            }
+        });
+
+        return res.status(204).send();
+
+    } catch (error) {
+        if (error.code === 'P2025') {
+            return res.status(404).json({ message: "Usuário não encontrado." });
+        }
+        console.error("Erro ao remover usuário:", error);
+        return res.status(500).json({ message: "Erro interno." });
+    }
+}
+
+export const listarUsuarios = async (req, res) => {
+    try {
+        let { page = 1, limit = 10 } = req.query;
+
+        page = parseInt(page);
+        limit = parseInt(limit);
+
+        if (page < 1) page = 1;
+        if (limit < 1 || limit > 100) limit = 10;
+
+        const skip = (page - 1) * limit;
+
+        const usuarios = await prisma.usuario.findMany({
+            skip: skip,     
+            take: limit,    
+            orderBy: {
+                idUsuario: 'desc'
+            },
+            select: {       
+                idUsuario: true,
+                nome: true,
+                login: true,
+                email: true,
+                tipo: true,
+                ativo: true
+            }
+        });
+
+        const totalRegistros = await prisma.usuario.count();
+        const totalPaginas = Math.ceil(totalRegistros / limit);
+
+        return res.status(200).json({
+            data: usuarios,       
+            meta: {               
+                total: totalRegistros,
+                page: page,
+                limit: limit,
+                totalPages: totalPaginas
+            }
+        });
+
+    } catch (error) {
+        console.error("Erro ao listar usuários:", error);
         return res.status(500).json({ message: "Erro interno." });
     }
 }

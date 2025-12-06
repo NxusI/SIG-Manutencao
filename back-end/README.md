@@ -36,7 +36,7 @@ Rota de *setup* para criação inicial de usuários, no primeiro uso ela server 
       "login": "Tester",
       "email": "teste@gmail.com",
       "senha": "123",
-      "perfil": "GESTOR"  
+      "tipo": "GESTOR"  
     }
     ```
 * **Resposta:** `201 Created`
@@ -59,7 +59,7 @@ Rota para autenticação e emissão do JWT.
       "usuario": { 
         "id": 1, 
         "nome": "Gabriel", 
-        "perfil": "GESTOR" 
+        "tipo": "GESTOR" 
       }  
     }
     ```
@@ -71,7 +71,45 @@ Rota para autenticação e emissão do JWT.
 
 **REQUISITO DE SEGURANÇA:** Todas as rotas abaixo **EXIGEM** o cabeçalho `Authorization: Bearer <TOKEN>`.
 
-### 3. [RF0002] Alterar Própria Senha (`PATCH /alterar-senha`)
+### 4.  Listar Usuários (`GET /users`)
+
+Retorna a lista de usuários cadastrados com suporte a paginação.
+
+* **Permissão:** Usuário Logado (TÉCNICO ou GESTOR)
+* **Parâmetros (Query Params):**
+    * `page`: Número da página (Padrão: 1)
+    * `limit`: Itens por página (Padrão: 10)
+* **Exemplo de Requisição:**
+    `GET /users?page=1&limit=5`
+* **Resposta (Sucesso - `200 OK`):**
+    ```json
+    {
+      "data": [
+        {
+          "idUsuario": 1,
+          "nome": "Gabriel",
+          "login": "gabriel.dev",
+          "email": "gabriel@sig.com",
+          "tipo": "GESTOR",
+          "ativo": true
+        },
+        {
+          "idUsuario": 2,
+          "nome": "Usuário Excluído",
+          "perfil": "TÉCNICO",
+          "ativo": false
+        }
+      ],
+      "meta": {
+        "total": 15,
+        "page": 1,
+        "limit": 5,
+        "totalPages": 3
+      }
+    }
+    ```
+
+### 5. [RF0002] Alterar Própria Senha (`PATCH /alterar-senha`)
 
 Permite que qualquer usuário logado altere sua senha.
 
@@ -85,16 +123,26 @@ Permite que qualquer usuário logado altere sua senha.
     ```
 * **Resposta:** `200 OK`
 
-### 4. [RF0004] Editar Dados de Outro Usuário (`PATCH /editar-user/:id`)
+### 4. [RF0004] Editar Dados de Outro Usuário (`PATCH /users/editar-user/:id`)
 
-Permite que um Gestor edite o nome ou o perfil de outros usuários.
+Permite que um Gestor edite o nome ou o tipo de outros usuários.
 
 * **Permissão:** **GESTOR**
 * **Corpo da Requisição (JSON):** (Campos opcionais)
     ```json
     {
       "nome": "Novo Nome",
-      "perfil": "TECNICO" 
+      "tipo": "TECNICO" 
     }
     ```
 * **Status de Bloqueio:** `403 Forbidden` se o token não pertencer a um Gestor.
+
+### 6. [RF0005] Remover Usuário (`DELETE /users/:id`)
+
+Realiza a **Remoção Lógica (Soft Delete)** do usuário. O registro não é apagado do banco, apenas marcado como inativo (`ativo: false`), impedindo novos logins.
+
+* **Permissão:** **GESTOR**
+* **Regra de Negócio:**
+    1. O usuário logado não pode deletar a própria conta.
+    2. Usuários inativos perdem o acesso ao sistema imediatamente.
+* **Resposta:** `204 No Content` (Sucesso sem corpo de resposta).

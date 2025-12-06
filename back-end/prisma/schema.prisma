@@ -13,5 +13,6 @@ model Usuario {
   login      String  @unique
   email      String  @unique
   senhaHash  String   
-  perfil     String   @default("TECNICO") // 'TECNICO' ou 'SUPERVISOR'
+  tipo     String   @default("TECNICO") // 'TECNICO' ou 'GESTOR'
+  ativo      Boolean @default(true)
 }
