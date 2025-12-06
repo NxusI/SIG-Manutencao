@@ -27,7 +27,7 @@ Rotas que **NÃO exigem** o `Authorization` Header para acesso.
 
 ### 1. [RF0003] Cadastrar Novo Usuário (`POST /cadastro)
 
-Rota de *setup* para criação inicial de usuários, no primeiro uso ela server só para cadastrar o **GESTOR**. Após cadsatrar ele, tire as "/* */" da função verificarToken no arquivo auth.routes na rota de cadastro, e no if de checagem de gestor no auth.controller, assim só o gestor vai poder cadastrar novos usuários.
+Rota de *setup* para criação inicial de usuários, no primeiro uso ela server só para cadastrar o **GESTOR**. Após cadsatrar ele, a rota será protegida e só o gestor vai poder cadastrar novos usuários.
 
 * **Corpo da Requisição (JSON):**
     ```json

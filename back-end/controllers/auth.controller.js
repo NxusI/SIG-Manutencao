@@ -4,11 +4,23 @@ import jwt from 'jsonwebtoken';
 
 export const register = async (req, res) => {
     try {
-        const usuarioLogado = req.usuario;
+        // 1. Conta quantos usuários existem no banco
+        const totalUsuarios = await prisma.usuario.count();
+        
+        // 2. Lógica de Proteção Inteligente
+        if (totalUsuarios > 0) {
+            // Se JÁ existem usuários, a rota se torna privada.
+            // Precisamos verificar se quem chamou a rota está logado e é GESTOR.
+            
+            // O middleware verificarToken deve popular req.usuario
+            if (!req.usuario) {
+                 return res.status(401).json({ message: "Token não fornecido ou inválido." });
+            }
 
-        /*if (usuarioLogado.perfil !== 'GESTOR' && usuarioLogado.perfil !== 'SUPERVISOR') {
-            return res.status(403).json({ message: "Acesso negado. Apenas gestores podem cadastrar usuários." });
-        }*/
+            if (req.usuario.perfil !== 'GESTOR') {
+                return res.status(403).json({ message: "Acesso negado. Apenas gestores podem cadastrar novos usuários." });
+            }
+        }
 
         const { nome, login, email, senha, perfil } = req.body;
 
