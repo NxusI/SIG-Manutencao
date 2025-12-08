@@ -1,43 +1,58 @@
-import Swal from "sweetalert2";
-import { useEffect } from "react";
-import { AlertProps } from "@/shared/types/components";
+import { useEffect, useRef } from "react";
+import { toast } from "../ui/sonner";
+
+type ToastAlertProps = {
+  icon?: "success" | "error" | "warning" | "info" | "loading";
+  title?: string | any[];
+  text?: string | any[];
+  position?:
+    | "top-left"
+    | "top-center"
+    | "top-right"
+    | "bottom-left"
+    | "bottom-center"
+    | "bottom-right";
+  timer?: number;
+};
 
 export function ToastAlert({
-  icon,
+  icon = "info",
   title,
   text,
   position = "bottom-right",
-  duration = 3000,
-}: AlertProps) {
-  useEffect(() => {
-    Swal.fire({
-      toast: true,
-      position,
-      icon,
-      title,
-      text,
-      showConfirmButton: false,
-      timer: duration,
-      timerProgressBar: true,
-      background: "#f5f5f5",
-      color: "#3a3a4a",
-      iconColor:
-        icon === "error"
-          ? "rgba(192, 13, 13, 0.99)"
-          : icon === "success"
-          ? "rgba(13, 139, 8, 1)"
-          : "rgba(233, 198, 3, 1)",
-      customClass: {
-        popup: "border border-border rounded-md shadow-md",
-        title: "text-sm font-medium",
-        htmlContainer: "text-sm",
-      },
-    });
+  timer = 3000,
+}: ToastAlertProps) {
+  const firedRef = useRef(false);
 
-    return () => {
-      Swal.close();
-    };
-  }, [icon, title, text, position, duration]);
+  useEffect(() => {
+    if (firedRef.current) return;
+    firedRef.current = true;
+
+    const content = text ?? title;
+
+    if (!content) return;
+
+    if (Array.isArray(content)) {
+      content.forEach((item) => {
+        const message =
+          typeof item === "string"
+            ? item
+            : item?.message || JSON.stringify(item);
+
+        toast[icon](message, {
+          duration: timer,
+          position,
+        });
+      });
+
+      return;
+    }
+
+    toast[icon](content, {
+      duration: timer,
+      position,
+    });
+  }, [icon, title, text, position, timer]);
 
   return null;
 }

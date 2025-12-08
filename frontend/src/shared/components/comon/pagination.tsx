@@ -1,5 +1,5 @@
 import { Button } from "@/shared/components/ui/button";
-import { PaginationProps } from "@/shared/types/components";
+import { PaginationProps } from "@/shared/types/components.types";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 

@@ -1,5 +1,5 @@
 import Select, { StylesConfig } from "react-select";
-import { OptionFormatted, SelectProps } from "@/shared/types/components";
+import { OptionFormatted, SelectProps } from "@/shared/types/components.types";
 
 const customStyles: StylesConfig<OptionFormatted, false> = {
   menuPortal: (base) => ({

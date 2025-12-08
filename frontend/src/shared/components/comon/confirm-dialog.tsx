@@ -1,4 +1,4 @@
-import { ConfirmDialogProps } from '@/shared/types/components';
+import { ConfirmDialogProps } from '@/shared/types/components.types';
 import Swal from 'sweetalert2';
 
 export function ConfirmDialog({
