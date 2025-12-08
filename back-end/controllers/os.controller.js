@@ -1,3 +1,5 @@
+//EM DESENVOLVIMENTO
+
 import prisma from '../prismaClient.js';
 
 export const getOS = async (req, res) => {

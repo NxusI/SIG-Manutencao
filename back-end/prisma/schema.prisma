@@ -13,6 +13,34 @@ model Usuario {
   login      String  @unique
   email      String  @unique
   senhaHash  String   
-  tipo     String   @default("TECNICO") // 'TECNICO' ou 'GESTOR'
+  tipo       String   @default("TECNICO") // 'TECNICO' ou 'GESTOR'
   ativo      Boolean @default(true)
+  chamados   Chamado[]
+}
+
+model Cliente {
+  idCliente   Int      @id @default(autoincrement())
+  nome        String
+  email       String  @unique
+  telefone    String  @unique
+  chamados    Chamado[]
+}
+
+model Chamado {
+  idChamado     Int      @id @default(autoincrement())
+  idCliente     Int      
+  cliente       Cliente  @relation(fields: [idCliente], references: [idCliente])
+  idResponsavel Int?      
+  responsavel   Usuario?  @relation(fields: [idResponsavel], references: [idUsuario])
+  dataChamado   DateTime @default(now())
+  descricao     String   
+  idStatus      Int @default(1)     
+  status        statusOrdem  @relation(fields: [idStatus], references: [idStatus])
+  equipamento   String   
+}
+
+model statusOrdem {
+  idStatus    Int      @id @default(autoincrement())
+  descricao   String
+  chamados    Chamado[]
 }
