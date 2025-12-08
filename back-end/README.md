@@ -1,6 +1,6 @@
 # 📁 MÓDULO BACK-END: AUTENTICAÇÃO E GESTÃO DE ACESSO
 
-Este módulo implementa os requisitos de **RF001 a RF004** até agora.
+Este módulo implementa os requisitos de **RF001 a RF005** até agora.
 
 ## 🧭 Sumário
 
