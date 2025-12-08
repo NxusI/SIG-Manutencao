@@ -5,13 +5,13 @@ import { Input } from "@/shared/components/ui/input";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { ToastAlert } from "./comon/alert";
+import { useAuth } from "@/modules/auth/providers/auth-context";
+import { Eye, EyeOff } from "lucide-react";
 
-export function LoginForm({
-  className,
-  ...props
-}: React.ComponentProps<"form">) {
+export function LoginForm() {
   const [login, setLogin] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [showPassword, setShowPassword] = useState<boolean>(false);
   const [alertConfig, setAlertConfig] = useState<{
     icon: "success" | "error" | "warning";
     title: string;
@@ -19,8 +19,11 @@ export function LoginForm({
   } | null>(null);
 
   const router = useRouter();
+  const { login: authLogin } = useAuth();
 
-  const handleSubmit = () => {
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
     if (!login || !password) {
       setAlertConfig({
         icon: "warning",
@@ -29,11 +32,19 @@ export function LoginForm({
       return;
     }
 
-    router.push("/home");
+    await authLogin({ login, senha: password })
+      .then(() => router.push("/home"))
+      .catch((err) => {
+        setAlertConfig({
+          icon: "warning",
+          title:
+            err.response?.data?.message || "Inconsistência ao realizar login",
+        });
+      });
   };
 
   return (
-    <form className={cn("flex flex-col gap-6", className)} {...props}>
+    <form onSubmit={handleSubmit} className={cn("flex flex-col gap-6")}>
       <FieldGroup>
         <div className="flex flex-col items-center gap-1 text-center">
           <h1 className="text-2xl font-bold">Login na sua conta</h1>
@@ -41,27 +52,43 @@ export function LoginForm({
             Entre com login e senha para prosseguir
           </p>
         </div>
+
         <Field>
-          <FieldLabel htmlFor="email">Login</FieldLabel>
+          <FieldLabel htmlFor="login">Login</FieldLabel>
           <Input
+            id="login"
+            name="login"
             value={login}
             onChange={(e) => setLogin(e.target.value)}
             required
           />
         </Field>
-        <Field>
+
+        <div className="grid gap-3">
           <FieldLabel htmlFor="password">Senha</FieldLabel>
-          <Input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </Field>
+
+          <div className="relative">
+            <Input
+              id="password"
+              type={showPassword ? "text" : "password"}
+              required
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="pr-10"
+            />
+
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition"
+            >
+              {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+            </button>
+          </div>
+        </div>
+
         <Field>
-          <Button type="submit" onClick={handleSubmit}>
-            Login
-          </Button>
+          <Button type="submit">Login</Button>
         </Field>
       </FieldGroup>
 

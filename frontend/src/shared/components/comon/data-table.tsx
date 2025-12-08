@@ -7,7 +7,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/shared/components/ui/table";
-import { DataTableProps } from "@/shared/types/components";
+import { DataTableProps } from "@/shared/types/components.types";
 
 export function DataTable<T>({
   columns,

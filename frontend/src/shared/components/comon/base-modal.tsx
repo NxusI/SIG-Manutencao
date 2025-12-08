@@ -7,7 +7,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/shared/components/ui/dialog";
-import { BaseModalProps } from "@/shared/types/components";
+import { BaseModalProps } from "@/shared/types/components.types";
 
 export default function BaseModal({
   title,
