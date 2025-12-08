@@ -3,7 +3,7 @@ import CustomSelect from "@/shared/components/comon/select";
 import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
 import { Label } from "@/shared/components/ui/label";
-import { OptionFormatted } from "@/shared/types/components";
+import { OptionFormatted } from "@/shared/types/components.types";
 import { useState } from "react";
 
 const UpdateUsuario = () => {
