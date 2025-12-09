@@ -8,31 +8,51 @@ import CreateUsuario from "./create-form";
 import UpdateUsuario from "./update-form";
 import { DataTable } from "@/shared/components/comon/data-table";
 import { ConfirmDialog } from "@/shared/components/comon/confirm-dialog";
-import { useGetAllUsuarios } from "../hooks/use-usuario";
+import { useDeleteUsuario, useGetAllUsuarios } from "../hooks/use-usuario";
 import TableSkeleton from "@/shared/components/skeleton/table";
+import { Usuario } from "@/domain/usuario/entities/usuario.entity";
 
 const Usuarios = () => {
   const [page, setPage] = useState<number>(1);
-  const { error, loading, usuarios, total } = useGetAllUsuarios({
+  const [alertConfig, setAlertConfig] = useState<{
+    icon: "success" | "error" | "warning" | "info";
+    title: string;
+  } | null>(null);
+
+  const { delete: deleteUsuario } = useDeleteUsuario();
+  const { error, loading, usuarios, total, refetch } = useGetAllUsuarios({
     limit: 10,
     page,
   });
 
-  const handleDelete = (u: any) => {
+  const handleDelete = (u: Usuario) => {
     const { showDialog } = ConfirmDialog({
       title: "Confirmar Exclusão",
       text: `Tem certeza que deseja excluir o usuário ${u.nome}?`,
       buttonColor: "#b91111ff",
       confirmText: "Excluir",
-      onConfirm: () => {
-        console.log("excluir");
+      onConfirm: async () => {
+        await deleteUsuario(u.idUsuario)
+          .then(() => {
+            setAlertConfig({
+              icon: "success",
+              title: "Usuário excluido com sucesso",
+            });
+            setTimeout(() => refetch(), 3000);
+          })
+          .catch((err) => {
+            setAlertConfig({
+              icon: "warning",
+              title:
+                err.response.data.message || "Iconsistência ao excluir usuário",
+            });
+          })
+          .finally(() => setTimeout(() => setAlertConfig(null), 3000));
       },
     });
 
     showDialog();
   };
-
-  console.log(usuarios);
 
   return (
     <div className="grid gap-5">
@@ -48,7 +68,7 @@ const Usuarios = () => {
             </Button>
           }
         >
-          <CreateUsuario />
+          <CreateUsuario refetch={refetch} />
         </BaseModal>
       </div>
       {loading ? (
@@ -63,12 +83,13 @@ const Usuarios = () => {
         </p>
       ) : (
         <DataTable
-          columns={["idUsuario", "nome", "email", "login", "edit", "delete"]}
+          columns={["idUsuario", "nome", "email", "login", "tipo", "edit", "delete"]}
           columnLabels={{
             idUsuario: "ID",
             nome: "Nome",
             email: "E-mail",
             login: "Login",
+            tipo: "Tipo",
             edit: "Editar",
             delete: "Excluir",
           }}
@@ -85,7 +106,7 @@ const Usuarios = () => {
                   </Button>
                 }
               >
-                <UpdateUsuario />
+                <UpdateUsuario refetch={refetch} usuario={d} />
               </BaseModal>
             ),
             delete: (

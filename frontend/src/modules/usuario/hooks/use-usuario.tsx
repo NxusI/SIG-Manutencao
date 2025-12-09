@@ -1,6 +1,9 @@
 import { Usuario } from "@/domain/usuario/entities/usuario.entity";
+import { ICreateUsuarioParams } from "@/domain/usuario/params/create-usuario.params";
 import { UsuarioService } from "@/domain/usuario/usuarios.service";
+import { queryClient } from "@/lib/query-client";
 import { IGetPaginatedParams } from "@/shared/types/paginated-request.types";
+import { useMutation } from "@tanstack/react-query";
 import { useCallback, useEffect, useState } from "react";
 
 export function useGetAllUsuarios(params: IGetPaginatedParams) {
@@ -40,3 +43,58 @@ export function useGetAllUsuarios(params: IGetPaginatedParams) {
     refetch: fetchUsuarios,
   };
 }
+
+export function useCreateUsuario() {
+  const service = new UsuarioService();
+
+  const mutation = useMutation({
+    mutationFn: ({ data }: { data: ICreateUsuarioParams }) =>
+      service.create(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["usuarios"] });
+    },
+  });
+
+  return {
+    create: mutation.mutateAsync,
+    loading: mutation.isPending,
+  };
+}
+
+export function useUpdateUsuario() {
+  const service = new UsuarioService();
+
+  const mutation = useMutation({
+    mutationFn: ({
+      id,
+      data,
+    }: {
+      id: number;
+      data: Partial<ICreateUsuarioParams>;
+    }) => service.update(id, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["usuarios"] });
+    },
+  });
+
+  return {
+    update: mutation.mutateAsync,
+    loading: mutation.isPending,
+  };
+}
+
+export function useDeleteUsuario() {
+  const service = new UsuarioService();
+
+  const mutation = useMutation({
+    mutationFn: (id: number) => service.delete(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["usuarios"] });
+    },
+  });
+
+  return {
+    delete: mutation.mutateAsync,
+    loading: mutation.isPending,
+  };
+} 

@@ -5,6 +5,7 @@ export interface Usuario {
   login: string;
   senha: string;
   createdAt: string;
+  tipo: TipoUsuario;
 }
 
 export enum TipoUsuario {

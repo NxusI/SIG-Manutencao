@@ -1,3 +1,5 @@
+"use client"
+
 import {
   CircleCheck,
   Info,
@@ -33,7 +35,7 @@ export const Toaster = ({ ...props }: ToasterProps) => {
       style={
         {
           "--normal-bg": "var(--card)",
-          "--normal-text": "white",
+          "--normal-text": "black",
           "--normal-border": "var(--border)",
           "--border-radius": "var(--radius)",
 
@@ -49,11 +51,11 @@ export const Toaster = ({ ...props }: ToasterProps) => {
           "--error-bg": "var(--card)",
           "--loading-bg": "var(--card)",
 
-          "--success-text": "white",
-          "--info-text": "white",
-          "--warning-text": "white",
-          "--error-text": "white",
-          "--loading-text": "white",
+          "--success-text": "black",
+          "--info-text": "black",
+          "--warning-text": "black",
+          "--error-text": "black",
+          "--loading-text": "black",
         } as React.CSSProperties
       }
       {...props}

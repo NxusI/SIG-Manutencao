@@ -1,15 +1,62 @@
-import { TipoUsuario } from "@/domain/usuario/entities/usuario.entity";
+import { TipoUsuario, Usuario } from "@/domain/usuario/entities/usuario.entity";
 import CustomSelect from "@/shared/components/comon/select";
 import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
 import { Label } from "@/shared/components/ui/label";
 import { OptionFormatted } from "@/shared/types/components.types";
 import { useState } from "react";
+import { useUpdateUsuario } from "../hooks/use-usuario";
+import { Loader2 } from "lucide-react";
+import { ICreateUsuarioParams } from "@/domain/usuario/params/create-usuario.params";
+import { ToastAlert } from "@/shared/components/comon/alert";
 
-const UpdateUsuario = () => {
-  const [nome, setNome] = useState<string>("");
-  const [email, setEmail] = useState<string>("");
-  const [tipo, setTipo] = useState<OptionFormatted | null>(null);
+const UpdateUsuario = ({ usuario, refetch }: { usuario: Usuario, refetch: () => void }) => {
+  const [nome, setNome] = useState<string>(usuario.nome);
+  const [email, setEmail] = useState<string>(usuario.email);
+  const [tipo, setTipo] = useState<OptionFormatted | null>({
+    value: usuario.tipo,
+    label: usuario.tipo,
+  });
+  const [alertConfig, setAlertConfig] = useState<{
+    icon: "success" | "error" | "warning" | "info";
+    title: string;
+  } | null>(null);
+
+  const { loading, update } = useUpdateUsuario();
+
+  const handleSubmit = async () => {
+    const updateFields: Partial<ICreateUsuarioParams> = {};
+
+    if (nome !== usuario.nome) updateFields.nome = nome;
+    if (email !== usuario.email) updateFields.email = email;
+    if (tipo && tipo.value !== usuario.tipo)
+      updateFields.tipo = tipo.value as TipoUsuario;
+
+    if (Object.keys(updateFields).length === 0) {
+      setAlertConfig({
+        icon: "warning",
+        title: "Nenhum campo foi alterado",
+      });
+      return;
+    }
+
+    await update({ id: usuario.idUsuario, data: updateFields })
+      .then(() => {
+        setAlertConfig({
+          icon: "success",
+          title: "Usuário atualizado com sucesso",
+        });
+        setTimeout(() => refetch(), 3000);
+      })
+      .catch((err) => {
+        setAlertConfig({
+          icon: "warning",
+          title:
+            err.response.data.message || "Iconsistência ao atualizar usuário",
+        });
+      })
+      .finally(() => setTimeout(() => setAlertConfig(null), 3000));
+  };
 
   return (
     <div className="grid gap-5">
@@ -38,7 +85,11 @@ const UpdateUsuario = () => {
           value={tipo}
         />
       </div>
-      <Button>Atualizar</Button>
+      <Button onClick={handleSubmit} disabled={loading}>
+        {loading ? <Loader2 className="animate-spin" /> : "Atualizar"}
+      </Button>
+
+      {alertConfig && <ToastAlert {...alertConfig} />}
     </div>
   );
 };
