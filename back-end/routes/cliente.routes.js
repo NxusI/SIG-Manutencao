@@ -1,11 +1,14 @@
 import express from 'express'
-import { registrar } from '../controllers/cliente.controller.js';
+import { registrar, listarClientes} from '../controllers/cliente.controller.js';
 import { verificarToken } from '../middlewares/auth.middleware.js';
 
 
 const router = express.Router();
 
-router.get('/', registrar)
+router.get('/', listarClientes)
+
+router.post('/', registrar)
+
 // router.post('/cadastro', register);
 // router.post('/login', login);
 // router.patch('/alterar-senha', verificarToken, alterarSenha);
