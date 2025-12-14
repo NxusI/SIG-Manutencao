@@ -21,8 +21,8 @@ model Usuario {
 model Cliente {
   idCliente   Int      @id @default(autoincrement())
   nome        String
-  email       String  //@unique
-  telefone    String  //@unique
+  email       String  @unique
+  telefone    String  @unique
   chamados    Chamado[]
 }
 

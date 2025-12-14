@@ -7,16 +7,16 @@ export const registrar = async (req, res) => {
     const { nome, email, telefone } = req.body
 
     const novoUsuario = await prisma.cliente.create({
-        data: {
-                nome,
-                email,
-                telefone
+        data:{
+            nome,
+            email,
+            telefone
         }
     });
 
     return res.status(201).json({
-            message: "Cliente cadastrado com sucesso!",
-            cliente: {
+            mensagem: "Cliente cadastrado com sucesso!",
+            data: {
                 id: novoUsuario.idUsuario,
                 nome: novoUsuario.nome,
                 email: novoUsuario.email,
@@ -25,16 +25,15 @@ export const registrar = async (req, res) => {
     })
 }
 
-    export const listarClientes = async (req, res) => {
-        const clientes = await prisma.cliente.findMany({
-            select: {       
-                idUsuario: true,
-                nome: true,
-                email: true,
-                telefone: true,
-            }
-        })
-    }
+export const listarClientes = async (req, res) => {
+    const clientes = await prisma.cliente.findMany()
+
+    return res.status(202).json({
+        mensagem: "Lista de clientes.",
+        data: clientes
+    })
+
+}
     
     // try {
     //     const totalUsuarios = await prisma.usuario.count();
