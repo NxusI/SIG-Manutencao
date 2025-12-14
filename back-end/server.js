@@ -12,7 +12,7 @@ const PORT = 3001;
 app.use(express.json());
 
 app.get('/', (req, res) => {
-res.send('SIG-Manutencao')
+    res.send('SIG-Manutencao')
 });
 
 app.use('/api/ordens', osRoutes);
