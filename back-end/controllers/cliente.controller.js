@@ -29,7 +29,7 @@ export const registrar = async (req, res) => {
 export const listarClientes = async (req, res) => {
     const clientes = await prisma.cliente.findMany()
 
-    return res.status(202).json({
+    return res.status(200).json({
         mensagem: "Lista de clientes.",
         data: clientes
     })
@@ -54,10 +54,25 @@ export const editarCliente = async (req, res) => {
         }
     })
 
-    res.status(203).json({
+    res.status(201).json({
         message:"Cliente atualizado com sucesso",
         data: clienteAtualizado
     })
 
 
+}
+
+export const excluirCliente = async (req, res) => {
+    const {id} = req.params
+    const idCliente = parseInt(id)
+
+    const clienteExcluido = await prisma.cliente.delete({
+        where:{
+            idCliente: idCliente
+        }
+    })
+
+    res.status(200).json({
+        message:"Cliente excluído com sucesso!"
+    })
 }
