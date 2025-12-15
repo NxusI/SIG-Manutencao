@@ -40,7 +40,12 @@ const CreateUsuario = ({ refetch }: { refetch: () => void }) => {
           icon: "success",
           title: "Usuário cadastrado com sucesso",
         });
-        setTimeout(() => refetch(), 5000);
+        setEmail("");
+        setLogin("");
+        setNome("");
+        setTipo(null);
+        
+        setTimeout(() => refetch(), 2000);
       })
       .catch((err) => {
         setAlertConfig({

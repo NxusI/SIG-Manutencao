@@ -1,5 +1,4 @@
-export interface Cliente {
-  idCliente: number;
+export interface ICreateClienteParams {
   nome: string;
   email: string;
   telefone: string;

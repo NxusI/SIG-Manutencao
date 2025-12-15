@@ -46,7 +46,7 @@ const UpdateUsuario = ({ usuario, refetch }: { usuario: Usuario, refetch: () => 
           icon: "success",
           title: "Usuário atualizado com sucesso",
         });
-        setTimeout(() => refetch(), 3000);
+        setTimeout(() => refetch(), 2000);
       })
       .catch((err) => {
         setAlertConfig({
