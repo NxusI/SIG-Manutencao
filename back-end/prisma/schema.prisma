@@ -15,6 +15,7 @@ model Usuario {
   senhaHash  String   
   tipo       String   @default("TECNICO") // 'TECNICO' ou 'GESTOR'
   ativo      Boolean @default(true)
+  deletedAt DateTime?
   chamados   Chamado[]
 }
 
