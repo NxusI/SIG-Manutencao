@@ -66,23 +66,35 @@ Você pode encontrar o texto completo da licença no arquivo `LICENSE` na raiz d
 
 ## 🛠️ Tecnologias Utilizadas
 
-O sistema utilizará uma arquitetura moderna baseada em JavaScript, com foco em componentes acessíveis e desempenho.
+A arquitetura foi desenhada priorizando escalabilidade, componentização e performance. O sistema utilizará uma arquitetura moderna baseada em JavaScript, com foco em componentes acessíveis e desempenho.
 
-| Componente | Tecnologia |
+### 🎨 Frontend (Client-Side)
+> Focado na Experiência do Usuário (UX) e Acessibilidade. Utiliza o framework Next.js e React, com bibliotecas ShadCN/UI e Lucide Icons para componentes modernos e acessíveis.
+
+| Tecnologia | Função / Motivo da Escolha |
 | :--- | :--- |
-| **Frontend** | [ ![Next.js](https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=next.js&logoColor=white) ](https://nextjs.org/) + [ ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB) ](https://react.dev/) |
-| **UI/UX** | [ ![ShadCN/UI](https://img.shields.io/badge/ShadCN%2FUI-000000?style=for-the-badge&logo=react&logoColor=white) ](https://ui.shadcn.com/) + [Lucide Icons](https://lucide.dev/icons/)|
-| **Backend** | [ ![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=node.js&logoColor=white) ](https://nodejs.org/en/download/) + [ ![Express.js](https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white) ](https://expressjs.com/) |
-| **Banco de Dados** | [ ![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white) ](https://dev.mysql.com/downloads/) |
- 
-### Frontend
-> Utiliza o framework Next.js e React, com bibliotecas ShadCN/UI e Lucide Icons para componentes modernos e acessíveis.
+|[ ![Next.js](https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=next.js&logoColor=white) ](https://nextjs.org/)| Framework React para renderização híbrida (SSR/CSR) e rotas otimizadas. |
+|[ ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB) ](https://react.dev/)| Biblioteca base para construção de interfaces reativas baseadas em estados. |
+|**[Tailwind CSS](https://tailwindcss.com/)**| Estilização *utility-first* para desenvolvimento ágil e responsivo. |
+|[ ![ShadCN/UI](https://img.shields.io/badge/ShadCN%2FUI-000000?style=for-the-badge&logo=react&logoColor=white) ](https://ui.shadcn.com/)| Coleção de componentes acessíveis e customizáveis (Radix UI) para consistência visual. |
+|[Lucide Icons](https://lucide.dev/icons/)| Biblioteca de ícones vetoriais leves e padronizados. |
 
-### Backend
-> Construído com Node.js e Express.js.
+### ⚙️ Backend (Server-Side)
+> API RESTful robusta para regra de negócios e segurança. Construído com Node.js e Express.js.
 
-### Banco de Dados
+| Tecnologia | Função / Motivo da Escolha |
+| :--- | :--- |
+|[ ![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=node.js&logoColor=white) ](https://nodejs.org/en/download/)| Runtime JavaScript para execução de alta performance no servidor. |
+|[ ![Express.js](https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white) ](https://expressjs.com/)| Framework minimalista para estruturação de rotas e middlewares. |
+| **[Nodemailer](https://nodemailer.com/)** | Módulo para automação de envio de e-mails transacionais (Orçamentos/Avisos). |
+| **[JWT (JsonWebToken)](https://jwt.io/)** | Padrão para autenticação *stateless* e segura entre cliente e servidor. |
+
+### 🗄️ Banco de Dados
 > MySQL para armazenamento estruturado de clientes, chamados, OS e relatórios.
+
+| Tecnologia | Função |
+| :--- | :--- |
+| [ ![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white) ](https://dev.mysql.com/downloads/) | Banco de dados relacional para garantir a integridade das transações (ACID) e relacionamentos complexos (Cliente <-> OS <-> Peças). |
 
 ### Integração
 > Implementa um serviço de disparo automático de e-mails para comunicação com o cliente.
@@ -101,68 +113,54 @@ O levantamento de requisitos foi realizado através de uma abordagem qualitativa
 
 ### 🧩 Módulos do Sistema
 
-Abaixo estão listados os requisitos funcionais (RF) organizados por módulos, conforme definido na especificação técnica do projeto.
+Abaixo, a lista de Requisitos Funcionais (RF) ativos no projeto, alinhados com a **Seção 8 do Relatório Técnico**.
 
-#### 🔐 1. Módulo de Autenticação e Gestão de Usuários
-> *Foco: Segurança e controle de acesso hierárquico (Técnico vs. Supervisor).*
+> ⚠️ **Nota:** Os requisitos *RF007, RF015, RF016, RF025, RF027 e RF028* foram suspensos ou despriorizados nesta versão para adequação ao cronograma.
 
+### 🔐 1. Segurança e Administração
 | ID | Funcionalidade | Status |
 | :--- | :--- | :---: |
-| `RF001` | **Login Seguro:** Autenticação via usuário e senha. | 🚧 Em Desenv. |
-| `RF002` | **Gestão de Credenciais:** Alteração de senha pelo próprio usuário. | 📝 To Do |
-| `RF003` | **Cadastro de Usuários:** Inserção de novos colaboradores pelo gestor. | 📝 To Do |
-| `RF004` | **Edição de Perfil:** Atualização de permissões e dados cadastrais. | 📝 To Do |
-| `RF005` | **Desativação:** Remoção lógica de usuários do sistema. | 📝 To Do |
+| `RF001` | **Autenticação:** Login seguro (Admin/Técnico). | ✅ Feito |
+| `RF002` | **Recuperação:** Alteração de senha ("Esqueci minha senha"). | 🚧 Em Desenv. |
+| `RF003` | **Gestão de Equipe:** Listagem de usuários do sistema. | 📝 Backlog |
+| `RF004` | **Permissões:** Edição de dados cadastrais de usuários. | 📝 Backlog |
+| `RF005` | **Soft Delete:** Desativação lógica de usuários (sem perda de histórico). | 📝 Backlog |
 
-#### 👤 2. Módulo de Cadastro e Atendimento
-> *Foco: Eliminar fichas de papel e padronizar a entrada de dados.*
-
+### 👤 2. Operacional: Clientes e Chamados
 | ID | Funcionalidade | Status |
 | :--- | :--- | :---: |
-| `RF006` | **Gestão de Clientes:** CRUD completo (Nome, e-mail, telefone, endereço). | 📝 To Do |
-| `RF008` | **Solicitação de Serviço:** Registro do equipamento e problema relatado. | 📝 To Do |
-| `RF009` | **Abertura Automática:** Geração automática do "Chamado" após solicitação. | 📝 To Do |
-| `RF010` | **Matriz de Prioridade:** Classificação visual (Prioritário/Normal). | 📝 To Do |
-| `RF011` | **Atribuição:** Vínculo do chamado ao técnico responsável. | 📝 To Do |
+| `RF006` | **CRUD Clientes:** Gestão completa da base de clientes. | 📝 Backlog |
+| `RF008` | **Solicitação:** Registro de entrada de equipamento. | 📝 Backlog |
+| `RF009` | **Ticket Automático:** Geração de protocolo único por solicitação. | 📝 Backlog |
+| `RF010` | **Prioridade:** Classificação visual (Normal/Urgente). | 📝 Backlog |
+| `RF011` | **Assign:** Atribuição de responsabilidade técnica. | 📝 Backlog |
 
-#### 🔄 3. Gestão de Fluxo e Status
-> *Foco: Visibilidade do progresso em tempo real.*
-
+### 🔄 3. Fluxo de Trabalho (Kanban)
 | ID | Funcionalidade | Status |
 | :--- | :--- | :---: |
-| `RF012` | **Transição Automática:** Atualização de status ao vincular técnico. | 📝 To Do |
-| `RF013` | **Kanban de Chamados:** Agrupamento visual por status (Diagnóstico, Reparo, etc.). | 📝 To Do |
-| `RF014` | **Ordenação Inteligente:** Filtro automático por prioridade e data de criação. | 📝 To Do |
-| `RF017` | **Alertas de SLA:** Notificação de atraso em diagnósticos (> 3 dias). | 📝 To Do |
+| `RF012` | **Status Dinâmico:** Atualização automática baseada em ações. | 📝 Backlog |
+| `RF013` | **Visualização Kanban:** Colunas de Triagem, Bancada e Saída. | 📝 Backlog |
+| `RF014` | **Filtros:** Ordenação por data de entrada e criticidade. | 📝 Backlog |
+| `RF017` | **Monitor de SLA:** Alerta visual para diagnósticos atrasados (>3 dias). | 📝 Backlog |
 
-#### 🧾 4. Ordem de Serviço (OS) e Financeiro
-> *Foco: Profissionalização do orçamento e clareza fiscal.*
-
+### 🧾 4. Financeiro e OS
 | ID | Funcionalidade | Status |
 | :--- | :--- | :---: |
-| `RF018` | **Orçamentação:** Registro detalhado de peças e mão de obra. | 📝 To Do |
-| `RF019` | **Controle de Custos:** Registro do total gasto com insumos na OS. | 📝 To Do |
-| `RF020` | **Registro de Receita:** Definição do preço final cobrado do cliente. | 📝 To Do |
-| `RF021` | **Encerramento Técnico:** Finalizar a OS após a conclusão do reparo. | 📝 To Do |
-| `RF022` | **Status Finalizado:** Atribuir o status 'Finalizado' ao Chamado automaticamente após finalização da OS (RF0016) | 📝 To Do |
+| `RF018` | **Orçamento:** Composição de Peças + Mão de Obra. | 📝 Backlog |
+| `RF019` | **Custos:** Registro de custo interno (para cálculo de margem). | 📝 Backlog |
+| `RF020` | **Receita:** Definição de preço final ao consumidor. | 📝 Backlog |
+| `RF021` | **Baixa Técnica:** Encerramento da ordem de serviço. | 📝 Backlog |
+| `RF022` | **Finalização:** Mudança de status global do chamado. | 📝 Backlog |
 
-#### 📨 5. Comunicação Automatizada
-> *Foco: Reduzir o tempo gasto no WhatsApp/Telefone.*
-
+### 📨 5. Automação e Gestão
 | ID | Funcionalidade | Status |
 | :--- | :--- | :---: |
-| `RF023` | **Envio de Orçamento:** E-mail automático solicitando aprovação do cliente. | 📝 To Do |
-| `RF024` | **Registro de Aprovação:** Input da resposta do cliente (Aceite/Recusa) no sistema. | 📝 To Do |
-| `RF026` | **Notificação de Conclusão:** E-mail automático informando finalização do reparo. | 📝 To Do |
-
-#### 📊 6. Dashboard Gerencial
-> *Foco: Tomada de decisão baseada em dados.*
-
-| ID | Funcionalidade | Status |
-| :--- | :--- | :---: |
-| `RF029` | **Volumetria:** Estatísticas de serviços (Abertos vs. Concluídos). | 📝 To Do |
-| `RF030` | **Saúde Financeira:** Visão consolidada de Custos Operacionais vs. Lucro. | 📝 To Do |
-| `RF031` | **Eficiência:** Indicador de Tempo Médio de Resolução de chamados. | 📝 To Do |
+| `RF023` | **Disparo de Orçamento:** E-mail automático para aprovação. | 📝 Backlog |
+| `RF024` | **Coleta de Decisão:** Interface de Aceite/Recusa do cliente. | 📝 Backlog |
+| `RF026` | **Aviso de Retirada:** E-mail automático de serviço concluído. | 📝 Backlog |
+| `RF029` | **Dashboard:** Volumetria (Abertos vs. Fechados). | 📝 Backlog |
+| `RF030` | **Financeiro:** Lucro Líquido vs. Custos Operacionais. | 📝 Backlog |
+| `RF031` | **KPI:** Tempo Médio de Resolução. | 📝 Backlog |
 
 ---
 
