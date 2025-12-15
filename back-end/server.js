@@ -2,6 +2,7 @@ import express from 'express'
 import osRoutes from './routes/os.routes.js'
 import authRoutes from './routes/auth.routes.js'
 import chamadoRoutes from './routes/chamado.routes.js'
+import clienteRoutes from './routes/cliente.routes.js'
 import cors from 'cors';
 
 const app = express();
@@ -11,12 +12,13 @@ const PORT = 3001;
 app.use(express.json());
 
 app.get('/', (req, res) => {
-res.send('SIG-Manutencao')
+    res.send('SIG-Manutencao')
 });
 
 app.use('/api/ordens', osRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/chamado', chamadoRoutes);
+app.use('/api/cliente', clienteRoutes);
 
 app.listen(PORT, () => {
     console.log(`server rodando no http://localhost:${PORT}`);
