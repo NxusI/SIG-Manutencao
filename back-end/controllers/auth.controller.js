@@ -106,6 +106,7 @@ export const login = async (req, res) => {
             id: usuarioExiste.idUsuario,
             nome: usuarioExiste.nome,
             tipo: usuarioExiste.tipo,
+            email: usuarioExiste.email,
             email: usuarioExiste.email
         }
 
@@ -232,40 +233,30 @@ export const removerUsuario = async (req, res) => {
         const { id } = req.params;
         const usuarioLogado = req.usuario;
 
-        // verificar permissão
         if (usuarioLogado.tipo !== 'GESTOR') {
-            return res.status(403).json({ message: "Acesso negado. Apenas gestores podem remover usuários." });
+            return res.status(403).json({ message: "Acesso negado." });
         }
 
         const idInt = parseInt(id);
-        if (isNaN(idInt)) {
-            return res.status(400).json({ message: "ID inválido." });
+        if (isNaN(idInt) || idInt === usuarioLogado.id) {
+            return res.status(400).json({ message: "Operação inválida." });
         }
 
-        // não pode deletar a própria conta
-        if (idInt === usuarioLogado.id) {
-            return res.status(400).json({ message: "Você não pode remover sua própria conta." });
-        }
-
-        // remoção lógica
-        // ao invés de .delete(), usamos .update() para mudar o status
         await prisma.usuario.update({
             where: { idUsuario: idInt },
             data: { 
-                ativo: false
+                deletedAt: new Date(), 
+                ativo: false           
             }
         });
 
-        return res.status(204).send();
+        return res.status(204).send(); 
 
     } catch (error) {
-        if (error.code === 'P2025') {
-            return res.status(404).json({ message: "Usuário não encontrado." });
-        }
-        console.error("Erro ao remover usuário:", error);
+        console.error("Erro ao remover:", error);
         return res.status(500).json({ message: "Erro interno." });
     }
-}
+};
 
 export const listarUsuarios = async (req, res) => {
     try {
@@ -279,9 +270,14 @@ export const listarUsuarios = async (req, res) => {
 
         const skip = (page - 1) * limit;
 
+        const filtro = {
+            deletedAt: null
+        };
+
         const usuarios = await prisma.usuario.findMany({
             skip: skip,     
-            take: limit,    
+            take: limit,
+            where: filtro,    
             orderBy: {
                 idUsuario: 'desc'
             },
@@ -313,3 +309,37 @@ export const listarUsuarios = async (req, res) => {
         return res.status(500).json({ message: "Erro interno." });
     }
 }
+
+export const alternarStatus = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const usuarioLogado = req.usuario;
+
+        if (usuarioLogado.tipo !== 'GESTOR') {
+            return res.status(403).json({ message: "Apenas gestores podem alterar status." });
+        }
+
+        const idInt = parseInt(id);
+        if (isNaN(idInt)) return res.status(400).json({ message: "ID inválido." });
+
+        const usuarioAlvo = await prisma.usuario.findUnique({
+            where: { idUsuario: idInt }
+        });
+
+        if (!usuarioAlvo) return res.status(404).json({ message: "Usuário não encontrado." });
+
+        const usuarioAtualizado = await prisma.usuario.update({
+            where: { idUsuario: idInt },
+            data: { ativo: !usuarioAlvo.ativo }
+        });
+
+        return res.status(200).json({
+            message: `Usuário ${usuarioAtualizado.ativo ? 'ativado' : 'inativado'} com sucesso!`,
+            ativo: usuarioAtualizado.ativo
+        });
+
+    } catch (error) {
+        console.error("Erro ao alterar status:", error);
+        return res.status(500).json({ message: "Erro interno." });
+    }
+};
