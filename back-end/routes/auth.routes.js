@@ -2,7 +2,6 @@ import express from 'express'
 import { register, removerUsuario, login, alterarSenha, editarUsuario, listarUsuarios, alternarStatus } from '../controllers/auth.controller.js';
 import { verificarToken } from '../middlewares/auth.middleware.js';
 
-
 const router = express.Router();
 
 router.get('/users', verificarToken, listarUsuarios)
