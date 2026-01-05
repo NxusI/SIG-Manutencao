@@ -39,7 +39,7 @@ export const register = async (req, res) => {
         }
 
         const { nome, login, email, senha, tipo } = req.body;
-
+        
         if(!nome || !login || !email || !senha){
             return res.status(400).json({ mensagem: 'Dados inválidos ou faltando.'});
         }
@@ -72,7 +72,7 @@ export const register = async (req, res) => {
                 login: novoUsuario.login,
                 email: novoUsuario.email
             }
-    })
+        })
     } catch (error) {
         console.error("Erro ao criar usuario", error);
         return res.status(500).json({ message: 'Erro interno' });
