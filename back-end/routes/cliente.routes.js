@@ -4,9 +4,9 @@ import { verificarToken } from '../middlewares/auth.middleware.js';
 
 const router = express.Router();
 
-router.post('/cadastro', registrar)
 router.get('/', listarClientes)
-router.patch('/editar-cliente/:id', editarCliente)
-router.delete('/excluir-cliente/:id', excluirCliente)
+router.post('/cadastro', verificarToken, registrar)
+router.patch('/editar-cliente/:id', verificarToken, editarCliente)
+router.delete('/excluir-cliente/:id', verificarToken, excluirCliente)
 
 export default router;

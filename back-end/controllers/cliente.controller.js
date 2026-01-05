@@ -36,7 +36,6 @@ export const registrar = async (req, res) => {
         }
 
         const { nome, email, telefone } = req.body;
-        //const { nome, email, telefone } = req.body
         
         if(!nome || !email || !telefone){
             return res.status(400).json({ mensagem: 'Dados inválidos ou faltando.'});
@@ -129,52 +128,96 @@ export const listarClientes = async (req, res) => {
         return res.status(500).json({ message: "Erro interno." });
     }
 
-    // const clientes = await prisma.cliente.findMany()
-
-    // return res.status(200).json({
-    //     mensagem: "Lista de clientes.",
-    //     data: clientes
-    // })
-
 }
 
 export const editarCliente = async (req, res) => {
 
-    const {nome, email, telefone} = req.body
-    const {id} = req.params
+    try{
+        const {nome, email, telefone} = req.body
+        const {id} = req.params
+        
+        const verificaTipo = req.usuario.tipo;
 
-    const idCliente = parseInt(id)
-
-    const clienteAtualizado = await prisma.cliente.update({
-        where: {
-            idCliente: idCliente
-        },
-        data: {
-            nome: nome,
-            email: email,
-            telefone: telefone
+        if (verificaTipo !== 'GESTOR') {
+            return res.status(403).json({ message: "Acesso negado. Apenas gestores podem editar clientes." });
         }
-    })
 
-    res.status(201).json({
-        message:"Cliente atualizado com sucesso",
-        data: clienteAtualizado
-    })
+        const idCliente = parseInt(id)
+        
+        if (isNaN(idCliente)) {
+            return res.status(400).json({ message: "ID inválido." });
+        }
+
+        if (email || telefone) {
+            const emailExiste = await prisma.cliente.findUnique({ where: { email } });
+            const telefoneExiste = await prisma.cliente.findUnique({ where: { email } });
+
+            if (emailExiste && emailExiste.id_cliente !== idCliente) {
+                return res.status(400).json({ message: "Email já está em uso por outro cliente." });
+            }
+
+            if (telefoneExiste && emailExiste.id_cliente !== idCliente) {
+                return res.status(400).json({ message: "Telefone já está em uso por outro cliente." });
+            }
+        }
+        
+        const clienteAtualizado = await prisma.cliente.update({
+            where: {
+                idCliente: idCliente
+            },
+            data: {
+                nome: nome,
+                email: email,
+                telefone: telefone
+            }
+        })
+
+        res.status(201).json({
+            message:"Cliente atualizado com sucesso.",
+            data: clienteAtualizado
+        })
+    } catch (error) {
+        if (error.code === 'P2025') {
+            return res.status(404).json({ message: "Usuário não encontrado." });
+        }
+        console.error("Erro ao editar:", error);
+        return res.status(500).json({ message: "Erro interno." });
+    }
 
 
 }
 
 export const excluirCliente = async (req, res) => {
-    const {id} = req.params
-    const idCliente = parseInt(id)
+    
+    try {
+        const {id} = req.params
+        const idCliente = parseInt(id)
 
-    const clienteExcluido = await prisma.cliente.delete({
-        where:{
-            idCliente: idCliente
+        const usuarioLogado = req.usuario
+
+        if (usuarioLogado.tipo !== 'GESTOR') {
+            return res.status(403).json({ message: "Acesso negado." });
         }
-    })
 
-    res.status(200).json({
-        message:"Cliente excluído com sucesso!"
-    })
+        if (isNaN(idCliente) || idCliente === usuarioLogado.id) {
+            return res.status(400).json({ message: "Operação inválida." });
+        }
+
+        await prisma.cliente.delete({
+            where:{
+                idCliente: idCliente
+            }
+        })
+
+        res.status(200).json({
+            message:"Cliente excluído com sucesso!"
+        })
+
+    } catch (error) {
+        if (error.code === 'P2025') {
+            return res.status(404).json({ message: "Cliente não encontrado." });
+        }
+        console.error("Erro ao remover:", error);
+        return res.status(500).json({ message: "Erro interno." });
+    }
 }
