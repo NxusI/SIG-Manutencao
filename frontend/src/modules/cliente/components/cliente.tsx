@@ -43,7 +43,7 @@ const Clientes = () => {
               icon: "success",
               title: "Cliente excluido com sucesso",
             });
-            setTimeout(() => refetch(), 2000);
+            setTimeout(() => refetch(), 1000);
           })
           .catch((err) => {
             setAlertConfig({
