@@ -34,6 +34,7 @@ model Chamado {
   idResponsavel Int?      
   responsavel   Usuario?  @relation(fields: [idResponsavel], references: [idUsuario])
   dataChamado   DateTime @default(now())
+  //add dispois titulo        String
   descricao     String   
   idStatus      Int @default(1)     
   status        statusOrdem  @relation(fields: [idStatus], references: [idStatus])
