@@ -188,35 +188,35 @@ export const editarCliente = async (req, res) => {
 }
 
 export const excluirCliente = async (req, res) => {
-    
     try {
-        const {id} = req.params
-        const idCliente = parseInt(id)
+        const { id } = req.params;
+        const idCliente = parseInt(id);
 
-        const usuarioLogado = req.usuario
+        const usuarioLogado = req.usuario; 
 
-        if (usuarioLogado.tipo !== 'GESTOR') {
-            return res.status(403).json({ message: "Acesso negado." });
+        if (!usuarioLogado || usuarioLogado.tipo !== 'GESTOR') {
+            return res.status(403).json({ message: "Acesso negado. Apenas gestores podem excluir clientes." });
         }
 
-        if (isNaN(idCliente) || idCliente === usuarioLogado.id) {
-            return res.status(400).json({ message: "Operação inválida." });
+        if (isNaN(idCliente)) {
+            return res.status(400).json({ message: "ID do cliente inválido." });
         }
 
         await prisma.cliente.delete({
-            where:{
+            where: {
                 idCliente: idCliente
             }
-        })
+        });
 
-        res.status(200).json({
-            message:"Cliente excluído com sucesso!"
-        })
+        return res.status(200).json({
+            message: "Cliente excluído com sucesso!"
+        });
 
     } catch (error) {
         if (error.code === 'P2025') {
             return res.status(404).json({ message: "Cliente não encontrado." });
         }
+
         console.error("Erro ao remover:", error);
         return res.status(500).json({ message: "Erro interno." });
     }
