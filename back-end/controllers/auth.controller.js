@@ -291,7 +291,9 @@ export const listarUsuarios = async (req, res) => {
             }
         });
 
-        const totalRegistros = await prisma.usuario.count();
+        const totalRegistros = await prisma.usuario.count({
+            where: filtro
+        });
         const totalPaginas = Math.ceil(totalRegistros / limit);
 
         return res.status(200).json({

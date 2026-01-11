@@ -96,9 +96,14 @@ export const listarClientes = async (req, res) => {
 
         const skip = (page - 1) * limit;
 
+        const filtro = {
+            deletedAt: null
+        };
+
         const clientes = await prisma.cliente.findMany({
             skip: skip,     
-            take: limit, 
+            take: limit,
+            where: filtro, 
             orderBy: {
                 idCliente: 'desc'
             },
@@ -106,11 +111,14 @@ export const listarClientes = async (req, res) => {
                 idCliente: true,
                 nome: true,
                 email: true,
-                telefone: true
+                telefone: true,
+                ativo: true
             }
         });
 
-        const totalRegistros = await prisma.cliente.count();
+        const totalRegistros = await prisma.cliente.count({
+            where: filtro
+        });
         const totalPaginas = Math.ceil(totalRegistros / limit);
 
         return res.status(200).json({
@@ -190,27 +198,26 @@ export const editarCliente = async (req, res) => {
 export const excluirCliente = async (req, res) => {
     try {
         const { id } = req.params;
-        const idCliente = parseInt(id);
+        const usuarioLogado = req.usuario;
 
-        const usuarioLogado = req.usuario; 
-
-        if (!usuarioLogado || usuarioLogado.tipo !== 'GESTOR') {
-            return res.status(403).json({ message: "Acesso negado. Apenas gestores podem excluir clientes." });
+        if (usuarioLogado.tipo !== 'GESTOR') {
+            return res.status(403).json({ message: "Acesso negado." });
         }
 
-        if (isNaN(idCliente)) {
-            return res.status(400).json({ message: "ID do cliente inválido." });
+        const idInt = parseInt(id);
+        if (isNaN(idInt)) { 
+            return res.status(400).json({ message: "ID inválido." });
         }
 
-        await prisma.cliente.delete({
-            where: {
-                idCliente: idCliente
+        await prisma.cliente.update({
+            where: { idCliente: idInt },
+            data: { 
+                deletedAt: new Date(), 
+                ativo: false           
             }
         });
 
-        return res.status(200).json({
-            message: "Cliente excluído com sucesso!"
-        });
+        return res.status(204).send(); 
 
     } catch (error) {
         if (error.code === 'P2025') {
@@ -220,4 +227,38 @@ export const excluirCliente = async (req, res) => {
         console.error("Erro ao remover:", error);
         return res.status(500).json({ message: "Erro interno." });
     }
-}
+};
+
+export const alternarStatus = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const usuarioLogado = req.usuario;
+
+        if (usuarioLogado.tipo !== 'GESTOR') {
+            return res.status(403).json({ message: "Apenas gestores podem alterar status." });
+        }
+
+        const idInt = parseInt(id);
+        if (isNaN(idInt)) return res.status(400).json({ message: "ID inválido." });
+
+        const clienteAlvo = await prisma.cliente.findUnique({
+            where: { idCliente: idInt }
+        });
+
+        if (!clienteAlvo) return res.status(404).json({ message: "Usuário não encontrado." });
+
+        const clienteAtualizado = await prisma.cliente.update({
+            where: { idCliente: idInt },
+            data: { ativo: !clienteAlvo.ativo }
+        });
+
+        return res.status(200).json({
+            message: `Cliente ${clienteAtualizado.ativo ? 'ativado' : 'inativado'} com sucesso!`,
+            ativo: clienteAtualizado.ativo
+        });
+
+    } catch (error) {
+        console.error("Erro ao alterar status:", error);
+        return res.status(500).json({ message: "Erro interno." });
+    }
+};

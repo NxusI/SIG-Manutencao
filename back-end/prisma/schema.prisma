@@ -24,6 +24,8 @@ model Cliente {
   nome        String
   email       String  @unique
   telefone    String  @unique
+  ativo      Boolean @default(true)
+  deletedAt DateTime?
   chamados    Chamado[]
 }
 
