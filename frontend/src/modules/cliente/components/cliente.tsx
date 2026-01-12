@@ -84,7 +84,7 @@ const Clientes = () => {
         </p>
       ) : !clientes || !clientes.length ? (
         <p className="w-full text-center text-muted-foreground text-lg">
-          Nenhum usuário cadastrado
+          Nenhum cliente cadastrado
         </p>
       ) : (
         <DataTable
