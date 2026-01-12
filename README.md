@@ -11,7 +11,7 @@ Keywords: Nexus One - Instituto Robótica Sustentável - Projeto Integrado - Sis
   - [📝 Sobre o Projeto](#-sobre-o-projeto)
     - [O Desafio](#o-desafio)
     - [A Solução](#a-solução)
-  - [🤝 Quem Somos Nos!](#-quem-somos-nos)
+  - [🤝 Quem Somos Nós!](#-quem-somos-nós)
   - [📜 Licença](#-licença)
   - [🛠️ Tecnologias Utilizadas](#️-tecnologias-utilizadas)
     - [Frontend](#frontend)
@@ -97,6 +97,7 @@ A arquitetura foi desenhada priorizando escalabilidade, componentização e perf
 | :--- | :--- |
 | [ ![Prisma](https://img.shields.io/badge/Prisma-3982CE?style=for-the-badge&logo=Prisma&logoColor=white) ](https://www.prisma.io/) | ORM moderno que garante acesso ao banco de dados com tipagem segura (*Type-Safe*) e migrações ágeis. |
 | [ ![MySQL](https://img.shields.io/badge/MySQL-005C84?style=for-the-badge&logo=mysql&logoColor=white) ](https://www.mysql.com/) | Banco de dados relacional robusto utilizado para a persistência estruturada das informações. |
+
 ### Integração
 > Implementa um serviço de disparo automático de e-mails para comunicação com o cliente.
 
