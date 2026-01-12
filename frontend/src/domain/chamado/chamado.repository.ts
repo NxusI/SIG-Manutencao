@@ -1,11 +1,12 @@
-import { IGetPaginatedParams, PaginatedResponse } from "@/shared/types/paginated-request.types";
+import { PaginatedResponse } from "@/shared/types/paginated-request.types";
 import { IChamadoRepository } from "./contracts/chamado-repository.interface";
 import { Chamado } from "./entities/chamado.entity";
 import { apiClient } from "@/infraestructure/api/api-client";
 import { ICreateChamadoParams } from "./params/create-chamado.params";
+import { IGetAllChamadoParams } from "./params/get-all-chamado.params";
 
 export class ChamadoRepository implements IChamadoRepository {
-  async getAll(params?: IGetPaginatedParams): Promise<PaginatedResponse<Chamado>> {
+  async getAll(params?: IGetAllChamadoParams): Promise<PaginatedResponse<Chamado>> {
     const res = await apiClient.get(`chamado`,{
       params
     });

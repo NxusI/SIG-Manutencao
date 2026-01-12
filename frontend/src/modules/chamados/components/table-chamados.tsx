@@ -38,6 +38,7 @@ const TableChamados = ({
         <DataTable
           columns={[
             "idChamado",
+            "titulo",
             "nomeCliente",
             "telefone",
             "equipamento",
@@ -48,6 +49,7 @@ const TableChamados = ({
           ]}
           columnLabels={{
             idChamado: "ID",
+            titulo: "Título",
             nomeCliente: "Cliente",
             telefone: "Telefone",
             equipamento: "Equipamento",

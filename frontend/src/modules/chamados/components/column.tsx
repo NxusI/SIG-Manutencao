@@ -11,6 +11,7 @@ const columnColors: Record<string, string> = {
   green: "bg-green-600",
   yellow: "bg-yellow-600",
   orange: "bg-orange-600",
+  red: "bg-red-600",
 };
 
 const ColumnKanban = ({ column }: { column: Column }) => {
@@ -32,15 +33,15 @@ const ColumnKanban = ({ column }: { column: Column }) => {
       </h3>
 
       <SortableContext
-        items={column.cards.map((card) => card.id)}
+        items={column.cards.map((card) => card.idChamado)}
         strategy={verticalListSortingStrategy}
       >
         {column.cards.map((card) => (
-          <CardItem key={card.id} card={card} />
+          <CardItem key={card.idChamado} card={card} />
         ))}
       </SortableContext>
     </div>
   );
 };
 
-export default ColumnKanban;
+export default ColumnKanban;  

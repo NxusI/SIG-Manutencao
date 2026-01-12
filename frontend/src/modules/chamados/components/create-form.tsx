@@ -11,7 +11,7 @@ import { useCreateChamado } from "../hooks/use-chamado";
 import { Loader2 } from "lucide-react";
 import { ToastAlert } from "@/shared/components/comon/alert";
 
-const CreateChamado = ({refetch}: { refetch: () => void}) => {
+const CreateChamado = ({ refetch }: { refetch: () => void }) => {
   const [title, setTitle] = useState<string>("");
   const [equipamento, setEquipamento] = useState<string>("");
   const [descricao, setDescricao] = useState<string>("");
@@ -43,7 +43,7 @@ const CreateChamado = ({refetch}: { refetch: () => void}) => {
 
     await create({
       data: {
-        // titulo: title,
+        titulo: title,
         equipamento,
         descricao,
         idCliente: Number(cliente.value),
@@ -56,6 +56,12 @@ const CreateChamado = ({refetch}: { refetch: () => void}) => {
           icon: "success",
           title: "Chamado criado com sucesso",
         });
+
+        setTitle("");
+        setEquipamento("");
+        setDescricao("");
+        setCliente(null);
+        setResponsavel(null);
         setTimeout(() => refetch(), 1000);
       })
       .catch(() => {
@@ -66,12 +72,6 @@ const CreateChamado = ({refetch}: { refetch: () => void}) => {
         });
       })
       .finally(() => {
-        setTitle("");
-        setEquipamento("");
-        setDescricao("");
-        setCliente(null);
-        setResponsavel(null);
-
         setTimeout(() => {
           setAlertConfig(null);
         }, 3000);
@@ -87,7 +87,10 @@ const CreateChamado = ({refetch}: { refetch: () => void}) => {
         </div>
         <div className="grid gap-2 col-span-2">
           <Label>Equipamento*</Label>
-          <Input value={equipamento} onChange={(e) => setEquipamento(e.target.value)} />
+          <Input
+            value={equipamento}
+            onChange={(e) => setEquipamento(e.target.value)}
+          />
         </div>
         <div className="grid gap-2">
           <Label>Cliente*</Label>
@@ -117,14 +120,18 @@ const CreateChamado = ({refetch}: { refetch: () => void}) => {
         </div>
         <div className="grid gap-2 col-span-2">
           <Label>Descrição*</Label>
-          <Textarea rows={7} value={descricao} onChange={(e) => setDescricao(e.target.value)} />
+          <Textarea
+            rows={7}
+            value={descricao}
+            onChange={(e) => setDescricao(e.target.value)}
+          />
         </div>
       </div>
       <Button className="w-full" disabled={loading} onClick={handleSubmit}>
         {loading ? <Loader2 className="animate-spin" /> : "Salvar"}
       </Button>
 
-      {alertConfig && <ToastAlert key={alertConfig.id} {...alertConfig}/>}
+      {alertConfig && <ToastAlert key={alertConfig.id} {...alertConfig} />}
     </div>
   );
 };

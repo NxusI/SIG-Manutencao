@@ -1,11 +1,8 @@
-export type Card = {
-  id: string;
-  title: string;
-};
+import { Chamado } from "@/domain/chamado/entities/chamado.entity";
 
 export type Column = {
-  id: string;
+  id: number;
   title: string;
   color: string;
-  cards: Card[];
+  cards: Chamado[];
 };

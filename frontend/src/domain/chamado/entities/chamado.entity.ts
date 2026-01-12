@@ -4,6 +4,7 @@ import { Usuario } from "@/domain/usuario/entities/usuario.entity";
 
 export interface Chamado {
   idChamado: number;
+  titulo: string;
   idCliente: number;
   idResponsavel: number | null;
   dataChamado: string;

@@ -6,16 +6,19 @@ import TableChamados from "./table-chamados";
 import KanbanChamados from "./kanban-chamados";
 import BaseModal from "@/shared/components/comon/base-modal";
 import CreateChamado from "./create-form";
-import { useGetAllChamados } from "../hooks/use-chamado";
+import { useGetAllChamados, useKanbanChamados } from "../hooks/use-chamado";
+import FilterChamados from "./filter";
 
 const Chamados = () => {
   const [page, setPage] = useState<number>(1);
   const [viewMode, setViewMode] = useState<"table" | "grid">("table");
+  const [open, setOpen] = useState<boolean>(false);
 
   const { chamados, error, loading, total, refetch } = useGetAllChamados({
     limit: 7,
     page,
   });
+  const columns = useKanbanChamados();
 
   return (
     <div className="grid gap-5">
@@ -44,6 +47,7 @@ const Chamados = () => {
         </div>
 
         <div className="flex flex-col lg:flex-row justify-end gap-2">
+          <FilterChamados open={open} setOpen={setOpen} />
           <Input
             placeholder="Pesquisar Chamado..."
             className="lg:max-w-[350px]"
