@@ -17,6 +17,8 @@ model Usuario {
   ativo      Boolean @default(true)
   deletedAt DateTime?
   chamados   Chamado[]
+
+  @@map("USUARIO")
 }
 
 model Cliente {
@@ -24,7 +26,11 @@ model Cliente {
   nome        String
   email       String  @unique
   telefone    String  @unique
+  ativo      Boolean @default(true)
+  deletedAt DateTime?
   chamados    Chamado[]
+
+  @@map("CLIENTE")
 }
 
 model Chamado {
@@ -34,14 +40,19 @@ model Chamado {
   idResponsavel Int?      
   responsavel   Usuario?  @relation(fields: [idResponsavel], references: [idUsuario])
   dataChamado   DateTime @default(now())
+  titulo        String
   descricao     String   
   idStatus      Int @default(1)     
   status        statusOrdem  @relation(fields: [idStatus], references: [idStatus])
   equipamento   String   
+
+  @@map("CHAMADO")
 }
 
 model statusOrdem {
   idStatus    Int      @id @default(autoincrement())
-  descricao   String
+  descricao   String   @unique
   chamados    Chamado[]
+
+  @@map("STATUS")
 }
