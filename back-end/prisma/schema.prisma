@@ -17,6 +17,8 @@ model Usuario {
   ativo      Boolean @default(true)
   deletedAt DateTime?
   chamados   Chamado[]
+
+  @@map("USUARIO")
 }
 
 model Cliente {
@@ -27,6 +29,8 @@ model Cliente {
   ativo      Boolean @default(true)
   deletedAt DateTime?
   chamados    Chamado[]
+
+  @@map("CLIENTE")
 }
 
 model Chamado {
@@ -41,10 +45,14 @@ model Chamado {
   idStatus      Int @default(1)     
   status        statusOrdem  @relation(fields: [idStatus], references: [idStatus])
   equipamento   String   
+
+  @@map("CHAMADO")
 }
 
 model statusOrdem {
   idStatus    Int      @id @default(autoincrement())
-  descricao   String
+  descricao   String   @unique
   chamados    Chamado[]
+
+  @@map("STATUS")
 }
