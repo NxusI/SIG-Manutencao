@@ -107,6 +107,41 @@ A arquitetura foi desenhada priorizando escalabilidade, componentização e perf
 
 [A demonstração da prova de conceito pode ser acessada aqui.](https://github.com/NxusI/Teste-Tecnologias)
 
+## 🚀 Como Rodar o Projeto
+
+Siga os passos abaixo para executar o ambiente de desenvolvimento localmente.
+
+### Pré-requisitos
+* **Node.js** (Versão LTS recomendada)
+* **NPM** ou **Yarn**
+* **Git**
+* **MySQL**
+
+### Passo a Passo
+
+```bash
+# 1. Clone o repositório
+git clone [https://github.com/NxusI/SIG-Manutencao.git](https://github.com/NxusI/SIG-Manutencao.git)
+
+# 2. Entre na pasta do projeto
+cd SIG-Manutencao
+
+# 3. Instale as dependências
+npm install
+
+# 4. Configure as Variáveis de Ambiente/Banco de Dados (Se necessário)
+# Crie um arquivo chamado .env (apenas .env, sem nome antes).
+
+# Conexão com o Banco de Dados
+# Formato: mysql://USUARIO:SENHA@HOST:PORTA/NOME_DO_BANCO
+DATABASE_URL="mysql://root:SUA_SENHA_AQUI@localhost:3306/sig_manutencao"
+
+# Agora vamos pedir para o Prisma criar as tabelas no MySQL automaticamente. No terminal, rode:
+npx prisma migrate dev --name init
+
+# 5. Execute o projeto
+npm run dev
+
 ---
 
 ## ✨ Escopo Funcional e Requisitos
