@@ -113,34 +113,46 @@ Siga os passos abaixo para executar o ambiente de desenvolvimento localmente.
 
 ### Pré-requisitos
 * **Node.js** (Versão LTS recomendada)
-* **NPM** ou **Yarn**
+* **NPM**
 * **Git**
 * **MySQL**
 
 ### Passo a Passo
 
 ```bash
-# 1. Clone o repositório
-git clone [https://github.com/NxusI/SIG-Manutencao.git](https://github.com/NxusI/SIG-Manutencao.git)
-
-# 2. Entre na pasta do projeto
+# 1. Clone o repositório e entre na pasta
+git clone https://github.com/NxusI/SIG-Manutencao.git
 cd SIG-Manutencao
 
-# 3. Instale as dependências
+# --- PARTE A: CONFIGURANDO O BACKEND (API e BANCO) ---
+
+# 2. Entre na pasta do backend e instale as dependências
+cd backend
 npm install
 
-# 4. Configure as Variáveis de Ambiente/Banco de Dados (Se necessário)
-# Crie um arquivo chamado .env (apenas .env, sem nome antes).
+# 3. Crie o arquivo .env
+# Crie um arquivo chamado .env dentro da pasta 'backend' e cole o conteúdo abaixo:
+DATABASE_URL="mysql://root:SUA_SENHA@localhost:3306/sig_manutencao"
+JWT_SECRET="segredo-nexus-one"
 
-# Conexão com o Banco de Dados
-# Formato: mysql://USUARIO:SENHA@HOST:PORTA/NOME_DO_BANCO
-DATABASE_URL="mysql://root:SUA_SENHA_AQUI@localhost:3306/sig_manutencao"
-
-# Agora vamos pedir para o Prisma criar as tabelas no MySQL automaticamente. No terminal, rode:
+# 4. Sincronize o Banco de Dados (Isso cria as tabelas no MySQL)
 npx prisma migrate dev --name init
 
-# 5. Execute o projeto
+# 5. Rode a API (Mantenha este terminal aberto)
 npm run dev
+
+# --- PARTE B: CONFIGURANDO O FRONTEND (INTERFACE) ---
+
+# 6. Abra um NOVO terminal (o anterior está ocupado rodando a API)
+# Volte para a pasta raiz e entre no frontend
+cd frontend
+npm install
+
+# 7. Execute o projeto visual
+npm run dev
+
+# 8. Acesse no navegador
+http://localhost:3000
 
 ---
 
