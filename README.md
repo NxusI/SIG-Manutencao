@@ -4,6 +4,7 @@ Keywords: Nexus One - Instituto Robótica Sustentável - Projeto Integrado - Sis
 [![Status](https://img.shields.io/badge/Status-Checkpoint_1-orange.svg)](#-status-do-projeto)
 [![Licença](https://img.shields.io/badge/License-GPL_v3-blue.svg)](#-licença)
 [![Backend](https://img.shields.io/badge/Backend-Node.js%20%7C%20Express.js-black.svg)](#backend)
+[![ORM](https://img.shields.io/badge/ORM-Prisma-2D3748.svg)](#banco-de-dados)
 [![Frontend](https://img.shields.io/badge/Frontend-Next.js%20%7C%20React-black.svg)](#frontend)
 
 ## 🧭 Sumário
@@ -90,12 +91,12 @@ A arquitetura foi desenhada priorizando escalabilidade, componentização e perf
 | **[JWT (JsonWebToken)](https://jwt.io/)** | Padrão para autenticação *stateless* e segura entre cliente e servidor. |
 
 ### 🗄️ Banco de Dados
-> MySQL para armazenamento estruturado de clientes, chamados, OS e relatórios.
+> A persistência de dados é gerenciada pelo **Prisma ORM**, garantindo tipagem segura e migrações eficientes para o banco de dados MySQL.
 
 | Tecnologia | Função |
 | :--- | :--- |
-| [ ![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white) ](https://dev.mysql.com/downloads/) | Banco de dados relacional para garantir a integridade das transações (ACID) e relacionamentos complexos (Cliente <-> OS <-> Peças). |
-
+| [ ![Prisma](https://img.shields.io/badge/Prisma-3982CE?style=for-the-badge&logo=Prisma&logoColor=white) ](https://www.prisma.io/) | ORM moderno que garante acesso ao banco de dados com tipagem segura (*Type-Safe*) e migrações ágeis. |
+| [ ![MySQL](https://img.shields.io/badge/MySQL-005C84?style=for-the-badge&logo=mysql&logoColor=white) ](https://www.mysql.com/) | Banco de dados relacional robusto utilizado para a persistência estruturada das informações. |
 ### Integração
 > Implementa um serviço de disparo automático de e-mails para comunicação com o cliente.
 
