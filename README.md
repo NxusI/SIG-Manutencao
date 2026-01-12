@@ -153,7 +153,7 @@ npm run dev
 
 # 8. Acesse no navegador
 http://localhost:3000
-
+```
 ---
 
 ## ✨ Escopo Funcional e Requisitos
