@@ -9,6 +9,6 @@ export interface PaginatedResponse<T> {
 }
 
 export interface IGetPaginatedParams{
-  page: number;
-  limit: number;
+  page?: number;
+  limit?: number;
 }

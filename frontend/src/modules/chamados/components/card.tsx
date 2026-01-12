@@ -1,8 +1,8 @@
+import { Chamado } from "@/domain/chamado/entities/chamado.entity";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { Card } from "../types/chamados.types";
 
-const CardItem = ({ card }: { card: Card }) => {
+const CardItem = ({ card }: { card: Chamado }) => {
   const {
     attributes,
     listeners,
@@ -11,7 +11,7 @@ const CardItem = ({ card }: { card: Card }) => {
     transition,
     isDragging,
   } = useSortable({
-    id: card.id,
+    id: card.idChamado,
   });
 
   const style = {
@@ -29,7 +29,7 @@ const CardItem = ({ card }: { card: Card }) => {
         ${isDragging ? "opacity-0" : "opacity-100"}
         cursor-grab hover:bg-gray-50 active:cursor-grabbing`}
     >
-      {card.title}
+      {card.titulo}
     </div>
   );
 };

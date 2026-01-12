@@ -1,12 +1,14 @@
 import { ChamadoService } from "@/domain/chamado/chamado.service";
 import { Chamado } from "@/domain/chamado/entities/chamado.entity";
 import { ICreateChamadoParams } from "@/domain/chamado/params/create-chamado.params";
+import { IGetAllChamadoParams } from "@/domain/chamado/params/get-all-chamado.params";
 import { queryClient } from "@/lib/query-client";
-import { IGetPaginatedParams } from "@/shared/types/paginated-request.types";
 import { useMutation } from "@tanstack/react-query";
 import { useCallback, useEffect, useState } from "react";
+import { Column } from "../types/chamados.types";
+import { STATUS_COLUMNS } from "../data/status";
 
-export function useGetAllChamados(params?: IGetPaginatedParams) {
+export function useGetAllChamados(params?: IGetAllChamadoParams) {
   const [chamados, setChamados] = useState<Chamado[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [total, setTotal] = useState<number>(1);
@@ -41,6 +43,40 @@ export function useGetAllChamados(params?: IGetPaginatedParams) {
     total,
     refetch: fetchChamados,
   };
+}
+
+export function useKanbanChamados(params?: IGetAllChamadoParams) {
+  const [columns, setColumns] = useState<Column[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  const service = new ChamadoService();
+
+  useEffect(() => {
+    async function load() {
+      setLoading(true);
+
+      const data = await Promise.all(
+        STATUS_COLUMNS.map(async (status) => {
+          const response = await service.getAll({
+            ...params,
+            statusId: status.id,
+          });
+
+          return {
+            ...status,
+            cards: response.data,
+          };
+        })
+      );
+
+      setColumns(data);
+      setLoading(false);
+    }
+
+    load();
+  }, []);
+
+  return { columns, loading };
 }
 
 export function useCreateChamado() {

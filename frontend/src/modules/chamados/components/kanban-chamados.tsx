@@ -13,36 +13,39 @@ const KanbanChamados = () => {
   const [activeCardId, setActiveCardId] = useState<string | null>(null);
   const [columns, setColumns] = useState<Column[]>([
     {
-      id: "todo",
-      title: "Aberto",
+      id: 1,
+      title: "INICIADO",
       color: "blue",
-      cards: [
-        { id: "1", title: "Criar layout" },
-        { id: "2", title: "Configurar backend" },
-      ],
+      cards: [],
     },
     {
-      id: "doing",
-      title: "Em Andamento",
+      id: 2,
+      title: "EM ANDAMENTO",
       color: "yellow",
-      cards: [{ id: "3", title: "Implementar Kanban" }],
+      cards: [],
     },
     {
-      id: "pendent",
-      title: "Pendente",
+      id: 3,
+      title: "PENDENTE",
       color: "orange",
-      cards: [{ id: "4", title: "Orar pelo aumento de salário" }],
+      cards: [],
     },
     {
-      id: "done",
-      title: "Finalizado",
+      id: 4,
+      title: "FINALIZADO",
       color: "green",
+      cards: [],
+    },
+    {
+      id: 5,
+      title: "CANCELADO",
+      color: "red",
       cards: [],
     },
   ]);
 
   function findColumnByCardId(cardId: string, cols: Column[]) {
-    return cols.find((col) => col.cards.some((card) => card.id === cardId));
+    return cols.find((col) => col.cards.some((card) => String(card.idChamado) === cardId));
   }
 
   function handleDragEnd(event: DragEndEvent) {
@@ -63,7 +66,7 @@ const KanbanChamados = () => {
       if (sourceColumn.id === destinationColumn.id) return prev;
 
       const draggedCard = sourceColumn.cards.find(
-        (card) => card.id === active.id
+        (card) => card.idChamado === active.id
       );
 
       if (!draggedCard) return prev;
@@ -72,7 +75,7 @@ const KanbanChamados = () => {
         if (column.id === sourceColumn.id) {
           return {
             ...column,
-            cards: column.cards.filter((card) => card.id !== draggedCard.id),
+            cards: column.cards.filter((card) => card.idChamado !== draggedCard.idChamado),
           };
         }
 
@@ -112,7 +115,7 @@ const KanbanChamados = () => {
               {
                 columns
                   .flatMap((col) => col.cards)
-                  .find((card) => card.id === activeCardId)?.title
+                  .find((card) => String(card.idChamado) === activeCardId)?.titulo
               }
             </div>
           ) : null}
