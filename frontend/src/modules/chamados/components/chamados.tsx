@@ -2,6 +2,8 @@ import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
 import { LayoutGrid, Plus, Table } from "lucide-react";
 import { useState } from "react";
+import TableChamados from "./table-chamados";
+import KanbanChamados from "./kanban-chamados";
 
 const Chamados = () => {
   const [viewMode, setViewMode] = useState<"table" | "grid">("table");
@@ -42,6 +44,7 @@ const Chamados = () => {
           </Button>
         </div>
       </div>
+      {viewMode === "table" ? <TableChamados/> : <KanbanChamados/>}
     </div>
   );
 };
