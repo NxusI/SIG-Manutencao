@@ -4,18 +4,19 @@ import jwt from 'jsonwebtoken';
 
 export const criarChamado = async (req, res) => {
     try {
-        const { idCliente, equipamento, descricao, idResponsavel } = req.body;
+        const { idCliente, equipamento, descricao, idResponsavel, titulo } = req.body;
         
         const idClienteInt = parseInt(idCliente);
         const idResponsavelInt = idResponsavel ? parseInt(idResponsavel) : null;
 
-        if (!equipamento || isNaN(idClienteInt) || idClienteInt <= 0 || !descricao) {
+        if (!titulo || !equipamento || isNaN(idClienteInt) || idClienteInt <= 0 || !descricao) {
             return res.status(400).json({ message: 'Dados inválidos ou faltando.' });
         }
 
         const novoChamado = await prisma.chamado.create({
             data: {
                 idCliente: idClienteInt,
+                titulo: titulo,
                 equipamento,
                 descricao,
                 idResponsavel: idResponsavelInt,
@@ -99,40 +100,61 @@ export const listarChamados = async (req, res) => {
 }
 
 export const editarChamado = async (req, res) => {
-    const { idCliente, idResponsavel, equipamento, descricao, idStatus } = req.body;
-    console.log("KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK")
-    const {id} = req.params
-    console.log("vindo?:" + id)
-    
-    const idChamadoInt = parseInt(id);
-
-    const idClienteInt = parseInt(idCliente);
-    const idResponsavelInt = parseInt(idResponsavel);
-    
-    console.log(idCliente + ' | ' + idResponsavel + ' | ' + equipamento + ' | ' + descricao + ' | ' + idStatus + ' | ' + idChamadoInt)
-
-
     try {
+        const { id } = req.params;
+        const { idCliente, idResponsavel, equipamento, descricao, idStatus, titulo } = req.body;
+
+        const idChamadoInt = parseInt(id);
+        if (isNaN(idChamadoInt)) return res.status(400).json({ message: "ID do chamado inválido." });
+
+        const dadosParaAtualizar = {};
+
+        if (titulo) dadosParaAtualizar.titulo = titulo;
+ 
+        if (equipamento) dadosParaAtualizar.equipamento = equipamento;
+
+        if (descricao) dadosParaAtualizar.descricao = descricao;
+
+        if (idCliente) dadosParaAtualizar.idCliente = parseInt(idCliente);
+
+        if (idStatus) dadosParaAtualizar.idStatus = parseInt(idStatus);
+
+        if (idResponsavel) {
+            const idRespInt = parseInt(idResponsavel);
+            
+            dadosParaAtualizar.idResponsavel = idRespInt;
+
+            if (!idStatus) {
+                dadosParaAtualizar.idStatus = 2; 
+            }
+        }
+
+        if (Object.keys(dadosParaAtualizar).length === 0) {
+            return res.status(400).json({ message: "Nenhum dado enviado para atualização." });
+        }
+
         const chamadoAtualizado = await prisma.chamado.update({
-            where:{
+            where: {
                 idChamado: idChamadoInt
             },
-            data: {
-                idCliente: idClienteInt,
-                idResponsavel: idResponsavelInt,
-                equipamento: equipamento,
-                descricao: descricao,
-                idStatus: idStatus
-            },
+            data: dadosParaAtualizar,
+            include: {
+                status: true,     
+                responsavel: true  
+            }
         });
 
-        return res.status(201).json({ 
+        return res.status(200).json({ 
             mensagem: 'Chamado atualizado com sucesso!',
+            info: dadosParaAtualizar.idStatus === 2 ? "Status alterado para 'Em Andamento' automaticamente." : null,
             data: chamadoAtualizado
         });
 
     } catch (error) {
+        if (error.code === 'P2025') {
+            return res.status(404).json({ message: "Chamado não encontrado." });
+        }
         console.error("Erro ao atualizar chamado:", error);
-        return res.status(500).json({ mensagem: 'Erro interno no servidor.' });
+        return res.status(500).json({ message: 'Erro interno no servidor.' });
     };
 };
