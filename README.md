@@ -170,19 +170,20 @@ Abaixo, a lista de Requisitos Funcionais (RF) ativos no projeto, alinhados com a
 | ID | Funcionalidade | Status |
 | :--- | :--- | :---: |
 | `RF001` | **Autenticação:** Login seguro (Admin/Técnico). | ✅ Feito |
-| `RF002` | **Recuperação:** Alteração de senha ("Esqueci minha senha"). | 🚧 Em Desenv. |
-| `RF003` | **Gestão de Equipe:** Listagem de usuários do sistema. | 📝 Backlog |
-| `RF004` | **Permissões:** Edição de dados cadastrais de usuários. | 📝 Backlog |
-| `RF005` | **Soft Delete:** Desativação lógica de usuários (sem perda de histórico). | 📝 Backlog |
+| `RF002` | **Recuperação:** Alteração de senha ("Esqueci minha senha"). | ✅ Feito |
+| `RF003` | **Gestão de Equipe:** Listagem de usuários do sistema. | ✅ Feito |
+| `RF004` | **Permissões:** Edição de dados cadastrais de usuários. | ✅ Feito |
+| `RF005` | **Soft Delete:** Desativação lógica de usuários (sem perda de histórico). | ✅ Feito |
 
 ### 👤 2. Operacional: Clientes e Chamados
 | ID | Funcionalidade | Status |
 | :--- | :--- | :---: |
-| `RF006` | **CRUD Clientes:** Gestão completa da base de clientes. | 📝 Backlog |
-| `RF008` | **Solicitação:** Registro de entrada de equipamento. | 📝 Backlog |
-| `RF009` | **Ticket Automático:** Geração de protocolo único por solicitação. | 📝 Backlog |
-| `RF010` | **Prioridade:** Classificação visual (Normal/Urgente). | 📝 Backlog |
-| `RF011` | **Assign:** Atribuição de responsabilidade técnica. | 📝 Backlog |
+| `RF006` | **CRUD Clientes:** Gestão completa da base de clientes. | ✅ Feito |
+| `RF007` | **Alterar cadastro de clientes Cadastro e Atendimento** | 📝 SUSPENSO |
+| `RF008` | **Solicitação:** Registro de entrada de equipamento. | ✅ Feito |
+| `RF009` | **Ticket Automático:** Geração de protocolo único por solicitação. | 📝 SUSPENSO |
+| `RF010` | **Prioridade:** Classificação visual (Normal/Urgente). | 📝 SUSPENSO |
+| `RF011` | **Assign:** Atribuição de responsabilidade técnica. | ✅ Feito |
 
 ### 🔄 3. Fluxo de Trabalho (Kanban)
 | ID | Funcionalidade | Status |
@@ -190,23 +191,23 @@ Abaixo, a lista de Requisitos Funcionais (RF) ativos no projeto, alinhados com a
 | `RF012` | **Status Dinâmico:** Atualização automática baseada em ações. | 📝 Backlog |
 | `RF013` | **Visualização Kanban:** Colunas de Triagem, Bancada e Saída. | 📝 Backlog |
 | `RF014` | **Filtros:** Ordenação por data de entrada e criticidade. | 📝 Backlog |
-| `RF017` | **Monitor de SLA:** Alerta visual para diagnósticos atrasados (>3 dias). | 📝 Backlog |
+| `RF017` | **Monitor de SLA:** Alerta visual para diagnósticos atrasados (>3 dias). | 📝 SUSPENSO |
 
 ### 🧾 4. Financeiro e OS
 | ID | Funcionalidade | Status |
 | :--- | :--- | :---: |
-| `RF018` | **Orçamento:** Composição de Peças + Mão de Obra. | 📝 Backlog |
-| `RF019` | **Custos:** Registro de custo interno (para cálculo de margem). | 📝 Backlog |
-| `RF020` | **Receita:** Definição de preço final ao consumidor. | 📝 Backlog |
-| `RF021` | **Baixa Técnica:** Encerramento da ordem de serviço. | 📝 Backlog |
-| `RF022` | **Finalização:** Mudança de status global do chamado. | 📝 Backlog |
+| `RF018` | **Orçamento:** Composição de Peças + Mão de Obra. | ✅ Feito |
+| `RF019` | **Custos:** Registro de custo interno (para cálculo de margem). | ✅ Feito |
+| `RF020` | **Receita:** Definição de preço final ao consumidor. | ✅ Feito |
+| `RF021` | **Baixa Técnica:** Encerramento da ordem de serviço. | 📝 SUSPENSO |
+| `RF022` | **Finalização:** Mudança de status global do chamado. | ✅ Feito |
 
 ### 📨 5. Automação e Gestão
 | ID | Funcionalidade | Status |
 | :--- | :--- | :---: |
 | `RF023` | **Disparo de Orçamento:** E-mail automático para aprovação. | 📝 Backlog |
 | `RF024` | **Coleta de Decisão:** Interface de Aceite/Recusa do cliente. | 📝 Backlog |
-| `RF026` | **Aviso de Retirada:** E-mail automático de serviço concluído. | 📝 Backlog |
+| `RF026` | **Aviso de Retirada:** E-mail automático de serviço concluído. | 📝 SUSPENSO |
 | `RF029` | **Dashboard:** Volumetria (Abertos vs. Fechados). | 📝 Backlog |
 | `RF030` | **Financeiro:** Lucro Líquido vs. Custos Operacionais. | 📝 Backlog |
 | `RF031` | **KPI:** Tempo Médio de Resolução. | 📝 Backlog |
