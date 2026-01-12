@@ -47,7 +47,7 @@ const Usuarios = () => {
                 err.response.data.message || "Iconsistência ao excluir usuário",
             });
           })
-          .finally(() => setTimeout(() => setAlertConfig(null), 3000));
+          .finally(() => setTimeout(() => setAlertConfig(null), 1000));
       },
     });
 

@@ -24,7 +24,7 @@ const CreateUsuario = ({ refetch }: { refetch: () => void }) => {
   const handleSubmit = async () => {
     if (!tipo) return;
     const year = new Date().getFullYear();
-    const senha = `rob${year}`;
+    const senha = `rob@${year}`;
 
     await create({
       data: {

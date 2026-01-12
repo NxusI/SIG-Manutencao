@@ -43,7 +43,7 @@ const Clientes = () => {
               icon: "success",
               title: "Cliente excluido com sucesso",
             });
-            setTimeout(() => refetch(), 2000);
+            setTimeout(() => refetch(), 1000);
           })
           .catch((err) => {
             setAlertConfig({
@@ -84,7 +84,7 @@ const Clientes = () => {
         </p>
       ) : !clientes || !clientes.length ? (
         <p className="w-full text-center text-muted-foreground text-lg">
-          Nenhum usuário cadastrado
+          Nenhum cliente cadastrado
         </p>
       ) : (
         <DataTable

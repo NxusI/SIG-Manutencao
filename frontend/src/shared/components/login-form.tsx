@@ -53,7 +53,7 @@ export function LoginForm() {
           </p>
         </div>
 
-        <Field>
+        <div className="grid gap-1">
           <FieldLabel htmlFor="login">Login</FieldLabel>
           <Input
             id="login"
@@ -62,9 +62,9 @@ export function LoginForm() {
             onChange={(e) => setLogin(e.target.value)}
             required
           />
-        </Field>
+        </div>
 
-        <div className="grid gap-3">
+        <div className="grid gap-1">
           <FieldLabel htmlFor="password">Senha</FieldLabel>
 
           <div className="relative">

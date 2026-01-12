@@ -1,0 +1,26 @@
+import { IGetPaginatedParams, PaginatedResponse } from "@/shared/types/paginated-request.types";
+import { ChamadoRepository } from "./chamado.repository";
+import { Chamado } from "./entities/chamado.entity";
+import { ICreateChamadoParams } from "./params/create-chamado.params";
+
+export class ChamadoService {
+  private readonly repository: ChamadoRepository;
+  constructor() {
+    this.repository = new ChamadoRepository();
+  }
+
+  async getAll(params?: IGetPaginatedParams): Promise<PaginatedResponse<Chamado>> {
+    return await this.repository.getAll(params);
+  }
+
+  async create(data: ICreateChamadoParams): Promise<Chamado> {
+    return await this.repository.create(data);
+  }
+
+  async update(
+    id: number,
+    data: Partial<ICreateChamadoParams>
+  ): Promise<Chamado> {
+    return await this.repository.update(id, data);
+  }
+}
