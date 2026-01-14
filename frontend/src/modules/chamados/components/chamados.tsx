@@ -11,14 +11,14 @@ import FilterChamados from "./filter";
 
 const Chamados = () => {
   const [page, setPage] = useState<number>(1);
-  const [viewMode, setViewMode] = useState<"table" | "grid">("table");
+  const [viewMode, setViewMode] = useState<"table" | "grid">("grid");
   const [open, setOpen] = useState<boolean>(false);
 
   const { chamados, error, loading, total, refetch } = useGetAllChamados({
     limit: 7,
     page,
   });
-  const columns = useKanbanChamados();
+  const { columns, loading: kanbanLoading } = useKanbanChamados();
 
   return (
     <div className="grid gap-5">
@@ -76,7 +76,7 @@ const Chamados = () => {
           total={total}
         />
       ) : (
-        <KanbanChamados />
+        <KanbanChamados loading={kanbanLoading} columns={columns} />
       )}
     </div>
   );
