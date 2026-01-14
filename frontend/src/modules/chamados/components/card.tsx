@@ -1,6 +1,9 @@
 import { Chamado } from "@/domain/chamado/entities/chamado.entity";
+import { Card, CardHeader, CardTitle } from "@/shared/components/ui/card";
+import { formatDateString } from "@/utils/formatters";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import { User } from "lucide-react";
 
 const CardItem = ({ card }: { card: Chamado }) => {
   const {
@@ -20,7 +23,7 @@ const CardItem = ({ card }: { card: Chamado }) => {
   };
 
   return (
-    <div
+    <Card
       ref={setNodeRef}
       style={style}
       {...attributes}
@@ -29,8 +32,16 @@ const CardItem = ({ card }: { card: Chamado }) => {
         ${isDragging ? "opacity-0" : "opacity-100"}
         cursor-grab hover:bg-gray-50 active:cursor-grabbing`}
     >
-      {card.titulo}
-    </div>
+      <CardTitle>
+        [{card.idChamado}] - {card.titulo.toUpperCase()}
+      </CardTitle>
+      <div className="flex gap-3 text-xs text-muted-foreground items-center">
+        <button>
+        <User size={15}/>
+        </button>
+        <span>{formatDateString(card.dataChamado)}</span>
+      </div>
+    </Card>
   );
 };
 
