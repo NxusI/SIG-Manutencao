@@ -1,148 +1,232 @@
-# 📁 MÓDULO BACK-END: AUTENTICAÇÃO E GESTÃO DE ACESSO
+Com certeza! Aqui está o **README.md** completamente atualizado, organizado por módulos, com as rotas novas, os corpos de requisição ajustados para o novo Schema (`idUsuario`, `idEmpresa`, `idCliente`) e sem os números de requisitos.
 
-Este módulo implementa os requisitos de **RF001 a RF005** até agora.
-
-## 🧭 Sumário
-
-1. [🔑 Base de Acesso e Segurança](#-base-de-acesso-e-segurança)
-2. [🔐 Endpoints Públicos (Autenticação)](#-endpoints-públicos-autenticação)
-3. [🛡️ Endpoints Protegidos (Gestão)](#-endpoints-protegidos-gestão)
+Pode copiar e substituir o conteúdo do seu arquivo atual.
 
 ---
 
-## 🔑 Base de Acesso e Segurança
+# 📁 DOCUMENTAÇÃO DA API - SIG MANUTENÇÃO
+
+Este documento detalha os endpoints disponíveis no Back-end, organizados por módulos.
+
+## 🧭 Visão Geral e Segurança
 
 | Item | Descrição | Configuração |
-| :--- | :--- | :--- |
-| **Base URL** | Endereço de acesso para as rotas do módulo. | `http://localhost:3001/api/auth` (Ajustar para produção) |
+| --- | --- | --- |
+| **Base URL** | Endereço base da API. | `http://localhost:3001/api` |
 | **Autenticação** | Mecanismo de segurança. | **JWT (Bearer Token)** |
-| **Uso do Token** | O token deve ser enviado em todas as rotas protegidas. | **`Authorization: Bearer <TOKEN>`** |
-| **Middleware** | Função que verifica e decodifica o token. | `verificarToken` (popula `req.usuario`) |
+| **Header** | O token deve ser enviado nas rotas protegidas. | **`Authorization: Bearer <TOKEN>`** |
 
 ---
 
-## 🔐 Endpoints Públicos (Autenticação)
+## 1. 🔐 Módulo de Autenticação e Usuários
 
-Rotas que **NÃO exigem** o `Authorization` Header para acesso.
+**Base URL:** `/api/auth`
 
-### 1. [RF0003] Cadastrar Novo Usuário (`POST /cadastro)
+### 🔓 Rotas Públicas
 
-Rota de *setup* para criação inicial de usuários, no primeiro uso ela server só para cadastrar o **GESTOR**. Após cadsatrar ele, a rota será protegida e só o gestor vai poder cadastrar novos usuários.
+#### **Login**
 
-* **Corpo da Requisição (JSON):**
-    ```json
-    {
-      "nome": "Usuário Teste",
-      "login": "Tester",
-      "email": "teste@gmail.com",
-      "senha": "123",
-      "tipo": "GESTOR"  
-    }
-    ```
-* **Resposta:** `201 Created`
+Autentica o usuário e retorna o token de acesso.
 
-### 2. [RF0001] Login (`POST /login`)
+* **Método:** `POST`
+* **Rota:** `/login`
+* **Body:**
+```json
+{
+  "login": "admin",
+  "senha": "123"
+}
 
-Rota para autenticação e emissão do JWT.
+```
 
-* **Corpo da Requisição (JSON):**
-    ```json
-    {
-      "login": "Tester",
-      "senha": "123"
-    }
-    ```
-* **Resposta (Sucesso - `200 OK`):**
-    ```json
-    {
-      "token": "eyJhbGciOi...", 
-      "usuario": { 
-        "id": 1, 
-        "nome": "Gabriel", 
-        "tipo": "GESTOR" 
-      }  
-    }
-    ```
-    > **⚠️ IMPORTANTE:** O `token` deve ser armazenado pelo *front-end* para uso futuro.
+
+* **Resposta (200):**
+```json
+{
+  "token": "eyJhbGciOi...",
+  "usuario": {
+    "idUsuario": 1,
+    "nome": "Administrador",
+    "tipo": "GESTOR",
+    "idEmpresa": 1
+  }
+}
+
+```
+
+
+
+#### **Cadastro Inicial**
+
+Cadastra novos usuários. Se for o primeiro uso do sistema, cria o Gestor.
+
+* **Método:** `POST`
+* **Rota:** `/cadastro`
+* **Body:**
+```json
+{
+  "nome": "Técnico Lucas",
+  "login": "lucas.tech",
+  "email": "lucas@email.com",
+  "senha": "123",
+  "tipo": "TECNICO",
+  "idEmpresa": 1
+}
+
+```
+
+
+
+### 🛡️ Rotas Protegidas (Requer Token)
+
+#### **Listar Usuários**
+
+* **Método:** `GET`
+* **Rota:** `/users`
+* **Query Params:** `page` (pág), `limit` (itens por pág).
+
+#### **Editar Usuário (Gestor)**
+
+* **Método:** `PATCH`
+* **Rota:** `/editar-user/:id`
+* **Body:** (Envie apenas o que deseja alterar)
+```json
+{ "nome": "Lucas Silva", "tipo": "GESTOR" }
+
+```
+
+
+
+#### **Alterar Senha (Própria)**
+
+* **Método:** `PATCH`
+* **Rota:** `/alterar-senha`
+* **Body:** `{ "senha": "atual", "novaSenha": "nova" }`
+
+#### **Remover Usuário (Soft Delete)**
+
+* **Método:** `DELETE`
+* **Rota:** `/remover-user/:id`
+
+#### **Alternar Status (Ativar/Desativar)**
+
+* **Método:** `PATCH`
+* **Rota:** `/status/:id`
 
 ---
 
-## 🛡️ Endpoints Protegidos (Gestão)
+## 2. 👤 Módulo de Clientes
 
-**REQUISITO DE SEGURANÇA:** Todas as rotas abaixo **EXIGEM** o cabeçalho `Authorization: Bearer <TOKEN>`.
+**Base URL:** `/api/cliente`
+**Requisito:** Todas as rotas exigem Token.
 
-### 4.  Listar Usuários (`GET /users`)
+#### **Cadastrar Cliente**
 
-Retorna a lista de usuários cadastrados com suporte a paginação.
+* **Método:** `POST`
+* **Rota:** `/cadastro`
+* **Body:**
+```json
+{
+  "nome": "Padaria Estrela",
+  "email": "contato@padaria.com",
+  "telefone": "85999998888",
+  "endereco": "Rua das Flores, 123",
+  "idEmpresa": 1
+}
 
-* **Permissão:** Usuário Logado (TÉCNICO ou GESTOR)
-* **Parâmetros (Query Params):**
-    * `page`: Número da página (Padrão: 1)
-    * `limit`: Itens por página (Padrão: 10)
-* **Exemplo de Requisição:**
-    `GET /users?page=1&limit=5`
-* **Resposta (Sucesso - `200 OK`):**
-    ```json
-    {
-      "data": [
-        {
-          "idUsuario": 1,
-          "nome": "Gabriel",
-          "login": "gabriel.dev",
-          "email": "gabriel@sig.com",
-          "tipo": "GESTOR",
-          "ativo": true
-        },
-        {
-          "idUsuario": 2,
-          "nome": "Usuário Excluído",
-          "perfil": "TÉCNICO",
-          "ativo": false
-        }
-      ],
-      "meta": {
-        "total": 15,
-        "page": 1,
-        "limit": 5,
-        "totalPages": 3
-      }
-    }
-    ```
+```
 
-### 5. [RF0002] Alterar Própria Senha (`PATCH /alterar-senha`)
 
-Permite que qualquer usuário logado altere sua senha.
 
-* **Permissão:** Usuário Logado (TÉCNICO ou GESTOR)
-* **Corpo da Requisição (JSON):**
-    ```json
-    {
-      "senha": "senhaAtual",
-      "novaSenha": "novaSenhaForte"
-    }
-    ```
-* **Resposta:** `200 OK`
+#### **Listar Clientes**
 
-### 4. [RF0004] Editar Dados de Outro Usuário (`PATCH /users/editar-user/:id`)
+* **Método:** `GET`
+* **Rota:** `/`
+* **Query Params:** `page`, `limit`, `nome` (filtro).
 
-Permite que um Gestor edite o nome ou o tipo de outros usuários.
+#### **Editar Cliente**
 
-* **Permissão:** **GESTOR**
-* **Corpo da Requisição (JSON):** (Campos opcionais)
-    ```json
-    {
-      "nome": "Novo Nome",
-      "tipo": "TECNICO" 
-    }
-    ```
-* **Status de Bloqueio:** `403 Forbidden` se o token não pertencer a um Gestor.
+* **Método:** `PATCH`
+* **Rota:** `/editar-cliente/:id`
+* **Body:** `{ "telefone": "85988887777", "endereco": "Novo endereço..." }`
 
-### 6. [RF0005] Remover Usuário (`DELETE /users/:id`)
+#### **Excluir Cliente (Soft Delete)**
 
-Realiza a **Remoção Lógica (Soft Delete)** do usuário. O registro não é apagado do banco, apenas marcado como inativo (`ativo: false`), impedindo novos logins.
+* **Método:** `DELETE`
+* **Rota:** `/excluir-cliente/:id`
 
-* **Permissão:** **GESTOR**
-* **Regra de Negócio:**
-    1. O usuário logado não pode deletar a própria conta.
-    2. Usuários inativos perdem o acesso ao sistema imediatamente.
-* **Resposta:** `204 No Content` (Sucesso sem corpo de resposta).
+#### **Alternar Status Cliente**
+
+* **Método:** `PATCH`
+* **Rota:** `/status/:id`
+
+---
+
+## 3. 🛠️ Módulo de Chamados (Ordens de Serviço)
+
+**Base URL:** `/api/chamado`
+**Requisito:** Todas as rotas exigem Token.
+
+#### **Criar Chamado**
+
+O `idUsuarioCriacao` é capturado automaticamente do token.
+
+* **Método:** `POST`
+* **Rota:** `/criar`
+* **Body:**
+```json
+{
+  "idCliente": 1,
+  "titulo": "PC não liga",
+  "equipamento": "Desktop Dell Vostro",
+  "descricao": "Ao apertar o botão power, nada acontece.",
+  "idResponsavel": null 
+}
+
+```
+
+
+*(Nota: Se enviar `idResponsavel`, o status muda para "Em Andamento" automaticamente).*
+
+#### **Listar Chamados (Filtros)**
+
+* **Método:** `GET`
+* **Rota:** `/`
+* **Query Params:**
+* `idCliente`: ID do cliente.
+* `idResponsavel`: ID do técnico.
+* `idStatus`: ID do status (1=Aberto, 2=Andamento...).
+* `titulo`: Busca por texto.
+* `dataInicio` / `dataFim`: Filtro por data de criação.
+
+
+
+#### **Detalhes do Chamado**
+
+Retorna o objeto completo com dados do Cliente, Status e Responsável.
+
+* **Método:** `GET`
+* **Rota:** `/:id`
+
+#### **Editar / Atribuir Chamado**
+
+Usado para mudar status, editar descrição ou atribuir técnico.
+
+* **Método:** `PATCH`
+* **Rota:** `/editar-chamado/:id`
+* **Body:**
+```json
+{
+  "idResponsavel": 2,
+  "idStatus": 2,
+  "descricao": "Nova descrição técnica..."
+}
+
+```
+
+
+
+#### **Listar Status Disponíveis**
+
+* **Método:** `GET`
+* **Rota:** `/lista/status`

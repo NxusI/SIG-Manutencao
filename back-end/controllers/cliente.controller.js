@@ -1,10 +1,9 @@
-import { notEqual } from 'assert';
 import prisma from '../prismaClient.js';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
 export const registrar = async (req, res) => {
-    try{
+    try {
         const authHeader = req.headers.authorization;
 
         if (!authHeader) {
@@ -25,7 +24,6 @@ export const registrar = async (req, res) => {
         try {
             const secret = process.env.JWT_SECRET || 'segredo-super-secreto';
             const decoded = jwt.verify(token, secret);
-            
             req.usuario = decoded; 
         } catch (err) {
             return res.status(401).json({ message: "Token inválido ou expirado." });
@@ -35,7 +33,7 @@ export const registrar = async (req, res) => {
             return res.status(403).json({ message: "Acesso negado. Apenas gestores podem cadastrar novos clientes." });
         }
 
-        const { nome, email, telefone } = req.body;
+        const { nome, email, telefone, idEmpresa, endereco } = req.body;
         
         if(!nome || !email || !telefone){
             return res.status(400).json({ mensagem: 'Dados inválidos ou faltando.'});
@@ -45,46 +43,44 @@ export const registrar = async (req, res) => {
             where: { email: email }
         })
 
-        const usuarioExiste_telefone = await prisma.cliente.findUnique({
-            where: { telefone: telefone }
-        })
-
         if (usuarioExiste_email){
             return res.status(400).json({ message: 'Email já cadastrado'});
         }
+
+        const usuarioExiste_telefone = await prisma.cliente.findUnique({
+            where: { telefone: telefone }
+        })
 
         if (usuarioExiste_telefone){
             return res.status(400).json({ message: 'Telefone já cadastrado'});
         }
 
         const novoCliente = await prisma.cliente.create({
-            data:{
+            data: {
                 nome,
                 email,
-                telefone
+                telefone,
+                idEmpresa: idEmpresa ? parseInt(idEmpresa) : null,
+                endereco: endereco || null
             }
         });
 
         return res.status(201).json({
-                mensagem: "Cliente cadastrado com sucesso!",
-                data: {
-                    id: novoCliente.idCliente,
-                    nome: novoCliente.nome,
-                    email: novoCliente.email,
-                    telefone: novoCliente.telefone
-                }
+            mensagem: "Cliente cadastrado com sucesso!",
+            data: {
+                id: novoCliente.idCliente,
+                nome: novoCliente.nome,
+                email: novoCliente.email,
+                telefone: novoCliente.telefone
+            }
         })
-
     } catch (error) {
         console.error("Erro ao criar cliente", error);
         return res.status(500).json({ message: 'Erro interno' });
     }
-
-
 }
 
 export const listarClientes = async (req, res) => {
-
     try {
         let { page = 1, limit = 10 } = req.query;
 
@@ -112,7 +108,9 @@ export const listarClientes = async (req, res) => {
                 nome: true,
                 email: true,
                 telefone: true,
-                ativo: true
+                ativo: true,
+                endereco: true,
+                idEmpresa: true
             }
         });
 
@@ -130,19 +128,16 @@ export const listarClientes = async (req, res) => {
                 totalPages: totalPaginas
             }
         });
-
     } catch (error) {
         console.error("Erro ao listar clientes:", error);
         return res.status(500).json({ message: "Erro interno." });
     }
-
 }
 
 export const editarCliente = async (req, res) => {
-
-    try{
-        const {nome, email, telefone} = req.body
-        const {id} = req.params
+    try {
+        const { nome, email, telefone, endereco, idEmpresa } = req.body
+        const { id } = req.params
         
         const verificaTipo = req.usuario.tipo;
 
@@ -156,15 +151,16 @@ export const editarCliente = async (req, res) => {
             return res.status(400).json({ message: "ID inválido." });
         }
 
-        if (email || telefone) {
+        if (email) {
             const emailExiste = await prisma.cliente.findUnique({ where: { email } });
-            const telefoneExiste = await prisma.cliente.findUnique({ where: { email } });
-
-            if (emailExiste && emailExiste.id_cliente !== idCliente) {
+            if (emailExiste && emailExiste.idCliente !== idCliente) {
                 return res.status(400).json({ message: "Email já está em uso por outro cliente." });
             }
+        }
 
-            if (telefoneExiste && emailExiste.id_cliente !== idCliente) {
+        if (telefone) {
+            const telefoneExiste = await prisma.cliente.findUnique({ where: { telefone } });
+            if (telefoneExiste && telefoneExiste.idCliente !== idCliente) {
                 return res.status(400).json({ message: "Telefone já está em uso por outro cliente." });
             }
         }
@@ -174,25 +170,25 @@ export const editarCliente = async (req, res) => {
                 idCliente: idCliente
             },
             data: {
-                nome: nome,
-                email: email,
-                telefone: telefone
+                nome: nome || undefined,
+                email: email || undefined,
+                telefone: telefone || undefined,
+                endereco: endereco || undefined,
+                idEmpresa: idEmpresa ? parseInt(idEmpresa) : undefined
             }
         })
 
-        res.status(201).json({
-            message:"Cliente atualizado com sucesso.",
+        return res.status(200).json({
+            message: "Cliente atualizado com sucesso.",
             data: clienteAtualizado
         })
     } catch (error) {
         if (error.code === 'P2025') {
-            return res.status(404).json({ message: "Usuário não encontrado." });
+            return res.status(404).json({ message: "Cliente não encontrado." });
         }
         console.error("Erro ao editar:", error);
         return res.status(500).json({ message: "Erro interno." });
     }
-
-
 }
 
 export const excluirCliente = async (req, res) => {
@@ -218,16 +214,14 @@ export const excluirCliente = async (req, res) => {
         });
 
         return res.status(204).send(); 
-
     } catch (error) {
         if (error.code === 'P2025') {
             return res.status(404).json({ message: "Cliente não encontrado." });
         }
-
         console.error("Erro ao remover:", error);
         return res.status(500).json({ message: "Erro interno." });
     }
-};
+}
 
 export const alternarStatus = async (req, res) => {
     try {
@@ -245,7 +239,7 @@ export const alternarStatus = async (req, res) => {
             where: { idCliente: idInt }
         });
 
-        if (!clienteAlvo) return res.status(404).json({ message: "Usuário não encontrado." });
+        if (!clienteAlvo) return res.status(404).json({ message: "Cliente não encontrado." });
 
         const clienteAtualizado = await prisma.cliente.update({
             where: { idCliente: idInt },
@@ -256,9 +250,8 @@ export const alternarStatus = async (req, res) => {
             message: `Cliente ${clienteAtualizado.ativo ? 'ativado' : 'inativado'} com sucesso!`,
             ativo: clienteAtualizado.ativo
         });
-
     } catch (error) {
         console.error("Erro ao alterar status:", error);
         return res.status(500).json({ message: "Erro interno." });
     }
-};
+}

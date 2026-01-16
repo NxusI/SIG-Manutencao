@@ -13,6 +13,20 @@
             "name": "view",
             "database": "osdb",
             "username": "root"
+        },
+        {
+            "mysqlOptions": {
+                "authProtocol": "default",
+                "enableSsl": "Disabled"
+            },
+            "ssh": "Disabled",
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 3306,
+            "driver": "MySQL",
+            "name": "Database",
+            "database": "dbprojeto",
+            "username": "root"
         }
     ]
 }

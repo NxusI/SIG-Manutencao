@@ -27,7 +27,6 @@ export const register = async (req, res) => {
             try {
                 const secret = process.env.JWT_SECRET || 'segredo-super-secreto';
                 const decoded = jwt.verify(token, secret);
-                
                 req.usuario = decoded; 
             } catch (err) {
                 return res.status(401).json({ message: "Token inválido ou expirado." });
@@ -38,7 +37,7 @@ export const register = async (req, res) => {
             }
         }
 
-        const { nome, login, email, senha, tipo } = req.body;
+        const { nome, login, email, senha, tipo, idEmpresa } = req.body;
         
         if(!nome || !login || !email || !senha){
             return res.status(400).json({ mensagem: 'Dados inválidos ou faltando.'});
@@ -60,7 +59,8 @@ export const register = async (req, res) => {
                  login,
                  email,
                  senhaHash,
-                 tipo: tipo || TÉCNICO
+                 tipo: tipo || 'TECNICO',
+                 idEmpresa: idEmpresa ? parseInt(idEmpresa) : null
             }
         });
 
@@ -81,7 +81,6 @@ export const register = async (req, res) => {
 
 export const login = async (req, res) => {
     try {
-
         const { login, senha } = req.body;
 
         if(!login || !senha){
@@ -92,9 +91,13 @@ export const login = async (req, res) => {
             where: { login: login }
         })
 
+        if (!usuarioExiste) {
+            return res.status(401).json({ message: 'Credenciais inválidas'});
+        }
+
         const validarSenha = await bcrypt.compare(senha, usuarioExiste.senhaHash)
 
-        if (!usuarioExiste || !validarSenha){
+        if (!validarSenha){
             return res.status(401).json({ message: 'Credenciais inválidas'});
         }
 
@@ -103,17 +106,15 @@ export const login = async (req, res) => {
         }
 
         const payload = {
-            id: usuarioExiste.idUsuario,
+            idUsuario: usuarioExiste.idUsuario,
             nome: usuarioExiste.nome,
             tipo: usuarioExiste.tipo,
             email: usuarioExiste.email,
-            email: usuarioExiste.email
+            idEmpresa: usuarioExiste.idEmpresa
         }
 
         const segredo = process.env.JWT_SECRET || 'segredo-super-secreto';
-
         const opcoes = { expiresIn: '8h' };
-
         const token = jwt.sign(payload, segredo, opcoes);
 
         return res.status(200).json({
@@ -128,58 +129,50 @@ export const login = async (req, res) => {
 }
 
 export const alterarSenha = async (req, res) => {
-
     try {
-
         const { senha, novaSenha } = req.body;
-        const id = req.usuario.id;
+        const id = req.usuario.idUsuario;
 
-            if(!senha || !novaSenha){
-                return res.status(400).json({ mensagem: 'Dados inválidos ou faltando.'});
-            }
+        if(!senha || !novaSenha){
+            return res.status(400).json({ mensagem: 'Dados inválidos ou faltando.'});
+        }
 
-            if(senha == novaSenha){
-                return res.status(400).json({ mensagem: 'Nova senha não pode ser igual.'});
-            }
+        if(senha == novaSenha){
+            return res.status(400).json({ mensagem: 'Nova senha não pode ser igual.'});
+        }
 
-            const usuarioBanco = await prisma.usuario.findUnique({
-                where: { idUsuario: id }
-            })
+        const usuarioBanco = await prisma.usuario.findUnique({
+            where: { idUsuario: id }
+        })
 
-            if(!usuarioBanco){
-                return res.status(401).json({ mensagem: 'Usuário não encontrado.'});
-            }
+        if(!usuarioBanco){
+            return res.status(401).json({ mensagem: 'Usuário não encontrado.'});
+        }
 
-            const senhaValida = await bcrypt.compare(senha, usuarioBanco.senhaHash)
+        const senhaValida = await bcrypt.compare(senha, usuarioBanco.senhaHash)
 
-            if(!senhaValida){
-                return res.status(401).json({ mensagem: 'Senha incorreta'});
-            }
+        if(!senhaValida){
+            return res.status(401).json({ mensagem: 'Senha incorreta'});
+        }
 
-            const novaSenhaHash = await bcrypt.hash(novaSenha, 10);
+        const novaSenhaHash = await bcrypt.hash(novaSenha, 10);
 
-            await prisma.usuario.update({
+        await prisma.usuario.update({
             where: { idUsuario: id },
-            data: { 
-                senhaHash: novaSenhaHash 
-                  }
-             });
+            data: { senhaHash: novaSenhaHash }
+        });
 
         return res.status(200).json({ message: "Senha alterada com sucesso!" });
-
     } catch (error) {
-
         console.error(error);
         return res.status(500).json({ message: "Erro interno." });
-
     }
 }
 
 export const editarUsuario = async (req, res) => {
     try {
-        const { nome, email, tipo } = req.body;
+        const { nome, email, tipo, idEmpresa } = req.body;
         const {id} = req.params;
-
         const verificaTipo = req.usuario;
 
         if (verificaTipo.tipo !== 'GESTOR') {
@@ -193,11 +186,9 @@ export const editarUsuario = async (req, res) => {
 
         if (email) {
             const emailExiste = await prisma.usuario.findUnique({ where: { email } });
-
-            if (emailExiste && emailExiste.id_usuario !== idInt) {
+            if (emailExiste && emailExiste.idUsuario !== idInt) {
                 return res.status(400).json({ message: "Email já está em uso por outro usuário." });
             }
-
         }
 
         const usuarioAtualizado = await prisma.usuario.update({
@@ -205,20 +196,20 @@ export const editarUsuario = async (req, res) => {
             data: {
                 nome: nome || undefined, 
                 email: email || undefined,
-                tipo: tipo || undefined
+                tipo: tipo || undefined,
+                idEmpresa: idEmpresa ? parseInt(idEmpresa) : undefined
             }
         });
 
         return res.status(200).json({
             message: "Usuário atualizado com sucesso!",
             usuario: {
-                id: usuarioAtualizado.id_usuario,
+                id: usuarioAtualizado.idUsuario,
                 nome: usuarioAtualizado.nome,
                 email: usuarioAtualizado.email,
                 tipo: usuarioAtualizado.tipo
             }
         });
-
     } catch (error) {
         if (error.code === 'P2025') {
             return res.status(404).json({ message: "Usuário não encontrado." });
@@ -238,7 +229,7 @@ export const removerUsuario = async (req, res) => {
         }
 
         const idInt = parseInt(id);
-        if (isNaN(idInt) || idInt === usuarioLogado.id) {
+        if (isNaN(idInt) || idInt === usuarioLogado.idUsuario) {
             return res.status(400).json({ message: "Operação inválida." });
         }
 
@@ -251,7 +242,6 @@ export const removerUsuario = async (req, res) => {
         });
 
         return res.status(204).send(); 
-
     } catch (error) {
         console.error("Erro ao remover:", error);
         return res.status(500).json({ message: "Erro interno." });
@@ -287,7 +277,8 @@ export const listarUsuarios = async (req, res) => {
                 login: true,
                 email: true,
                 tipo: true,
-                ativo: true
+                ativo: true,
+                idEmpresa: true
             }
         });
 
@@ -305,7 +296,6 @@ export const listarUsuarios = async (req, res) => {
                 totalPages: totalPaginas
             }
         });
-
     } catch (error) {
         console.error("Erro ao listar usuários:", error);
         return res.status(500).json({ message: "Erro interno." });
@@ -339,9 +329,12 @@ export const alternarStatus = async (req, res) => {
             message: `Usuário ${usuarioAtualizado.ativo ? 'ativado' : 'inativado'} com sucesso!`,
             ativo: usuarioAtualizado.ativo
         });
-
     } catch (error) {
         console.error("Erro ao alterar status:", error);
         return res.status(500).json({ message: "Erro interno." });
     }
+};
+
+export const logout = (req, res) => {
+    return res.status(200).json({ message: "Logout realizado com sucesso!" });
 };

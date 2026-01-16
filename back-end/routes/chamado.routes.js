@@ -1,10 +1,13 @@
 import express from 'express'
-import { criarChamado, listarChamados, editarChamado } from '../controllers/chamado.controller.js';
+import { criarChamado, listarChamados, editarChamado, listarStatus, buscarChamadoPorId } from '../controllers/chamado.controller.js';
 import { verificarToken } from '../middlewares/auth.middleware.js';
+
 const router = express.Router();
 
 router.get('/', verificarToken, listarChamados);
+router.get('/lista/status', verificarToken, listarStatus);
 router.post('/criar', verificarToken, criarChamado);
-router.patch('/editar-chamado/:id', verificarToken, editarChamado)
+router.get('/:id', verificarToken, buscarChamadoPorId);
+router.patch('/editar-chamado/:id', verificarToken, editarChamado);
 
 export default router;

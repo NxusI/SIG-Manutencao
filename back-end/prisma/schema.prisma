@@ -7,27 +7,58 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Empresa {
+  idEmpresa    Int      @id @default(autoincrement())
+  nomeFantasia String
+  cnpj         String
+  endereco     String?
+  telefone     String?
+  isActive     Boolean  @default(true)
+  
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  usuarios     Usuario[]
+  clientes     Cliente[]
+
+  @@map("EMPRESA")
+}
+
 model Usuario {
   idUsuario  Int      @id @default(autoincrement())
+  idEmpresa   Int?
+  empresa     Empresa?  @relation(fields: [idEmpresa], references: [idEmpresa])
   nome       String
   login      String  @unique
   email      String  @unique
   senhaHash  String   
   tipo       String   @default("TECNICO") // 'TECNICO' ou 'GESTOR'
   ativo      Boolean @default(true)
+
+  createdAt   DateTime @default(now())
   deletedAt DateTime?
-  chamados   Chamado[]
+  updatedAt DateTime @updatedAt
+
+  chamadosCriados      Chamado[] @relation("UsuarioCriacao")
+  chamadosResponsavel  Chamado[] @relation("UsuarioResponsavel")
 
   @@map("USUARIO")
 }
 
 model Cliente {
   idCliente   Int      @id @default(autoincrement())
+  idEmpresa   Int?     
+  empresa     Empresa?  @relation(fields: [idEmpresa], references: [idEmpresa])
   nome        String
   email       String  @unique
   telefone    String  @unique
+  endereco    String?
   ativo      Boolean @default(true)
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
   deletedAt DateTime?
+
   chamados    Chamado[]
 
   @@map("CLIENTE")
@@ -35,24 +66,80 @@ model Cliente {
 
 model Chamado {
   idChamado     Int      @id @default(autoincrement())
+  idUsuarioCriacao Int      
+  criadoPor        Usuario   @relation("UsuarioCriacao", fields: [idUsuarioCriacao], references: [idUsuario])
   idCliente     Int      
   cliente       Cliente  @relation(fields: [idCliente], references: [idCliente])
   idResponsavel Int?      
-  responsavel   Usuario?  @relation(fields: [idResponsavel], references: [idUsuario])
-  dataChamado   DateTime @default(now())
+  responsavel    Usuario?  @relation("UsuarioResponsavel", fields: [idResponsavel], references: [idUsuario])
   titulo        String
   descricao     String   
   idStatus      Int @default(1)     
-  status        statusOrdem  @relation(fields: [idStatus], references: [idStatus])
-  equipamento   String   
+  status        Status  @relation(fields: [idStatus], references: [idStatus])
+  equipamento   String 
+
+  dataSolicitacao  DateTime  @default(now())
+  dataConfirmacao  DateTime?
+  dataFechamento   DateTime?
+
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  deletedAt        DateTime?
+
+  os               OS[]  
 
   @@map("CHAMADO")
 }
 
-model statusOrdem {
+model Status {
   idStatus    Int      @id @default(autoincrement())
   descricao   String   @unique
   chamados    Chamado[]
 
   @@map("STATUS")
+}
+
+model Produto {
+  idProduto   Int      @id @default(autoincrement())
+  descricao   String
+  preco       Float
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  itensOS     OsProduto[]
+
+  @@map("PRODUTO")
+}
+
+model OS {
+  idOS        Int      @id @default(autoincrement())
+  
+  idChamado   Int
+  chamado     Chamado  @relation(fields: [idChamado], references: [idChamado])
+
+  obs         String?
+  dataPrazo   DateTime?
+  valor       Float?    @default(0)
+
+  createdAt   DateTime  @default(now()) 
+  updatedAt   DateTime  @updatedAt 
+
+  itens       OsProduto[]
+
+  @@map("OS")
+}
+
+model OsProduto {
+  idOsProduto Int      @id @default(autoincrement())
+  
+  idOS        Int    
+  os          OS       @relation(fields: [idOS], references: [idOS])
+  
+  idProduto   Int     
+  produto     Produto  @relation(fields: [idProduto], references: [idProduto])
+  
+  quantidade  Int
+
+  @@map("OS_PRODUTO")
 }
