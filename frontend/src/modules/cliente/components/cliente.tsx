@@ -44,6 +44,7 @@ const Clientes = () => {
     setNome(nome);
     setTelefone(telefone);
     setEmail(email);
+    setPage(1);
   }
 
   const handleDelete = (c: Cliente) => {

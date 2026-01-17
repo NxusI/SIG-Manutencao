@@ -11,10 +11,18 @@ import { ConfirmDialog } from "@/shared/components/comon/confirm-dialog";
 import { useDeleteUsuario, useGetAllUsuarios } from "../hooks/use-usuario";
 import TableSkeleton from "@/shared/components/skeleton/table";
 import { Usuario } from "@/domain/usuario/entities/usuario.entity";
+import FilterUsuario from "./search-filter";
+import { ToastAlert } from "@/shared/components/comon/alert";
+import { OptionFormatted } from "@/shared/types/components.types";
 
 const Usuarios = () => {
   const [page, setPage] = useState<number>(1);
+  const [nome, setNome] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [login, setLogin] = useState<string>("");
+  const [tipo, setTipo] = useState<OptionFormatted | null>(null);
   const [alertConfig, setAlertConfig] = useState<{
+    id: number;
     icon: "success" | "error" | "warning" | "info";
     title: string;
   } | null>(null);
@@ -24,6 +32,19 @@ const Usuarios = () => {
     limit: 10,
     page,
   });
+
+  const onFilter = (
+    nome: string,
+    email: string,
+    login: string,
+    tipo: OptionFormatted | null
+  ) => {
+    setNome(nome);
+    setEmail(email);
+    setTipo(tipo);
+    setLogin(login);
+    setPage(1);
+  };
 
   const handleDelete = (u: Usuario) => {
     const { showDialog } = ConfirmDialog({
@@ -35,6 +56,7 @@ const Usuarios = () => {
         await deleteUsuario(u.idUsuario)
           .then(() => {
             setAlertConfig({
+              id: Date.now(),
               icon: "success",
               title: "Usuário excluido com sucesso",
             });
@@ -42,6 +64,7 @@ const Usuarios = () => {
           })
           .catch((err) => {
             setAlertConfig({
+              id: Date.now(),
               icon: "warning",
               title:
                 err.response.data.message || "Iconsistência ao excluir usuário",
@@ -71,6 +94,7 @@ const Usuarios = () => {
           <CreateUsuario refetch={refetch} />
         </BaseModal>
       </div>
+      <FilterUsuario onFilter={onFilter} />
       {loading ? (
         <TableSkeleton columns={6} rows={7} />
       ) : error ? (
@@ -83,7 +107,15 @@ const Usuarios = () => {
         </p>
       ) : (
         <DataTable
-          columns={["idUsuario", "nome", "email", "login", "tipo", "edit", "delete"]}
+          columns={[
+            "idUsuario",
+            "nome",
+            "email",
+            "login",
+            "tipo",
+            "edit",
+            "delete",
+          ]}
           columnLabels={{
             idUsuario: "ID",
             nome: "Nome",
@@ -127,6 +159,8 @@ const Usuarios = () => {
         onPageChange={setPage}
         totalPages={total}
       />
+
+      {alertConfig && <ToastAlert key={alertConfig.id} {...alertConfig} />}
     </div>
   );
 };

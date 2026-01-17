@@ -40,7 +40,7 @@ const FilterCliente = ({ onFilter }: FilterProps) => {
       <Button size={"icon"} onClick={handleFilter}>
         <Search />
       </Button>
-      <Button size={"icon"} variant={"secondary"} onClick={handleClear}>
+      <Button size={"icon"} className="bg-gray-500 hover:bg-gray-400" onClick={handleClear}>
         <X />
       </Button>
     </div>
