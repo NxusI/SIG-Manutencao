@@ -10,7 +10,7 @@ const customStyles: StylesConfig<OptionFormatted, false> = {
   menu: (provided) => ({
     ...provided,
     pointerEvents: "auto" as const,
-    backgroundColor: "var(--popover)",
+    backgroundColor: "var(--background)",
     border: "1px solid var(--border)",
     borderRadius: "0.5rem",
     marginTop: "0.25rem",
@@ -21,11 +21,11 @@ const customStyles: StylesConfig<OptionFormatted, false> = {
   }),
   control: (provided, state) => ({
     ...provided,
-    backgroundColor: "var(--card)",
+    backgroundColor: "var(--background)",
     borderColor: state.isFocused ? "var(--ring)" : "var(--border)",
     color: "var(--foreground)",
     boxShadow: state.isFocused ? "0 0 0 1px var(--ring)" : "none",
-    minHeight: "40px",
+    minHeight: "30px",
     "&:hover": {
       borderColor: "var(--ring)",
     },
