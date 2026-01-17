@@ -1,12 +1,13 @@
-// EM DESENVOLVIMENTO
-
-import express from 'express'
-import { getOS } from '../controllers/os.controller.js';
-import { criarOrdem } from '../controllers/os.controller.js';
+import express from 'express';
+import { gerarOS, listarOS, buscarOSPorId, editarOS, finalizarOS } from '../controllers/os.controller.js';
 import { verificarToken } from '../middlewares/auth.middleware.js';
+
 const router = express.Router();
 
-router.get('/', verificarToken, getOS);
-router.post('/', verificarToken, criarOrdem);
+router.post('/gerar', verificarToken, gerarOS);       
+router.get('/', verificarToken, listarOS);            
+router.get('/:id', verificarToken, buscarOSPorId);    
+router.patch('/editar/:id', verificarToken, editarOS);       
+router.patch('/finalizar/:id', verificarToken, finalizarOS); 
 
 export default router;
