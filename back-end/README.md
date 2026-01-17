@@ -34,7 +34,7 @@ Autentica o usuário e retorna o token de acesso.
 ```json
 {
   "login": "admin",
-  "senha": "123"
+  "senha": "123456"
 }
 
 ```
