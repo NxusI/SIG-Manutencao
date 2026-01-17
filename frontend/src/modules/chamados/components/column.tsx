@@ -22,7 +22,7 @@ const ColumnKanban = ({ column }: { column: Column }) => {
   return (
     <div
       ref={setNodeRef}
-      className="min-w-[320px] max-w-[320px] bg-gray-200 rounded-lg p-3 flex flex-col gap-3"
+      className="min-w-[280px] max-w-[280px] bg-gray-200 rounded-lg p-3 flex flex-col gap-3"
     >
       <h3
         className={`text-xs font-semibold uppercase text-white tracking-wide p-2 rounded-md ${

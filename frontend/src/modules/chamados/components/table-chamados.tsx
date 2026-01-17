@@ -6,6 +6,9 @@ import { formatTelefone } from "@/utils/formatters";
 import TableSkeleton from "@/shared/components/skeleton/table";
 import Pagination from "@/shared/components/comon/pagination";
 import { Chamado } from "@/domain/chamado/entities/chamado.entity";
+import { useState } from "react";
+import ViewChamado from "./view-chamado";
+import { ConfirmDialog } from "@/shared/components/comon/confirm-dialog";
 
 const TableChamados = ({
   loading,
@@ -22,6 +25,28 @@ const TableChamados = ({
   page: number;
   setPage: (page: number) => void;
 }) => {
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const [chamado, setChamado] = useState<Chamado | null>(null);
+
+  const handleDelete = (c: Chamado) => {
+    const { showDialog } = ConfirmDialog({
+      title: `Confirmar exclusão`,
+      text: `Tem certeza de que deseja excluir o chamado ${c.titulo}?`,
+      confirmText: "Excluir",
+      buttonColor: "#b91111ff",
+      onConfirm: () => {
+        console.log("excluido");
+      },
+    });
+
+    showDialog();
+  };
+
+  const handleView = (c: Chamado) => {
+    setChamado(c);
+    setShowModal(true);
+  };
+
   return (
     <>
       {loading ? (
@@ -65,21 +90,16 @@ const TableChamados = ({
             data: new Date(d.dataChamado).toLocaleDateString(),
             responsavel: d.responsavel?.nome || "-",
             edit: (
-              <BaseModal
-                title="Atualizar Chamado"
-                description="Altere as informações abaixo para atualizar o cadastro do cliente"
-                size="md"
-                trigger={
-                  <Button variant={"secondary"} size={"icon"}>
-                    <Edit />
-                  </Button>
-                }
+              <Button
+                variant={"secondary"}
+                size={"icon"}
+                onClick={() => handleView(d)}
               >
-                <></>
-              </BaseModal>
+                <Edit />
+              </Button>
             ),
             delete: (
-              <Button variant={"destructive"} size={"icon"} onClick={() => {}}>
+              <Button variant={"destructive"} size={"icon"} onClick={() => handleDelete(d)}>
                 <Trash2 />
               </Button>
             ),
@@ -92,6 +112,14 @@ const TableChamados = ({
           currentPage={page}
           onPageChange={setPage}
           totalPages={total}
+        />
+      )}
+
+      {showModal && chamado && (
+        <ViewChamado
+          chamado={chamado}
+          onClose={() => setShowModal(false)}
+          showModal={showModal}
         />
       )}
     </>
