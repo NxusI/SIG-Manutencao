@@ -13,8 +13,13 @@ import { Cliente } from "@/domain/cliente/entities/cliente.entity";
 import TableSkeleton from "@/shared/components/skeleton/table";
 import { ToastAlert } from "@/shared/components/comon/alert";
 import { formatTelefone } from "@/utils/formatters";
+import FilterCliente from "./search-filter";
 
 const Clientes = () => {
+  const [nome, setNome] = useState<string>("");
+  const [telefone, setTelefone] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+
   const { clientes, error, loading, refetch } = useGetAllCliente();
   const { delete: deleteCliente } = useDeleteCliente();
 
@@ -23,12 +28,23 @@ const Clientes = () => {
     icon: "success" | "error" | "warning" | "info";
     title: string;
   } | null>(null);
+
   const currentRows = useMemo(() => {
     const start = (page - 1) * 10;
     const end = start + 10;
     return clientes.slice(start, end);
   }, [page, clientes]);
   const total = useMemo(() => Math.ceil(clientes.length / 10), [clientes]);
+
+  const onFilter = (
+    nome: string,
+    telefone: string,
+    email: string
+  ) => {
+    setNome(nome);
+    setTelefone(telefone);
+    setEmail(email);
+  }
 
   const handleDelete = (c: Cliente) => {
     const { showDialog } = ConfirmDialog({
@@ -76,6 +92,7 @@ const Clientes = () => {
           <CreateUsuario refetch={refetch} />
         </BaseModal>
       </div>
+      <FilterCliente onFilter={onFilter}/>
       {loading ? (
         <TableSkeleton columns={5} rows={7} />
       ) : error ? (
