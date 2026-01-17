@@ -1,3 +1,4 @@
+import { Matcher } from "react-day-picker";
 import { ActionMeta, SingleValue } from "react-select";
 
 export interface AlertProps {
@@ -66,4 +67,14 @@ export interface ConfirmDialogProps {
   buttonColor?: string;
   onConfirm: () => void;
   onCancel?: () => void;
+}
+
+export interface DatePickerProps {
+  label?: string;
+  value?: Date;
+  onChange?: (date: Date | undefined) => void;
+  className?: string;
+  disable?: Matcher;
+  from?: Date;
+  to?: Date;
 }

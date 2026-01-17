@@ -8,6 +8,7 @@ import Pagination from "@/shared/components/comon/pagination";
 import { Chamado } from "@/domain/chamado/entities/chamado.entity";
 import { useState } from "react";
 import ViewChamado from "./view-chamado";
+import { ConfirmDialog } from "@/shared/components/comon/confirm-dialog";
 
 const TableChamados = ({
   loading,
@@ -26,6 +27,20 @@ const TableChamados = ({
 }) => {
   const [showModal, setShowModal] = useState<boolean>(false);
   const [chamado, setChamado] = useState<Chamado | null>(null);
+
+  const handleDelete = (c: Chamado) => {
+    const { showDialog } = ConfirmDialog({
+      title: `Confirmar exclusão`,
+      text: `Tem certeza de que deseja excluir o chamado ${c.titulo}?`,
+      confirmText: "Excluir",
+      buttonColor: "#b91111ff",
+      onConfirm: () => {
+        console.log("excluido");
+      },
+    });
+
+    showDialog();
+  };
 
   const handleView = (c: Chamado) => {
     setChamado(c);
@@ -84,7 +99,7 @@ const TableChamados = ({
               </Button>
             ),
             delete: (
-              <Button variant={"destructive"} size={"icon"} onClick={() => {}}>
+              <Button variant={"destructive"} size={"icon"} onClick={() => handleDelete(d)}>
                 <Trash2 />
               </Button>
             ),

@@ -87,7 +87,7 @@ const KanbanChamados = ({
             {STATUS_COLUMNS.map((s) => (
               <div className="grid gap-3">
                 {Array.from({ length: 3 }).map((_, i) => (
-                  <Skeleton className="bg-secondary/20 w-70 h-30 animate-pulse"/>
+                  <Skeleton key={i} className="bg-secondary/20 w-70 h-30 animate-pulse"/>
                 ))}
               </div>
             ))}
