@@ -193,7 +193,8 @@ O `idUsuarioCriacao` é capturado automaticamente do token.
   "titulo": "PC não liga",
   "equipamento": "Desktop Dell Vostro",
   "descricao": "Ao apertar o botão power, nada acontece.",
-  "idResponsavel": null 
+  "dataSolicitacao": "2024-01-15T14:30:00.000Z",
+  "idResponsavel": null
 }
 
 ```
