@@ -5,7 +5,7 @@ import jwt from 'jsonwebtoken';
 export const criarChamado = async (req, res) => {
     try {
         const idUsuarioLogado = req.usuario.idUsuario;
-        const { idCliente, equipamento, descricao, idResponsavel, titulo } = req.body;
+        const { idCliente, equipamento, descricao, idResponsavel, titulo, dataSolicitacao } = req.body;
         
         const idClienteInt = parseInt(idCliente);
         const idResponsavelInt = idResponsavel ? parseInt(idResponsavel) : null;
@@ -22,7 +22,8 @@ export const criarChamado = async (req, res) => {
                 descricao,
                 idResponsavel: idResponsavelInt,
                 idStatus: 1,
-                idUsuarioCriacao: idUsuarioLogado
+                idUsuarioCriacao: idUsuarioLogado,
+                dataSolicitacao: dataSolicitacao ? new Date(dataSolicitacao) : undefined
             }
         });
 

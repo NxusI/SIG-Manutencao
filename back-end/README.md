@@ -1,36 +1,71 @@
-Com certeza! Aqui está o **README.md** completamente atualizado, organizado por módulos, com as rotas novas, os corpos de requisição ajustados para o novo Schema (`idUsuario`, `idEmpresa`, `idCliente`) e sem os números de requisitos.
 
-Pode copiar e substituir o conteúdo do seu arquivo atual.
+# 🛠️ SIG Manutenção - Documentação da API
+
+Sistema de gerenciamento de ordens de serviço, chamados técnicos e controle de clientes.
+**Funcionalidades principais:** Aprovação de orçamentos via Gmail, Controle de Estoque, Perfis de Acesso (Gestor/Técnico).
 
 ---
 
-# 📁 DOCUMENTAÇÃO DA API - SIG MANUTENÇÃO
+## 🚀 Instalação e Configuração
 
-Este documento detalha os endpoints disponíveis no Back-end, organizados por módulos.
+### 1. Instalar Dependências
+```bash
+npm install
 
-## 🧭 Visão Geral e Segurança
+```
 
-| Item | Descrição | Configuração |
+### 2. Configurar Variáveis de Ambiente (.env)
+
+Crie um arquivo `.env` na raiz do projeto:
+
+```env
+DATABASE_URL="mysql://root:senha@localhost:3306/sig"
+JWT_SECRET="seu_segredo_super_seguro"
+API_URL="http://localhost:3001"
+
+# Obrigatório para envio de e-mail (Gere a senha de app no Google)
+EMAIL_USER="seu.email@gmail.com"
+EMAIL_PASS="sua senha de app sem espacos"
+
+```
+
+### 3. Banco de Dados
+
+```bash
+npx prisma migrate dev --name init
+
+```
+
+### 4. Rodar o Servidor
+
+```bash
+npm run dev
+# O servidor iniciará em: http://localhost:3001
+
+```
+
+---
+
+## 📚 Endpoints da API
+
+> **Autenticação:** Todas as rotas (exceto `/login`, `/cadastro` inicial e `/resposta` de email) exigem o Header:
+> `Authorization: Bearer <SEU_TOKEN>`
+
+### 🔐 Autenticação & Usuários (`/api/auth`)
+
+| Método | Rota | Descrição |
 | --- | --- | --- |
-| **Base URL** | Endereço base da API. | `http://localhost:3001/api` |
-| **Autenticação** | Mecanismo de segurança. | **JWT (Bearer Token)** |
-| **Header** | O token deve ser enviado nas rotas protegidas. | **`Authorization: Bearer <TOKEN>`** |
+| **POST** | `/login` | Autentica e retorna o Token JWT. |
+| **POST** | `/cadastro` | Cria um novo usuário (Requer token de GESTOR). |
+| **GET** | `/users` | Lista todos os usuários cadastrados. |
+| **POST** | `/logout` | Rota simbólica (O logout real é feito no Front removendo o token). |
+| **PATCH** | `/alterar-senha` | Altera a senha do usuário logado. |
+| **PATCH** | `/editar-user/:id` | Edita dados de um usuário (Gestor). |
+| **PATCH** | `/status/:id` | Ativa/Desativa um usuário (Soft Delete). |
+| **DELETE** | `/remover-user/:id` | Remove um usuário do banco (Cuidado). |
 
----
+#### 📥 Body: Login
 
-## 1. 🔐 Módulo de Autenticação e Usuários
-
-**Base URL:** `/api/auth`
-
-### 🔓 Rotas Públicas
-
-#### **Login**
-
-Autentica o usuário e retorna o token de acesso.
-
-* **Método:** `POST`
-* **Rota:** `/login`
-* **Body:**
 ```json
 {
   "login": "admin",
@@ -39,194 +74,158 @@ Autentica o usuário e retorna o token de acesso.
 
 ```
 
+#### 📥 Body: Cadastro de Usuário
 
-* **Resposta (200):**
 ```json
 {
-  "token": "eyJhbGciOi...",
-  "usuario": {
-    "idUsuario": 1,
-    "nome": "Administrador",
-    "tipo": "GESTOR",
-    "idEmpresa": 1
-  }
-}
-
-```
-
-
-
-#### **Cadastro Inicial**
-
-Cadastra novos usuários. Se for o primeiro uso do sistema, cria o Gestor.
-
-* **Método:** `POST`
-* **Rota:** `/cadastro`
-* **Body:**
-```json
-{
-  "nome": "Técnico Lucas",
-  "login": "lucas.tech",
-  "email": "lucas@email.com",
+  "nome": "Carlos Técnico",
+  "login": "carlos",
+  "email": "carlos@empresa.com",
   "senha": "123",
-  "tipo": "TECNICO",
-  "idEmpresa": 1
+  "tipo": "TECNICO" // ou "GESTOR"
 }
 
 ```
 
-
-
-### 🛡️ Rotas Protegidas (Requer Token)
-
-#### **Listar Usuários**
-
-* **Método:** `GET`
-* **Rota:** `/users`
-* **Query Params:** `page` (pág), `limit` (itens por pág).
-
-#### **Editar Usuário (Gestor)**
-
-* **Método:** `PATCH`
-* **Rota:** `/editar-user/:id`
-* **Body:** (Envie apenas o que deseja alterar)
-```json
-{ "nome": "Lucas Silva", "tipo": "GESTOR" }
-
-```
-
-
-
-#### **Alterar Senha (Própria)**
-
-* **Método:** `PATCH`
-* **Rota:** `/alterar-senha`
-* **Body:** `{ "senha": "atual", "novaSenha": "nova" }`
-
-#### **Remover Usuário (Soft Delete)**
-
-* **Método:** `DELETE`
-* **Rota:** `/remover-user/:id`
-
-#### **Alternar Status (Ativar/Desativar)**
-
-* **Método:** `PATCH`
-* **Rota:** `/status/:id`
-
 ---
 
-## 2. 👤 Módulo de Clientes
+### 🎫 Chamados (`/api/chamado`)
 
-**Base URL:** `/api/cliente`
-**Requisito:** Todas as rotas exigem Token.
+| Método | Rota | Descrição |
+| --- | --- | --- |
+| **GET** | `/` | Lista chamados. Filtros opcionais na URL (ex: `?idStatus=1`). |
+| **POST** | `/criar` | Abre um novo chamado (Triagem inicial). |
+| **GET** | `/:id` | Retorna detalhes completos do chamado + cliente + histórico. |
+| **GET** | `/lista/status` | Retorna a lista de status possíveis (Aberto, Em Andamento, etc). |
+| **PATCH** | `/editar-chamado/:id` | Atualiza informações ou transfere o chamado. |
 
-#### **Cadastrar Cliente**
+#### 📥 Body: Criar Chamado
 
-* **Método:** `POST`
-* **Rota:** `/cadastro`
-* **Body:**
-```json
-{
-  "nome": "Padaria Estrela",
-  "email": "contato@padaria.com",
-  "telefone": "85999998888",
-  "endereco": "Rua das Flores, 123",
-  "idEmpresa": 1
-}
-
-```
-
-
-
-#### **Listar Clientes**
-
-* **Método:** `GET`
-* **Rota:** `/`
-* **Query Params:** `page`, `limit`, `nome` (filtro).
-
-#### **Editar Cliente**
-
-* **Método:** `PATCH`
-* **Rota:** `/editar-cliente/:id`
-* **Body:** `{ "telefone": "85988887777", "endereco": "Novo endereço..." }`
-
-#### **Excluir Cliente (Soft Delete)**
-
-* **Método:** `DELETE`
-* **Rota:** `/excluir-cliente/:id`
-
-#### **Alternar Status Cliente**
-
-* **Método:** `PATCH`
-* **Rota:** `/status/:id`
-
----
-
-## 3. 🛠️ Módulo de Chamados (Ordens de Serviço)
-
-**Base URL:** `/api/chamado`
-**Requisito:** Todas as rotas exigem Token.
-
-#### **Criar Chamado**
-
-O `idUsuarioCriacao` é capturado automaticamente do token.
-
-* **Método:** `POST`
-* **Rota:** `/criar`
-* **Body:**
 ```json
 {
   "idCliente": 1,
-  "titulo": "PC não liga",
-  "equipamento": "Desktop Dell Vostro",
-  "descricao": "Ao apertar o botão power, nada acontece.",
-  "idResponsavel": null 
+  "titulo": "Notebook não liga",
+  "equipamento": "Dell Inspiron 15",
+  "descricao": "Cliente relatou cheiro de queimado.",
+  "idResponsavel": 2, // (Opcional) Já atribui a um técnico
+  "dataSolicitacao": "2026-01-18T14:00:00.000Z" // (Opcional) Data retroativa
 }
 
 ```
 
+#### 📥 Body: Editar Chamado
 
-*(Nota: Se enviar `idResponsavel`, o status muda para "Em Andamento" automaticamente).*
-
-#### **Listar Chamados (Filtros)**
-
-* **Método:** `GET`
-* **Rota:** `/`
-* **Query Params:**
-* `idCliente`: ID do cliente.
-* `idResponsavel`: ID do técnico.
-* `idStatus`: ID do status (1=Aberto, 2=Andamento...).
-* `titulo`: Busca por texto.
-* `dataInicio` / `dataFim`: Filtro por data de criação.
-
-
-
-#### **Detalhes do Chamado**
-
-Retorna o objeto completo com dados do Cliente, Status e Responsável.
-
-* **Método:** `GET`
-* **Rota:** `/:id`
-
-#### **Editar / Atribuir Chamado**
-
-Usado para mudar status, editar descrição ou atribuir técnico.
-
-* **Método:** `PATCH`
-* **Rota:** `/editar-chamado/:id`
-* **Body:**
 ```json
 {
-  "idResponsavel": 2,
-  "idStatus": 2,
-  "descricao": "Nova descrição técnica..."
+  "titulo": "Notebook não dá vídeo",
+  "descricao": "Atualização: O led liga mas a tela não.",
+  "idStatus": 2, // Forçar mudança de status manual
+  "idResponsavel": 3 // Trocar técnico
 }
 
 ```
 
+---
 
+### 🛠️ Ordens de Serviço (`/api/os`)
 
-#### **Listar Status Disponíveis**
+| Método | Rota | Descrição |
+| --- | --- | --- |
+| **POST** | `/gerar` | **Principal:** Cria OS, insere produtos, calcula valor e envia E-mail. |
+| **GET** | `/` | Lista todas as OS geradas. |
+| **GET** | `/:id` | Busca OS específica com seus itens e produtos. |
+| **PATCH** | `/editar/:id` | Adiciona mais itens ou muda observações (Reenvia e-mail se valor mudar). |
+| **PATCH** | `/finalizar/:id` | Conclui a OS e fecha o chamado (Status 4). |
+| **GET** | `/resposta/:id/:resp` | **Link Público:** Usado pelos botões do e-mail (Aprova/Reprova). |
 
-* **Método:** `GET`
-* **Rota:** `/lista/status`
+#### 📥 Body: Gerar OS (Orçamento)
+
+```json
+{
+  "idChamado": 10,
+  "dataPrazo": "2026-01-25",
+  "maoDeObra": 150.00,
+  "obs": "Necessário troca da fonte.",
+  "diagnostico": "Fonte queimada.",
+  "produtos": [
+    {
+      "nome": "Fonte ATX 500W",
+      "quantidade": 1,
+      "preco": 200.50
+    },
+    {
+      "nome": "Cabo de força",
+      "quantidade": 2,
+      "preco": 10.00
+    }
+  ]
+}
+
+```
+
+---
+
+### 👥 Clientes (`/api/cliente`)
+
+| Método | Rota | Descrição |
+| --- | --- | --- |
+| **GET** | `/` | Lista clientes (Paginado). |
+| **POST** | `/cadastro` | Cadastra novo cliente PF ou PJ. |
+| **PATCH** | `/editar-cliente/:id` | Atualiza dados cadastrais. |
+| **PATCH** | `/status/:id` | Ativa ou Inativa um cliente (Não apaga do banco). |
+| **DELETE** | `/excluir-cliente/:id` | Tenta excluir (Só funciona se não tiver chamados). |
+
+#### 📥 Body: Cadastro Cliente
+
+```json
+{
+  "nome": "Maria Souza",
+  "email": "maria@cliente.com",
+  "telefone": "85999999999",
+  "endereco": "Rua das Flores, 123",
+  "idEmpresa": 1 // (Opcional) Apenas se for vinculado a uma empresa
+}
+
+```
+
+---
+
+### 🏢 Empresas (`/api/empresa`)
+
+| Método | Rota | Descrição |
+| --- | --- | --- |
+| **GET** | `/` | Lista empresas parceiras. |
+| **POST** | `/` | Cadastra nova empresa. |
+| **GET** | `/:id` | Busca detalhes da empresa. |
+| **PATCH** | `/:id` | Edita dados da empresa. |
+| **DELETE** | `/:id` | Desativa a empresa. |
+
+#### 📥 Body: Nova Empresa
+
+```json
+{
+  "nomeFantasia": "Tech Solutions LTDA",
+  "cnpj": "12345678000199",
+  "endereco": "Av. Central, 500",
+  "telefone": "8533330000"
+}
+
+```
+
+---
+
+## 📧 Fluxo Automático de E-mail
+
+O sistema envia e-mails automaticamente nestas condições:
+
+1. **Geração de OS:** Quando `POST /api/os/gerar` é chamado com valor total > 0.
+2. **Edição de OS:** Quando `PATCH /api/os/editar/:id` altera o valor final.
+
+**Comportamento dos Links no E-mail:**
+
+* **Aprovar:** Status do Chamado vira `2` (Em Andamento).
+* **Reprovar:** Status do Chamado vira `5` (Cancelado/Recusado).
+
+```
+
+```
