@@ -20,7 +20,7 @@ Crie um arquivo `.env` na raiz do projeto:
 
 ```env
 DATABASE_URL="mysql://root:senha@localhost:3306/sig"
-JWT_SECRET="seu_segredo_super_seguro"
+JWT_SECRET="segredo_super_seguro"
 API_URL="http://localhost:3001"
 
 # Obrigatório para envio de e-mail (Gere a senha de app no Google)
