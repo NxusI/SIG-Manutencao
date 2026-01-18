@@ -54,6 +54,19 @@ Autentica o usuário e retorna o token de acesso.
 
 ```
 
+####  **Logout**
+
+Encerra a sessão do usuário.
+
+- **URL:** `/api/auth/logout`
+- **Método:** `POST`
+- **Autenticação:** Sim (Token JWT)
+- **Resposta de Sucesso (200 OK):**
+  ```json
+  {
+    "message": "Logout realizado com sucesso!"
+  }
+
 
 
 #### **Cadastro Inicial**
@@ -162,7 +175,7 @@ Cadastra novos usuários. Se for o primeiro uso do sistema, cria o Gestor.
 
 ---
 
-## 3. 🛠️ Módulo de Chamados (Ordens de Serviço)
+## 3. 🛠️ Módulo de Chamados
 
 **Base URL:** `/api/chamado`
 **Requisito:** Todas as rotas exigem Token.
