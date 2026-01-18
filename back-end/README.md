@@ -58,7 +58,7 @@ npm run dev
 | **POST** | `/login` | Autentica e retorna o Token JWT. |
 | **POST** | `/cadastro` | Cria um novo usuário (Requer token de GESTOR). |
 | **GET** | `/users` | Lista todos os usuários cadastrados. |
-| **POST** | `/logout` | Rota simbólica (O logout real é feito no Front removendo o token). |
+| **POST** | `/logout` | O logout real é feito no Front removendo o token. |
 | **PATCH** | `/alterar-senha` | Altera a senha do usuário logado. |
 | **PATCH** | `/editar-user/:id` | Edita dados de um usuário (Gestor). |
 | **PATCH** | `/status/:id` | Ativa/Desativa um usuário (Soft Delete). |
