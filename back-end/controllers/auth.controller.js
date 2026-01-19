@@ -88,7 +88,8 @@ export const login = async (req, res) => {
         }
 
         const usuarioExiste = await prisma.usuario.findUnique({
-            where: { login: login }
+            where: { login: login },
+            include: { empresa: true }
         })
 
         if (!usuarioExiste) {
@@ -110,7 +111,8 @@ export const login = async (req, res) => {
             nome: usuarioExiste.nome,
             tipo: usuarioExiste.tipo,
             email: usuarioExiste.email,
-            idEmpresa: usuarioExiste.idEmpresa
+            idEmpresa: usuarioExiste.idEmpresa,
+            empresa: usuarioExiste.empresa
         }
 
         const segredo = process.env.JWT_SECRET || 'segredo-super-secreto';
@@ -278,7 +280,8 @@ export const listarUsuarios = async (req, res) => {
                 email: true,
                 tipo: true,
                 ativo: true,
-                idEmpresa: true
+                idEmpresa: true,
+                empresa: true
             }
         });
 
