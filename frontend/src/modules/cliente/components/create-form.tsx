@@ -6,20 +6,25 @@ import { useCreateCliente } from "../hooks/use-cliente";
 import { Loader2 } from "lucide-react";
 import { ToastAlert } from "@/shared/components/comon/alert";
 import { formatTelefone } from "@/utils/formatters";
+import { useGetAllEmpresa } from "@/modules/empresa/hooks/use-empresa";
+import { OptionFormatted } from "@/shared/types/components.types";
+import CustomSelect from "@/shared/components/comon/select";
 
-const CreateForm = ({refetch}: {refetch: () => void}) => {
+const CreateForm = ({ refetch }: { refetch: () => void }) => {
   const [nome, setNome] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [telefone, setTelefone] = useState<string>("");
+  const [empresa, setEmpresa] = useState<OptionFormatted | null>(null);
   const [alertConfig, setAlertConfig] = useState<{
     icon: "success" | "error" | "warning" | "info";
     title: string;
   } | null>(null);
 
   const { create, loading } = useCreateCliente();
+  const { empresa: empresas, loading: loadingEmpresa } = useGetAllEmpresa();
 
   const handleSubmit = async () => {
-    if (!nome || !email || !telefone) {
+    if (!nome || !email || !telefone || !empresa) {
       setAlertConfig({
         icon: "warning",
         title: "Preencha todos os campos",
@@ -32,6 +37,7 @@ const CreateForm = ({refetch}: {refetch: () => void}) => {
         nome,
         email,
         telefone,
+        idEmpresa: Number(empresa.value),
       },
     })
       .then(() => {
@@ -73,6 +79,19 @@ const CreateForm = ({refetch}: {refetch: () => void}) => {
           value={formatTelefone(telefone)}
           placeholder="(00) 00000-0000"
           onChange={(e) => setTelefone(e.target.value)}
+        />
+      </div>
+      <div className="grid gap-2">
+        <Label>Empresa*</Label>
+        <CustomSelect
+          label="Selecione uma Empresa"
+          onChange={setEmpresa}
+          options={empresas.map((e) => ({
+            value: String(e.idEmpresa),
+            label: e.nomeFantasia,
+          }))}
+          value={empresa}
+          loading={loadingEmpresa}
         />
       </div>
       <Button onClick={handleSubmit} disabled={loading}>

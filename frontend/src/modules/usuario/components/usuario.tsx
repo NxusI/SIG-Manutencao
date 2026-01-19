@@ -37,7 +37,7 @@ const Usuarios = () => {
     nome: string,
     email: string,
     login: string,
-    tipo: OptionFormatted | null
+    tipo: OptionFormatted | null,
   ) => {
     setNome(nome);
     setEmail(email);
@@ -154,11 +154,13 @@ const Usuarios = () => {
           getRowId={(d) => d.idUsuario}
         />
       )}
-      <Pagination
-        currentPage={page}
-        onPageChange={setPage}
-        totalPages={total}
-      />
+      {total > 1 && (
+        <Pagination
+          currentPage={page}
+          onPageChange={setPage}
+          totalPages={total}
+        />
+      )}
 
       {alertConfig && <ToastAlert key={alertConfig.id} {...alertConfig} />}
     </div>

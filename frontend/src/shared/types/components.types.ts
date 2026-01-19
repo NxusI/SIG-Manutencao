@@ -1,3 +1,5 @@
+import { TipoUsuario } from "@/domain/usuario/entities/usuario.entity";
+import { LucideIcon } from "lucide-react";
 import { Matcher } from "react-day-picker";
 import { ActionMeta, SingleValue } from "react-select";
 
@@ -50,7 +52,7 @@ export interface SelectProps {
   options: OptionFormatted[];
   onChange: (
     newValue: SingleValue<OptionFormatted>,
-    actionMeta: ActionMeta<OptionFormatted>
+    actionMeta: ActionMeta<OptionFormatted>,
   ) => void;
   value: OptionFormatted | null;
   disable?: boolean;
@@ -77,4 +79,12 @@ export interface DatePickerProps {
   disable?: Matcher;
   from?: Date;
   to?: Date;
+}
+
+export interface MenuItem {
+  title: string;
+  url: string;
+  icon?: LucideIcon;
+  permission?: TipoUsuario[];
+  items?: MenuItem[];
 }

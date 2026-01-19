@@ -22,10 +22,13 @@ import { useAuth } from "@/modules/auth/providers/auth-context";
 
 export function NavUser() {
   const { isMobile } = useSidebar();
-  const { userName, logout } = useAuth();
+  const { userName, logout, email } = useAuth();
 
-  function getInitials(name: string = ""): string {
-    const parts = name.trim().split(/\s+/);
+  function getInitials(): string {
+    if (!userName) {
+      return "";
+    }
+    const parts = userName.trim().split(/\s+/);
 
     if (parts.length === 1) {
       return parts[0].charAt(0).toUpperCase();
@@ -47,15 +50,11 @@ export function NavUser() {
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
               <Avatar className="h-8 w-8 rounded-lg">
-                <AvatarImage
-                  src={getInitials(userName || undefined)}
-                  alt={userName || undefined}
-                />
-                <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+                <AvatarFallback className="rounded-lg">{getInitials()}</AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-medium">{userName}</span>
-                {/* <span className="truncate text-xs">{user.email}</span> */}
+                <span className="truncate text-xs">{email}</span>
               </div>
               <ChevronsUpDown className="ml-auto size-4" />
             </SidebarMenuButton>
@@ -69,15 +68,11 @@ export function NavUser() {
             <DropdownMenuLabel className="p-0 font-normal">
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                 <Avatar className="h-8 w-8 rounded-lg">
-                  <AvatarImage
-                    src={getInitials(userName || undefined)}
-                    alt={userName || undefined}
-                  />
-                  <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+                  <AvatarFallback className="rounded-lg">{getInitials()}</AvatarFallback>
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-medium">{userName}</span>
-                  {/* <span className="truncate text-xs">{user.email}</span> */}
+                  <span className="truncate text-xs">{email}</span>
                 </div>
               </div>
             </DropdownMenuLabel>
