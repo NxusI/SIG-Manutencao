@@ -4,15 +4,23 @@ import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
 import { Label } from "@/shared/components/ui/label";
 import { OptionFormatted } from "@/shared/types/components.types";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useUpdateUsuario } from "../hooks/use-usuario";
 import { Loader2 } from "lucide-react";
 import { ICreateUsuarioParams } from "@/domain/usuario/params/create-usuario.params";
 import { ToastAlert } from "@/shared/components/comon/alert";
+import { useGetAllEmpresa } from "@/modules/empresa/hooks/use-empresa";
 
-const UpdateUsuario = ({ usuario, refetch }: { usuario: Usuario, refetch: () => void }) => {
+const UpdateUsuario = ({
+  usuario,
+  refetch,
+}: {
+  usuario: Usuario;
+  refetch: () => void;
+}) => {
   const [nome, setNome] = useState<string>(usuario.nome);
   const [email, setEmail] = useState<string>(usuario.email);
+  const [empresa, setEmpresa] = useState<OptionFormatted | null>(null);
   const [tipo, setTipo] = useState<OptionFormatted | null>({
     value: usuario.tipo,
     label: usuario.tipo,
@@ -23,6 +31,7 @@ const UpdateUsuario = ({ usuario, refetch }: { usuario: Usuario, refetch: () => 
   } | null>(null);
 
   const { loading, update } = useUpdateUsuario();
+  const { empresa: empresas, loading: loadingEmpresa } = useGetAllEmpresa();
 
   const handleSubmit = async () => {
     const updateFields: Partial<ICreateUsuarioParams> = {};
@@ -31,6 +40,8 @@ const UpdateUsuario = ({ usuario, refetch }: { usuario: Usuario, refetch: () => 
     if (email !== usuario.email) updateFields.email = email;
     if (tipo && tipo.value !== usuario.tipo)
       updateFields.tipo = tipo.value as TipoUsuario;
+    if (empresa && Number(empresa.value) !== usuario.idEmpresa)
+      updateFields.idEmpresa = Number(empresa.value);
 
     if (Object.keys(updateFields).length === 0) {
       setAlertConfig({
@@ -58,6 +69,18 @@ const UpdateUsuario = ({ usuario, refetch }: { usuario: Usuario, refetch: () => 
       .finally(() => setTimeout(() => setAlertConfig(null), 3000));
   };
 
+  useEffect(() => {
+    if(usuario.idEmpresa){
+      const find = empresas.find((e) => e.idEmpresa === usuario.idEmpresa);
+      if (find) {
+        setEmpresa({
+          value: String(find.idEmpresa),
+          label: find.nomeFantasia,
+        });
+      }
+    }
+  },[]);
+
   return (
     <div className="grid gap-5">
       <div className="grid gap-2">
@@ -83,6 +106,19 @@ const UpdateUsuario = ({ usuario, refetch }: { usuario: Usuario, refetch: () => 
             label: t,
           }))}
           value={tipo}
+        />
+      </div>
+      <div className="grid gap-2">
+        <Label>Empresa*</Label>
+        <CustomSelect
+          label="Selecione uma Empresa"
+          onChange={setEmpresa}
+          options={empresas.map((e) => ({
+            value: String(e.idEmpresa),
+            label: e.nomeFantasia,
+          }))}
+          value={empresa}
+          loading={loadingEmpresa}
         />
       </div>
       <Button onClick={handleSubmit} disabled={loading}>

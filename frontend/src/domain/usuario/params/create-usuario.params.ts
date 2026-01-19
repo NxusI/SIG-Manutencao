@@ -5,5 +5,6 @@ export interface ICreateUsuarioParams {
   login: string;
   email: string;
   senha: string;
+  idEmpresa: number;
   tipo: TipoUsuario;
 }
