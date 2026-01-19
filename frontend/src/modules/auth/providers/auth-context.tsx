@@ -22,6 +22,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [userId, setUserId] = useState<number | null>(null);
   const [userName, setUserName] = useState<string | null>(null);
   const [userType, setUserType] = useState<string | null>(null);
+  const [email, setEmail] = useState<string | null>(null);
+  const [idEmpresa, setIdEmpresa] = useState<number | null>(null);
   const [expiresAt, setExpiresAt] = useState<number | null>(null);
   const [isFirstAccess, setIsFirstAccess] = useState<boolean>(false);
   const router = useRouter();
@@ -36,16 +38,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const decoded = jwtDecode<DecodedToken>(token);
 
     const anoAtual = new Date().getFullYear();
-    const senhaPadrao = `rob${anoAtual}`; 
+    const senhaPadrao = `rob${anoAtual}`;
     setIsFirstAccess(params.senha === senhaPadrao);
 
     const expAsDate = new Date(decoded.exp * 1000);
     TokenStorage.setToken(token, { expires: expAsDate });
 
-    setUserId(decoded.id);
+    setUserId(decoded.idUsuario);
     setUserName(decoded.nome);
     setUserType(decoded.tipo);
     setExpiresAt(decoded.exp);
+    setEmail(decoded.email);
+    setIdEmpresa(decoded.idEmpresa);
   }, []);
 
   const logout = useCallback(() => {
@@ -54,6 +58,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUserName(null);
     setUserType(null);
     setExpiresAt(null);
+    setEmail(null);
+    setIdEmpresa(null);
     setIsFirstAccess(false);
 
     router.push("/login");
@@ -71,7 +77,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         return;
       }
 
-      setUserId(decoded.id);
+      setUserId(decoded.idUsuario);
+      setEmail(decoded.email);
+      setIdEmpresa(decoded.idEmpresa);
       setUserName(decoded.nome);
       setUserType(decoded.tipo);
       setExpiresAt(decoded.exp);
@@ -94,6 +102,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         isFirstAccess,
         login,
         logout,
+        email,
+        idEmpresa,
       }}
     >
       {children}

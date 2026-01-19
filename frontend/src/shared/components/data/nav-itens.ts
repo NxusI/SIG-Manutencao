@@ -1,41 +1,46 @@
+import { TipoUsuario } from "@/domain/auth/params/login.params";
+import { MenuItem } from "@/shared/types/components.types";
 import { Archive, FilePlusCorner, FolderOpen, House } from "lucide-react";
 
-export const data = {
-  user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
+export const data: MenuItem[] = [
+  {
+    title: "Home",
+    url: "/home",
+    icon: House,
+    permission: [],
   },
-  navMain: [
-    {
-      title: "Home",
-      url: "/home",
-      icon: House,
-    },
-    {
-      title: "Cadastrar",
-      url: "#",
-      icon: FilePlusCorner,
-      items: [
-        {
-          title: "Clientes",
-          url: "/cadastrar/cliente",
-        },
-        {
-          title: "Usuários",
-          url: "/cadastrar/usuario",
-        },
-      ],
-    },
-    {
-      title: "Chamados",
-      url: "/chamados",
-      icon: FolderOpen,
-    },
-    {
-      title: "Ordem de Serviço",
-      url: "/ordem-servico",
-      icon: Archive,
-    },
-  ],
-};
+  {
+    title: "Cadastrar",
+    url: "#",
+    icon: FilePlusCorner,
+    items: [
+      {
+        title: "Clientes",
+        url: "/cadastrar/cliente",
+        permission: [],
+      },
+      {
+        title: "Usuários",
+        url: "/cadastrar/usuario",
+        permission: [TipoUsuario.GESTOR],
+      },
+      {
+        title: "Empresa",
+        url: "/cadastrar/empresa",
+        permission: [TipoUsuario.GESTOR],
+      },
+    ],
+  },
+  {
+    title: "Chamados",
+    url: "/chamados",
+    icon: FolderOpen,
+    permission: [],
+  },
+  {
+    title: "Ordem de Serviço",
+    url: "/ordem-servico",
+    icon: Archive,
+    permission: [],
+  },
+];

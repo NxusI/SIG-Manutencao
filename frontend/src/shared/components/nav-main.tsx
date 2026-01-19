@@ -13,25 +13,52 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from "@/shared/components/ui/sidebar";
+import { MenuItem } from "../types/components.types";
+import { useAuth } from "@/modules/auth/providers/auth-context";
+import { TipoUsuario } from "@/domain/usuario/entities/usuario.entity";
+
+function filterMenuByPermission(
+  items: MenuItem[],
+  tipoUsuario?: TipoUsuario
+): MenuItem[] {
+  return items
+    .map((item) => {
+      const hasPermission =
+        !item.permission ||
+        item.permission.length === 0 ||
+        (tipoUsuario && item.permission.includes(tipoUsuario));
+
+      if (!hasPermission) return null;
+
+      if (item.items && item.items.length > 0) {
+        const filteredChildren = filterMenuByPermission(
+          item.items,
+          tipoUsuario
+        );
+
+        if (filteredChildren.length === 0) return null;
+
+        return {
+          ...item,
+          items: filteredChildren,
+        };
+      }
+
+      return item;
+    })
+    .filter(Boolean) as MenuItem[];
+}
 
 export function NavMain({
   items,
-}: {
-  items: {
-    title: string;
-    url: string;
-    icon?: LucideIcon;
-    isActive?: boolean;
-    items?: {
-      title: string;
-      url: string;
-    }[];
-  }[];
-}) {
+}: {items: MenuItem[]}) {
+  const { userType } = useAuth();
+  const filteredItems = filterMenuByPermission(items, userType as TipoUsuario ?? undefined);
+
   return (
     <SidebarGroup>
       <SidebarMenu>
-        {items.map((item) => {
+        {filteredItems.map((item) => {
           const hasSubItems = item.items && item.items.length > 0;
 
           if (!hasSubItems) {
@@ -40,7 +67,6 @@ export function NavMain({
                 <SidebarMenuButton
                   asChild
                   tooltip={item.title}
-                  isActive={item.isActive}
                 >
                   <a href={item.url}>
                     {item.icon && <item.icon />}
@@ -55,7 +81,6 @@ export function NavMain({
             <Collapsible
               key={item.title}
               asChild
-              defaultOpen={item.isActive}
               className="group/collapsible"
             >
               <SidebarMenuItem>
