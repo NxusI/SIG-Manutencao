@@ -188,10 +188,10 @@ Abaixo, a lista de Requisitos Funcionais (RF) ativos no projeto, alinhados com a
 ### 🔄 3. Fluxo de Trabalho (Kanban)
 | ID | Funcionalidade | Status |
 | :--- | :--- | :---: |
-| `RF012` | **Status Dinâmico:** Atualização automática baseada em ações. | 📝 Backlog |
-| `RF013` | **Visualização Kanban:** Colunas de Triagem, Bancada e Saída. | 📝 Backlog |
-| `RF014` | **Filtros:** Ordenação por data de entrada e criticidade. | 📝 Backlog |
-| `RF017` | **Monitor de SLA:** Alerta visual para diagnósticos atrasados (>3 dias). | 📝 SUSPENSO |
+| `RF012` | **Status Dinâmico:** Atualização automática baseada em ações. | ✅ Feito |
+| `RF013` | **Visualização Kanban:** Colunas de Triagem, Bancada e Saída. | ✅ Feito |
+| `RF014` | **Filtros:** Ordenação por data de entrada e criticidade. | ✅ Feito |
+| `RF017` | **Monitor de SLA:** Alerta visual para diagnósticos atrasados (>3 dias). | ✅ Feito |
 
 ### 🧾 4. Financeiro e OS
 | ID | Funcionalidade | Status |
@@ -199,7 +199,7 @@ Abaixo, a lista de Requisitos Funcionais (RF) ativos no projeto, alinhados com a
 | `RF018` | **Orçamento:** Composição de Peças + Mão de Obra. | ✅ Feito |
 | `RF019` | **Custos:** Registro de custo interno (para cálculo de margem). | ✅ Feito |
 | `RF020` | **Receita:** Definição de preço final ao consumidor. | ✅ Feito |
-| `RF021` | **Baixa Técnica:** Encerramento da ordem de serviço. | 📝 SUSPENSO |
+| `RF021` | **Baixa Técnica:** Encerramento da ordem de serviço. | ✅ Feito |
 | `RF022` | **Finalização:** Mudança de status global do chamado. | ✅ Feito |
 
 ### 📨 5. Automação e Gestão
