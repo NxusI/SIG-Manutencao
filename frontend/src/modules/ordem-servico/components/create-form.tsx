@@ -4,40 +4,131 @@ import { Input } from "@/shared/components/ui/input";
 import { Label } from "@/shared/components/ui/label";
 import { Textarea } from "@/shared/components/ui/textarea";
 import { OptionFormatted } from "@/shared/types/components.types";
-import { useState } from "react";
-import ProdutosOrdem from "./produtos";
 import { Button } from "@/shared/components/ui/button";
+import { useState } from "react";
+import ProdutosOrdem, { ProdutoOS } from "./produtos";
+import { useGetAllChamados } from "@/modules/chamados/hooks/use-chamado";
+import { useCreateOrdem } from "../hooks/use-ordem-servico";
+import { formatDate } from "@/utils/formatters";
 
-const CreateOS = () => {
+/* ======================
+   Utils locais
+====================== */
+
+const formatMoney = (value: number) =>
+  value.toLocaleString("pt-BR", {
+    style: "currency",
+    currency: "BRL",
+  });
+
+const parseMoney = (value: string): number =>
+  Number(value.replace(/\D/g, "")) / 100;
+
+const CreateOS = ({ refetch }: { refetch: () => void }) => {
+  const { chamados } = useGetAllChamados();
+  const { create, loading } = useCreateOrdem();
+
   const [chamado, setChamado] = useState<OptionFormatted | null>(null);
+  const [produtos, setProdutos] = useState<ProdutoOS[]>([]);
+  const [dataPrazo, setDataPrazo] = useState<Date | undefined>();
+  const [valorServico, setValorServico] = useState<number>(0);
+  const [observacao, setObservacao] = useState("");
+
+  const [alertConfig, setAlertConfig] = useState<{
+    id: number;
+    icon: "success" | "error" | "warning" | "info";
+    title: string;
+  } | null>(null);
+
+  const handleSubmit = async () => {
+    if (!chamado || !dataPrazo || produtos.length === 0) return;
+
+    await create({
+      data: {
+        idChamado: Number(chamado.value),
+        dataPrazo: dataPrazo,
+        maoDeObra: valorServico, // 👈 NUMBER LIMPO
+        obs: observacao,
+        produtos: produtos.map((p) => ({
+          nome: p.produto,
+          quantidade: p.quantidade,
+          preco: p.valorUnitario, // 👈 NUMBER LIMPO
+        })),
+      },
+    })
+      .then(() => {
+        setAlertConfig({
+          id: Date.now(),
+          icon: "success",
+          title: "Ordem de Serviço criada com sucesso!",
+        });
+        setTimeout(() => {
+          refetch();
+        }, 1000);
+
+        setChamado(null);
+        setDataPrazo(undefined);
+        setProdutos([]);
+        setObservacao("");
+        setValorServico(0);
+      })
+      .catch((err) => {
+        setAlertConfig({
+          id: Date.now(),
+          icon: "error",
+          title: err.response.data.message || "Erro ao criar ordem de serviço",
+        });
+      })
+      .finally(() => setTimeout(() => setAlertConfig(null), 1000));
+  };
+
+  const handledata = (data: Date | undefined | string) => {
+    setDataPrazo(data as Date);
+  };
 
   return (
-    <div className="grid gap-2">
+    <div className="grid gap-3">
       <div className="grid gap-2">
         <Label>Chamado*</Label>
         <CustomSelect
           label="Selecione um chamado"
-          onChange={setChamado}
-          options={[]}
+          options={chamados.map((c) => ({
+            value: String(c.idChamado),
+            label: c.titulo,
+          }))}
           value={chamado}
+          onChange={setChamado}
         />
       </div>
+
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-2">
         <div className="grid gap-2">
           <Label>Data Prazo*</Label>
-          <DatePicker />
+          <DatePicker value={dataPrazo} onChange={handledata} />
         </div>
+
         <div className="grid gap-2">
           <Label>Valor Serviço*</Label>
-          <Input placeholder="R$ 00,00" />
+          <Input
+            value={formatMoney(valorServico)}
+            onChange={(e) => setValorServico(parseMoney(e.target.value))}
+            placeholder="R$ 0,00"
+          />
         </div>
       </div>
-      <ProdutosOrdem/>
+
+      <ProdutosOrdem produtos={produtos} onChange={setProdutos} />
+
       <div className="grid gap-2">
-        <Label>Observação*</Label>
-        <Textarea rows={5} />
+        <Label>Observação</Label>
+        <Textarea
+          rows={4}
+          value={observacao}
+          onChange={(e) => setObservacao(e.target.value)}
+        />
       </div>
-      <Button className="mt-3">
+
+      <Button onClick={handleSubmit} disabled={loading}>
         Salvar
       </Button>
     </div>

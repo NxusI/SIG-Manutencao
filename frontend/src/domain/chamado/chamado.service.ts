@@ -3,6 +3,7 @@ import { ChamadoRepository } from "./chamado.repository";
 import { Chamado } from "./entities/chamado.entity";
 import { ICreateChamadoParams } from "./params/create-chamado.params";
 import { IGetAllChamadoParams } from "./params/get-all-chamado.params";
+import { Status } from "./entities/status.entity";
 
 export class ChamadoService {
   private readonly repository: ChamadoRepository;
@@ -23,5 +24,9 @@ export class ChamadoService {
     data: Partial<ICreateChamadoParams>
   ): Promise<Chamado> {
     return await this.repository.update(id, data);
+  }
+
+  async status(): Promise<Status[]> {
+    return await this.repository.status();
   }
 }

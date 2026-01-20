@@ -1,8 +1,8 @@
 import BaseModal from "@/shared/components/comon/base-modal";
 import { DataTable } from "@/shared/components/comon/data-table";
 import { Button } from "@/shared/components/ui/button";
-import { Edit, Trash2 } from "lucide-react";
-import { formatTelefone } from "@/utils/formatters";
+import { Edit, Info, Trash2 } from "lucide-react";
+import { formatDateString, formatTelefone } from "@/utils/formatters";
 import TableSkeleton from "@/shared/components/skeleton/table";
 import Pagination from "@/shared/components/comon/pagination";
 import { Chamado } from "@/domain/chamado/entities/chamado.entity";
@@ -17,6 +17,7 @@ const TableChamados = ({
   total,
   page,
   setPage,
+  refetch,
 }: {
   loading: boolean;
   chamados: Chamado[];
@@ -24,23 +25,10 @@ const TableChamados = ({
   total: number;
   page: number;
   setPage: (page: number) => void;
+  refetch: () => void;
 }) => {
   const [showModal, setShowModal] = useState<boolean>(false);
   const [chamado, setChamado] = useState<Chamado | null>(null);
-
-  const handleDelete = (c: Chamado) => {
-    const { showDialog } = ConfirmDialog({
-      title: `Confirmar exclusão`,
-      text: `Tem certeza de que deseja excluir o chamado ${c.titulo}?`,
-      confirmText: "Excluir",
-      buttonColor: "#b91111ff",
-      onConfirm: () => {
-        console.log("excluido");
-      },
-    });
-
-    showDialog();
-  };
 
   const handleView = (c: Chamado) => {
     setChamado(c);
@@ -68,9 +56,11 @@ const TableChamados = ({
             "telefone",
             "equipamento",
             "responsavel",
+            "status",
             "data",
+            "dataConfirmacao",
+            "dataFechamento",
             "edit",
-            "delete",
           ]}
           columnLabels={{
             idChamado: "ID",
@@ -80,27 +70,27 @@ const TableChamados = ({
             equipamento: "Equipamento",
             responsavel: "Responsável",
             data: "Data Solicitação",
-            edit: "Editar",
-            delete: "Excluir",
+            dataConfirmacao: "Data Confirmação",
+            dataFechamento: "Data Fechamento",
+            edit: "Detalhes",
+            status: "Status",
           }}
           data={chamados.map((d) => ({
             ...d,
+            status: d.status.descricao,
             nomeCliente: d.cliente.nome,
             telefone: formatTelefone(d.cliente.telefone),
-            data: new Date(d.dataChamado).toLocaleDateString(),
+            data: new Date(d.dataSolicitacao).toLocaleDateString(),
+            dataFechamento: formatDateString(d.dataFechamento || undefined),
             responsavel: d.responsavel?.nome || "-",
+            dataConfirmacao: formatDateString(d.dataConfirmacao || undefined),
             edit: (
               <Button
                 variant={"secondary"}
                 size={"icon"}
                 onClick={() => handleView(d)}
               >
-                <Edit />
-              </Button>
-            ),
-            delete: (
-              <Button variant={"destructive"} size={"icon"} onClick={() => handleDelete(d)}>
-                <Trash2 />
+                <Info />
               </Button>
             ),
           }))}
@@ -120,6 +110,7 @@ const TableChamados = ({
           chamado={chamado}
           onClose={() => setShowModal(false)}
           showModal={showModal}
+          refetch={refetch}
         />
       )}
     </>

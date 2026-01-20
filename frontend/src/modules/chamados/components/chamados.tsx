@@ -11,7 +11,7 @@ import FilterChamados from "./filter";
 
 const Chamados = () => {
   const [page, setPage] = useState<number>(1);
-  const [viewMode, setViewMode] = useState<"table" | "grid">("grid");
+  const [viewMode, setViewMode] = useState<"table" | "grid">("table");
   const [open, setOpen] = useState<boolean>(false);
 
   const { chamados, error, loading, total, refetch } = useGetAllChamados({
@@ -22,7 +22,7 @@ const Chamados = () => {
 
   return (
     <div className="grid gap-5">
-      <div className="grid grid-cols-1 lg:grid-cols-2 items-center gap-3">
+      <div className="flex justify-between gap-3">
         <div className="flex gap-2">
           <Button
             size="icon"
@@ -68,6 +68,7 @@ const Chamados = () => {
       </div>
       {viewMode === "table" ? (
         <TableChamados
+          refetch={refetch}
           chamados={chamados}
           error={error}
           loading={loading}
