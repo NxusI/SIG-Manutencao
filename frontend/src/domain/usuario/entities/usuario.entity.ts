@@ -5,6 +5,7 @@ export interface Usuario {
   login: string;
   senha: string;
   createdAt: string;
+  idEmpresa: number;
   tipo: TipoUsuario;
 }
 

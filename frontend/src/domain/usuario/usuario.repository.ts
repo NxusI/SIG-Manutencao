@@ -26,12 +26,12 @@ export class UsuarioRepository implements IUsuarioRepository {
     id: number,
     data: Partial<ICreateUsuarioParams>
   ): Promise<Usuario> {
-    const res = await apiClient.patch(`auth/users/editar-user/${id}`, data);
+    const res = await apiClient.patch(`auth/editar-user/${id}`, data);
     return res.data;
   }
 
   async delete(id: number): Promise<void> {
-    const res = await apiClient.delete(`auth/users/remover-user/${id}`);
+    const res = await apiClient.delete(`auth/remover-user/${id}`);
     return res.data;
   }
 }
