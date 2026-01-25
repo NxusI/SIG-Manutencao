@@ -49,7 +49,7 @@ Keywords: Nexus One - Instituto Robótica Sustentável - Projeto Integrado - Sis
 
 ## 🤝 Sobre a Equipe
 
-Este projeto é desenvolvido pela equipe **Nexus One**, alunos da **Universidade Federal do Ceará**.
+Este projeto é desenvolvido pela equipe **Nexus One**, formada por alunos do curso de **Sistemas e Mídias Digitias** da **Universidade Federal do Ceará**.
 
 * [**🔗 Perfil da Organização no GitHub**](https://github.com/NxusI)
  
@@ -100,61 +100,6 @@ A arquitetura foi desenhada priorizando escalabilidade, componentização e perf
 
 ### Integração
 > Implementa um serviço de disparo automático de e-mails para comunicação com o cliente.
-
-### Teste das Tecnologias
-
-> Uma prova de conceito inicial foi desenvolvida utilizando as tecnologias indicadas, demonstrando a viabilidade técnica do projeto.
-
-[A demonstração da prova de conceito pode ser acessada aqui.](https://github.com/NxusI/Teste-Tecnologias)
-
-## 🚀 Como Rodar o Projeto
-
-Siga os passos abaixo para executar o ambiente de desenvolvimento localmente.
-
-### Pré-requisitos
-* **Node.js** (Versão LTS recomendada)
-* **NPM**
-* **Git**
-* **MySQL**
-
-### Passo a Passo
-
-```bash
-# 1. Clone o repositório e entre na pasta
-git clone https://github.com/NxusI/SIG-Manutencao.git
-cd SIG-Manutencao
-
-# --- PARTE A: CONFIGURANDO O BACKEND (API e BANCO) ---
-
-# 2. Entre na pasta do backend e instale as dependências
-cd backend
-npm install
-
-# 3. Crie o arquivo .env
-# Crie um arquivo chamado .env dentro da pasta 'backend' e cole o conteúdo abaixo:
-DATABASE_URL="mysql://root:SUA_SENHA@localhost:3306/sig_manutencao"
-JWT_SECRET="segredo-nexus-one"
-
-# 4. Sincronize o Banco de Dados (Isso cria as tabelas no MySQL)
-npx prisma migrate dev --name init
-
-# 5. Rode a API (Mantenha este terminal aberto)
-npm run dev
-
-# --- PARTE B: CONFIGURANDO O FRONTEND (INTERFACE) ---
-
-# 6. Abra um NOVO terminal (o anterior está ocupado rodando a API)
-# Volte para a pasta raiz e entre no frontend
-cd frontend
-npm install
-
-# 7. Execute o projeto visual
-npm run dev
-
-# 8. Acesse no navegador
-http://localhost:3000
-```
----
 
 ## ✨ Escopo Funcional e Requisitos
 
@@ -224,4 +169,4 @@ Para detalhes aprofundados sobre as regras de negócio, diagramas e user stories
 
 ## 🚧 Status do Projeto
 
-* **Status:** 🚧 **Checkpoint 1 Concluído** | Fase: **Prototipação Inicial e Prova de Conceito (Next.js/Node.js).**
+* **Status:** 🚧 ** Em Conclusão** | Fase: **Desenvolvimento do Módulo de Gestão e Automação - Ajustes Finais.**
