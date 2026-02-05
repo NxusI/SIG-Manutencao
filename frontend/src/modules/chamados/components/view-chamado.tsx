@@ -5,137 +5,108 @@ import {
   DialogContent,
   DialogHeader,
 } from "@/shared/components/ui/dialog";
-import { Input } from "@/shared/components/ui/input";
-import { Textarea } from "@/shared/components/ui/textarea";
 import { formatDateString } from "@/utils/formatters";
 import { DialogTitle } from "@radix-ui/react-dialog";
 import { ArrowRight } from "lucide-react";
 import { useState } from "react";
-
-const EditTile = ({
-  title,
-  onUpdate,
-}: {
-  title: string;
-  onUpdate: (newTitle: string) => void;
-}) => {
-  const [editing, setEditing] = useState(false);
-  const [value, setValue] = useState(title);
-
-  const handleBlur = () => {
-    setEditing(false);
-    if (value !== title) onUpdate(value);
-  };
-
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
-      handleBlur();
-    }
-  };
-
-  return editing ? (
-    <Input
-      autoFocus
-      value={value}
-      onChange={(e) => setValue(e.target.value)}
-      onBlur={handleBlur}
-      onKeyDown={handleKeyDown}
-    />
-  ) : (
-    <span
-      className="text-xl font-semibold cursor-pointer"
-      onClick={() => setEditing(true)}
-    >
-      {title.toUpperCase()}
-    </span>
-  );
-};
-
-const EditDescription = ({
-  description,
-  onUpdate,
-}: {
-  description: string;
-  onUpdate: (newDescription: string) => void;
-}) => {
-  const [editing, setEditing] = useState(false);
-  const [value, setValue] = useState(description);
-
-  const handleBlur = () => {
-    setEditing(false);
-    if (value !== description) onUpdate(value);
-  };
-
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key === "Enter") {
-      handleBlur();
-    }
-  };
-
-  return editing ? (
-    <Textarea
-      autoFocus
-      value={value}
-      onChange={(e) => setValue(e.target.value)}
-      onBlur={handleBlur}
-      onKeyDown={handleKeyDown}
-    />
-  ) : (
-    <span
-      className="text-sm cursor-pointer border border-border rounded-lg p-3 text-muted-foreground min-h-[70px]"
-      onClick={() => setEditing(true)}
-    >
-      {description}
-    </span>
-  );
-}
+import { useGetStatus, useUpateChamado } from "../hooks/use-chamado";
+import { ToastAlert } from "@/shared/components/comon/alert";
+import { EditDescription, EditStatus, EditTile } from "./update-form";
 
 const ViewChamado = ({
   onClose,
   showModal,
-  chamado
+  chamado,
+  refetch,
 }: {
   showModal: boolean;
   onClose: () => void;
-  chamado: Chamado
+  chamado: Chamado;
+  refetch: () => void;
 }) => {
+  const { status } = useGetStatus();
+  const { update } = useUpateChamado();
+
+  const [alertConfig, setAlertConfig] = useState<{
+    id: number;
+    title: string;
+    icon: "success" | "error" | "warning" | "info";
+  } | null>(null);
+
+  const handleUpdateChamado = async (data: Partial<Chamado>) => {
+    await update({ id: chamado.idChamado, data })
+      .then(() => {
+        setAlertConfig({
+          id: Date.now(),
+          title: "Chamado atualizado com sucesso!",
+          icon: "success",
+        });
+        setTimeout(() => refetch(), 1000);
+      })
+      .catch((err) => {
+        setAlertConfig({
+          id: Date.now(),
+          title: err.response.data.message || "Erro ao atualizar chamado",
+          icon: "error",
+        });
+      })
+      .finally(() => setTimeout(() => setAlertConfig(null), 1000));
+  };
+
   return (
     <Dialog open={showModal} onOpenChange={onClose}>
       <DialogContent className="lg:min-w-[40vw]">
         <DialogHeader>
-            <DialogTitle>
-                <EditTile
-                    onUpdate={(newTitle) => console.log(newTitle)}
-                    title="Teste"
-                />
-            </DialogTitle>
+          <DialogTitle>
+            <EditTile
+              title={chamado.titulo}
+              onUpdate={(titulo) => handleUpdateChamado({ titulo })}
+            />
+          </DialogTitle>
         </DialogHeader>
+
         <div className="grid gap-5">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-2">
-                <div className="flex gap-3 items-center">
-                    <strong>Prazo</strong>
-                    <span>{formatDateString(chamado.dataChamado)}</span>
-                    <ArrowRight size={17}/>
-                    <span>{formatDateString(chamado.dataChamado)}</span>
-                </div>
-                <div className="flex gap-3 items-center">
-                  <strong>Cliente</strong>
-                  <span>{chamado.cliente.nome}</span>
-                </div>
-                <div className="flex gap-3 items-center">
-                  <strong>Status</strong>
-                  <span>{chamado.status.descricao}</span>
-                </div>
-                <div className="flex gap-3 items-center">
-                  <strong>Responsável</strong>
-                  <span>{chamado.responsavel?.nome || "Não atribuído"}</span>
-                </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-2">
+            <div className="flex gap-3 items-center">
+              <strong>Prazo</strong>
+              <span>{formatDateString(chamado.dataSolicitacao)}</span>
+              <ArrowRight size={17} />
+              <span>
+                {formatDateString(chamado.dataFechamento || undefined)}
+              </span>
             </div>
-            <EditDescription onUpdate={(newDescription) => console.log(newDescription)} description={chamado.descricao}/>
-              <Button variant={"outline"} onClick={onClose} className="hover:scale-105">
-                Fechar
-              </Button>
+
+            <div className="flex gap-3 items-center">
+              <strong>Cliente</strong>
+              <span>{chamado.cliente.nome}</span>
+            </div>
+
+            <EditStatus
+              statusAtual={chamado.status}
+              opcoes={status.map((s) => ({
+                value: String(s.idStatus),
+                label: s.descricao,
+              }))}
+              onUpdate={(idStatus) => handleUpdateChamado({ idStatus })}
+            />
+
+            <div className="flex gap-3 items-center">
+              <strong>Responsável</strong>
+              <span>{chamado.responsavel?.nome || "Não atribuído"}</span>
+            </div>
+          </div>
+
+          <EditDescription
+            description={chamado.descricao}
+            onUpdate={(descricao) => handleUpdateChamado({ descricao })}
+          />
+
+          <Button variant="outline" onClick={onClose}>
+            Fechar
+          </Button>
         </div>
+
+        {alertConfig && <ToastAlert key={alertConfig.id} {...alertConfig} />}
       </DialogContent>
     </Dialog>
   );

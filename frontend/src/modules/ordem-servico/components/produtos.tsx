@@ -1,23 +1,41 @@
 import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
 import { Label } from "@/shared/components/ui/label";
-import { formatCurrency } from "@/utils/formatters";
 import { Plus, Trash2 } from "lucide-react";
 import { useState } from "react";
 
-type Produto = {
+export type ProdutoOS = {
   produto: string;
   quantidade: number;
-  valorUnitario: number;
+  valorUnitario: number; // 👈 NUMBER
 };
 
-const parseCurrency = (value: string): number => {
-  return Number(value.replace(/\D/g, "").replace(/(\d{2})$/, ".$1"));
+/* ======================
+   Utils locais (isolados)
+====================== */
+
+const formatMoney = (value: number) => {
+  return value.toLocaleString("pt-BR", {
+    style: "currency",
+    currency: "BRL",
+  });
 };
 
-const ProdutosOrdem = () => {
-  const [produtos, setProdutos] = useState<Produto[]>([]);
-  const [novoProduto, setNovoProduto] = useState<Produto>({
+const parseMoney = (value: string): number => {
+  if (!value) return 0;
+  return Number(value.replace(/\D/g, "")) / 100;
+};
+
+/* ====================== */
+
+const ProdutosOrdem = ({
+  produtos,
+  onChange,
+}: {
+  produtos: ProdutoOS[];
+  onChange: (produtos: ProdutoOS[]) => void;
+}) => {
+  const [novoProduto, setNovoProduto] = useState<ProdutoOS>({
     produto: "",
     quantidade: 1,
     valorUnitario: 0,
@@ -26,7 +44,8 @@ const ProdutosOrdem = () => {
   const handleAddProduto = () => {
     if (!novoProduto.produto || novoProduto.valorUnitario <= 0) return;
 
-    setProdutos((prev) => [...prev, novoProduto]);
+    onChange([...produtos, novoProduto]);
+
     setNovoProduto({
       produto: "",
       quantidade: 1,
@@ -35,7 +54,7 @@ const ProdutosOrdem = () => {
   };
 
   const handleRemoveProduto = (index: number) => {
-    setProdutos((prev) => prev.filter((_, i) => i !== index));
+    onChange(produtos.filter((_, i) => i !== index));
   };
 
   return (
@@ -48,7 +67,6 @@ const ProdutosOrdem = () => {
             onChange={(e) =>
               setNovoProduto({ ...novoProduto, produto: e.target.value })
             }
-            placeholder="Descrição do produto"
           />
         </div>
 
@@ -70,12 +88,11 @@ const ProdutosOrdem = () => {
         <div className="grid gap-2 w-full">
           <Label>Valor Unitário*</Label>
           <Input
-            inputMode="numeric"
-            value={formatCurrency(novoProduto.valorUnitario)}
+            value={formatMoney(novoProduto.valorUnitario)}
             onChange={(e) =>
               setNovoProduto({
                 ...novoProduto,
-                valorUnitario: parseCurrency(e.target.value),
+                valorUnitario: parseMoney(e.target.value),
               })
             }
             placeholder="R$ 0,00"
@@ -88,7 +105,10 @@ const ProdutosOrdem = () => {
       </div>
 
       {produtos.map((produto, index) => (
-        <div key={index} className="flex flex-col lg:flex-row gap-2 items-end">
+        <div
+          key={index}
+          className="flex flex-col lg:flex-row gap-2 items-end"
+        >
           <div className="grid gap-2 w-full">
             <Label>Produto</Label>
             <Input value={produto.produto} disabled />
@@ -101,7 +121,7 @@ const ProdutosOrdem = () => {
 
           <div className="grid gap-2 w-full">
             <Label>Valor Unitário</Label>
-            <Input value={formatCurrency(produto.valorUnitario)} disabled />
+            <Input value={formatMoney(produto.valorUnitario)} disabled />
           </div>
 
           <Button
@@ -118,10 +138,9 @@ const ProdutosOrdem = () => {
         <div className="flex justify-end gap-5">
           <strong>TOTAL</strong>
           <span>
-            {formatCurrency(
+            {formatMoney(
               produtos.reduce(
-                (acc, produto) =>
-                  acc + produto.quantidade * produto.valorUnitario,
+                (acc, p) => acc + p.quantidade * p.valorUnitario,
                 0,
               ),
             )}

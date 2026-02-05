@@ -4,6 +4,7 @@ import { Chamado } from "./entities/chamado.entity";
 import { apiClient } from "@/infraestructure/api/api-client";
 import { ICreateChamadoParams } from "./params/create-chamado.params";
 import { IGetAllChamadoParams } from "./params/get-all-chamado.params";
+import { Status } from "./entities/status.entity";
 
 export class ChamadoRepository implements IChamadoRepository {
   async getAll(params?: IGetAllChamadoParams): Promise<PaginatedResponse<Chamado>> {
@@ -23,6 +24,11 @@ export class ChamadoRepository implements IChamadoRepository {
     data: Partial<ICreateChamadoParams>
   ): Promise<Chamado> {
     const res = await apiClient.patch(`chamado/editar-chamado/${id}`, data);
+    return res.data;
+  }
+
+  async status(): Promise<Status[]> {
+    const res = await apiClient.get(`chamado/lista/status`);
     return res.data;
   }
 }

@@ -81,7 +81,7 @@ const Empresas = () => {
         <TableSkeleton columns={5} rows={7} />
       ) : error ? (
         <p className="w-full text-center text-yellow-600 text-lg">
-          Ocorreu uma inconsistência ao buscar <a href="http://"></a>s empresas
+          Ocorreu uma inconsistência ao buscar as empresas
           cadastradas
         </p>
       ) : !empresa || !empresa.length ? (

@@ -7,6 +7,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useCallback, useEffect, useState } from "react";
 import { Column } from "../types/chamados.types";
 import { STATUS_COLUMNS } from "../data/status";
+import { Status } from "@/domain/chamado/entities/status.entity";
 
 export function useGetAllChamados(params?: IGetAllChamadoParams) {
   const [chamados, setChamados] = useState<Chamado[]>([]);
@@ -66,7 +67,7 @@ export function useKanbanChamados(params?: IGetAllChamadoParams) {
             ...status,
             cards: response.data,
           };
-        })
+        }),
       );
 
       setColumns(data);
@@ -117,3 +118,37 @@ export function useUpateChamado() {
     loading: mutation.isPending,
   };
 }
+
+export const useGetStatus = () => {
+  const [status, setstatus] = useState<Status[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const service = new ChamadoService();
+
+  const fetchStatus = useCallback(async () => {
+    setLoading(true);
+    await service
+      .status()
+      .then((res) => {
+        setstatus(res);
+      })
+      .catch((err) => {
+        setError(err.response.data.message);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, []);
+
+  useEffect(() => {
+    fetchStatus();
+  }, [fetchStatus]);
+
+  return {
+    status,
+    loading,
+    error,
+    refetch: fetchStatus,
+  };
+};

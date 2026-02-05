@@ -1,17 +1,29 @@
-import { Cliente } from "@/domain/cliente/entities/cliente.entity";
-import { Status } from "./status.entuty";
-import { Usuario } from "@/domain/usuario/entities/usuario.entity";
+import { Status } from "./status.entity";
 
 export interface Chamado {
   idChamado: number;
-  titulo: string;
+  idUsuarioCriacao: number;
   idCliente: number;
-  idResponsavel: number | null;
-  dataChamado: string;
+  idResponsavel: number;
+  titulo: string;
   descricao: string;
   idStatus: number;
   equipamento: string;
-  cliente: Cliente;
+  dataSolicitacao: string;
+  dataConfirmacao: string | null;
+  dataFechamento: string | null;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: string | null;
+  cliente: {
+    nome: string;
+    telefone: string;
+  };
   status: Status;
-  responsavel: Usuario | null;
+  responsavel: {
+    nome: string;
+  };
+  criadoPor: {
+    nome: string;
+  };
 }

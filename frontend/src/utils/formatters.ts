@@ -58,3 +58,14 @@ export function formatCEP(cep: string) {
   // Aplica a máscara XXXXX-XXX
   return digits.replace(/^(\d{5})(\d{0,3})$/, "$1-$2");
 }
+
+export const parseCurrencyToNumber = (value: string): number => {
+  if (!value) return 0;
+
+  return Number(
+    value
+      .replace(/\./g, "")
+      .replace(",", ".")
+      .replace(/[^\d.]/g, ""),
+  );
+};
