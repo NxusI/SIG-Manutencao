@@ -60,9 +60,10 @@ export function useKanbanChamados(params?: IGetAllChamadoParams) {
         STATUS_COLUMNS.map(async (status) => {
           const response = await service.getAll({
             ...params,
-            statusId: status.id,
+            idStatus: status.id,
           });
 
+          console.log(status.id, response.data);
           return {
             ...status,
             cards: response.data,
@@ -75,6 +76,8 @@ export function useKanbanChamados(params?: IGetAllChamadoParams) {
     }
 
     load();
+
+
   }, []);
 
   return { columns, loading };

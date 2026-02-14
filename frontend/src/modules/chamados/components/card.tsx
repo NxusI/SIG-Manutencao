@@ -1,5 +1,5 @@
 import { Chamado } from "@/domain/chamado/entities/chamado.entity";
-import { Card, CardHeader, CardTitle } from "@/shared/components/ui/card";
+import { Card, CardTitle } from "@/shared/components/ui/card";
 import { formatDateString } from "@/utils/formatters";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
@@ -14,7 +14,7 @@ const CardItem = ({ card }: { card: Chamado }) => {
     transition,
     isDragging,
   } = useSortable({
-    id: card.idChamado,
+    id: `card-${card.idChamado}`,
   });
 
   const style = {
@@ -37,9 +37,9 @@ const CardItem = ({ card }: { card: Chamado }) => {
       </CardTitle>
       <div className="flex gap-3 text-xs text-muted-foreground items-center">
         <button>
-        <User size={15}/>
+          <User size={15} />
         </button>
-        <span>{formatDateString(card.dataChamado)}</span>
+        <span>{formatDateString(card.dataSolicitacao)}</span>
       </div>
     </Card>
   );
