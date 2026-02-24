@@ -5,7 +5,7 @@ import { verificarToken } from '../middlewares/auth.middleware.js';
 const router = express.Router();
 
 router.get('/', verificarToken, listarChamados);
-router.get('/lista/status', verificarToken, listarStatus);
+router.get('/listar-status', verificarToken, listarStatus);
 router.post('/criar', verificarToken, criarChamado);
 router.get('/:id', verificarToken, buscarChamadoPorId);
 router.patch('/editar-chamado/:id', verificarToken, editarChamado);

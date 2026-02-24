@@ -4,13 +4,13 @@ import { verificarToken } from '../middlewares/auth.middleware.js';
 
 const router = express.Router();
 
-router.get('/users', verificarToken, listarUsuarios)
+router.get('/usuarios', verificarToken, listarUsuarios)
 router.post('/cadastro', register);
 router.post('/login', login);
 router.post('/logout', logout);
 router.patch('/alterar-senha', verificarToken, alterarSenha);
-router.patch('/editar-user/:id', verificarToken, editarUsuario);
-router.delete('/remover-user/:id', verificarToken, removerUsuario);
+router.patch('/editar-usuario/:id', verificarToken, editarUsuario);
+router.delete('/remover-usuario/:id', verificarToken, removerUsuario);
 router.patch('/status/:id', verificarToken, alternarStatus);
 
 export default router;

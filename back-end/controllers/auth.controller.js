@@ -252,24 +252,22 @@ export const removerUsuario = async (req, res) => {
 
 export const listarUsuarios = async (req, res) => {
     try {
-        let { page = 1, limit = 10 } = req.query;
+        let { page = 1, limit = 10, nome, email, tipo } = req.query;
 
-        page = parseInt(page);
-        limit = parseInt(limit);
-
-        if (page < 1) page = 1;
-        if (limit < 1 || limit > 100) limit = 10;
-
+        page = parseInt(page) || 1;
+        limit = parseInt(limit) || 10;
+        
         const skip = (page - 1) * limit;
+        const where = { deletedAt: null };
 
-        const filtro = {
-            deletedAt: null
-        };
+        if(nome) where.nome = nome
+        if(email) where.email = email
+        if(tipo) where.tipo = tipo
 
         const usuarios = await prisma.usuario.findMany({
             skip: skip,     
             take: limit,
-            where: filtro,    
+            where: where,    
             orderBy: {
                 idUsuario: 'desc'
             },
@@ -286,9 +284,11 @@ export const listarUsuarios = async (req, res) => {
         });
 
         const totalRegistros = await prisma.usuario.count({
-            where: filtro
+            where: where
         });
         const totalPaginas = Math.ceil(totalRegistros / limit);
+
+        //console.log(where)
 
         return res.status(200).json({
             data: usuarios,       

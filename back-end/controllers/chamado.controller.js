@@ -44,8 +44,8 @@ export const listarChamados = async (req, res) => {
 
         page = parseInt(page) || 1;
         limit = parseInt(limit) || 10;
-        const skip = (page - 1) * limit;
 
+        const skip = (page - 1) * limit;
         const where = { deletedAt: null };
 
         if (idCliente) where.idCliente = parseInt(idCliente);
@@ -90,12 +90,15 @@ export const listarChamados = async (req, res) => {
             }
         });
 
+
         const totalRegistros = await prisma.chamado.count({ where: where });
         const totalPaginas = Math.ceil(totalRegistros / limit);
 
+        //console.log(where)
+
         return res.status(200).json({
             data: chamados,       
-            meta: {               
+            meta: {  
                 total: totalRegistros,
                 page: page,
                 limit: limit,
