@@ -3,7 +3,7 @@ import Pagination from "@/shared/components/comon/pagination";
 import { Button } from "@/shared/components/ui/button";
 import { CardTitle } from "@/shared/components/ui/card";
 import { Edit, Plus, Trash2 } from "lucide-react";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import CreateUsuario from "./create-form";
 import UpdateUsuario from "./update-form";
 import { DataTable } from "@/shared/components/comon/data-table";
@@ -27,11 +27,20 @@ const Usuarios = () => {
     title: string;
   } | null>(null);
 
+  const params = useMemo(() => {
+    return {
+      nome,
+      email,
+      login,
+      ...(tipo ? { tipo: tipo.value } : {}),
+      limit: 7,
+      page,
+    };
+  }, [nome, email, tipo, page, login]);
+
   const { delete: deleteUsuario } = useDeleteUsuario();
-  const { error, loading, usuarios, total, refetch } = useGetAllUsuarios({
-    limit: 10,
-    page,
-  });
+  const { error, loading, usuarios, total, refetch } =
+    useGetAllUsuarios(params);
 
   const onFilter = (
     nome: string,

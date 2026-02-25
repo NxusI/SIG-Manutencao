@@ -1,12 +1,12 @@
 import { Usuario } from "@/domain/usuario/entities/usuario.entity";
 import { ICreateUsuarioParams } from "@/domain/usuario/params/create-usuario.params";
+import { IGetAllUsuarioParams } from "@/domain/usuario/params/get-all-usuario.params";
 import { UsuarioService } from "@/domain/usuario/usuarios.service";
 import { queryClient } from "@/lib/query-client";
-import { IGetPaginatedParams } from "@/shared/types/paginated-request.types";
 import { useMutation } from "@tanstack/react-query";
 import { useCallback, useEffect, useState } from "react";
 
-export function useGetAllUsuarios(params: IGetPaginatedParams) {
+export function useGetAllUsuarios(params: IGetAllUsuarioParams) {
   const [usuarios, setUsuarios] = useState<Usuario[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);

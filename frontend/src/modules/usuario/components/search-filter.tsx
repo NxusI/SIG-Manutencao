@@ -27,9 +27,21 @@ const FilterUsuario = ({ onFilter }: FilterProps) => {
 
   return (
     <div className="flex flex-col lg:flex-row gap-2">
-      <Input placeholder="Pesquisar por Nome" />
-      <Input placeholder="Pesquisar por E-mail" />
-      <Input placeholder="Pesquisar por Login" />
+      <Input
+        placeholder="Pesquisar por Nome"
+        value={nome}
+        onChange={(e) => setNome(e.target.value)}
+      />
+      <Input
+        placeholder="Pesquisar por E-mail"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+      />
+      <Input
+        placeholder="Pesquisar por Login"
+        value={login}
+        onChange={(e) => setLogin(e.target.value)}
+      />
       <CustomSelect
         label="Pesquisar por Tipo Usuário"
         onChange={setTipo}
@@ -40,7 +52,11 @@ const FilterUsuario = ({ onFilter }: FilterProps) => {
       <Button size={"icon"} onClick={handleFilter}>
         <Search />
       </Button>
-      <Button size={"icon"} className="bg-gray-500 hover:bg-gray-400" onClick={handleClear}>
+      <Button
+        size={"icon"}
+        className="bg-gray-500 hover:bg-gray-400"
+        onClick={handleClear}
+      >
         <X />
       </Button>
     </div>

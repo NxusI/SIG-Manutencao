@@ -6,12 +6,13 @@ import { IUsuarioRepository } from "./contracts/usuario-repository.interface";
 import { Usuario } from "./entities/usuario.entity";
 import { apiClient } from "@/infraestructure/api/api-client";
 import { ICreateUsuarioParams } from "./params/create-usuario.params";
+import { IGetAllUsuarioParams } from "./params/get-all-usuario.params";
 
 export class UsuarioRepository implements IUsuarioRepository {
   async getAll(
-    params: IGetPaginatedParams
+    params: IGetAllUsuarioParams,
   ): Promise<PaginatedResponse<Usuario>> {
-    const res = await apiClient.get(`auth/users`, {
+    const res = await apiClient.get(`auth/usuarios`, {
       params,
     });
     return res.data;
@@ -24,14 +25,14 @@ export class UsuarioRepository implements IUsuarioRepository {
 
   async update(
     id: number,
-    data: Partial<ICreateUsuarioParams>
+    data: Partial<ICreateUsuarioParams>,
   ): Promise<Usuario> {
-    const res = await apiClient.patch(`auth/editar-user/${id}`, data);
+    const res = await apiClient.patch(`auth/editar-usuario/${id}`, data);
     return res.data;
   }
 
   async delete(id: number): Promise<void> {
-    const res = await apiClient.delete(`auth/remover-user/${id}`);
+    const res = await apiClient.delete(`auth/remover-usuario/${id}`);
     return res.data;
   }
 }

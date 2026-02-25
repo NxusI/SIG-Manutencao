@@ -10,7 +10,7 @@ import {
   useSidebar,
 } from "@/shared/components/ui/sidebar";
 import Image from "next/image";
-import { data } from "./data/nav-itens";
+import { data } from "../data/nav-itens";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { open } = useSidebar();

@@ -1,10 +1,10 @@
 import {
-  IGetPaginatedParams,
   PaginatedResponse,
 } from "@/shared/types/paginated-request.types";
 import { UsuarioRepository } from "./usuario.repository";
 import { Usuario } from "./entities/usuario.entity";
 import { ICreateUsuarioParams } from "./params/create-usuario.params";
+import { IGetAllUsuarioParams } from "./params/get-all-usuario.params";
 
 export class UsuarioService {
   private readonly repository: UsuarioRepository;
@@ -14,7 +14,7 @@ export class UsuarioService {
   }
 
   async getAll(
-    params: IGetPaginatedParams
+    params: IGetAllUsuarioParams
   ): Promise<PaginatedResponse<Usuario>> {
     return await this.repository.getAll(params);
   }
