@@ -14,7 +14,7 @@ const columnColors: Record<string, string> = {
   red: "bg-red-600",
 };
 
-const ColumnKanban = ({ column }: { column: Column }) => {
+const ColumnKanban = ({ column, refetch }: { column: Column, refetch: () => void }) => {
   const { setNodeRef, isOver } = useDroppable({
     id: `column-${column.id}`,
   });
@@ -39,7 +39,7 @@ const ColumnKanban = ({ column }: { column: Column }) => {
         strategy={verticalListSortingStrategy}
       >
         {column.cards.map((card) => (
-          <CardItem key={card.idChamado} card={card} />
+          <CardItem refetch={refetch} key={card.idChamado} card={card} />
         ))}
       </SortableContext>
     </div>

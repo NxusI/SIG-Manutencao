@@ -55,7 +55,7 @@ const OrdemServico = () => {
             valor: formatCurrency(d.valor),
             infor: (
               <BaseModal
-              size="lg"
+                size="lg"
                 title={`Dados Ordem de Serviço #${d.idOS}`}
                 trigger={
                   <Button>
@@ -63,7 +63,7 @@ const OrdemServico = () => {
                   </Button>
                 }
               >
-                <Infor os={d}/>
+                <Infor os={d} />
               </BaseModal>
             ),
           }))}

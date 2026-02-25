@@ -4,8 +4,12 @@ import { formatDateString } from "@/utils/formatters";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { User } from "lucide-react";
+import { useState } from "react";
+import ViewChamado from "./view-chamado";
 
-const CardItem = ({ card }: { card: Chamado }) => {
+const CardItem = ({ card, refetch }: { card: Chamado, refetch: () => void }) => {
+  const [showModal, setShowModal] = useState<boolean>(false);
+
   const {
     attributes,
     listeners,
@@ -31,6 +35,7 @@ const CardItem = ({ card }: { card: Chamado }) => {
       className={`bg-white rounded-md p-3 shadow-sm text-sm
         ${isDragging ? "opacity-0" : "opacity-100"}
         cursor-grab hover:bg-gray-50 active:cursor-grabbing`}
+        onClick={() => setShowModal(true)}
     >
       <CardTitle>
         [{card.idChamado}] - {card.titulo.toUpperCase()}
@@ -41,6 +46,15 @@ const CardItem = ({ card }: { card: Chamado }) => {
         </button>
         <span>{formatDateString(card.dataSolicitacao)}</span>
       </div>
+
+      {showModal && card && (
+        <ViewChamado
+          chamado={card}
+          onClose={() => setShowModal(false)}
+          showModal={showModal}
+          refetch={refetch}
+        />
+      )}
     </Card>
   );
 };

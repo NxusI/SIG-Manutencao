@@ -1,14 +1,12 @@
-import BaseModal from "@/shared/components/comon/base-modal";
 import { DataTable } from "@/shared/components/comon/data-table";
 import { Button } from "@/shared/components/ui/button";
-import { Edit, Info, Trash2 } from "lucide-react";
+import { Info } from "lucide-react";
 import { formatDateString, formatTelefone } from "@/utils/formatters";
 import TableSkeleton from "@/shared/components/skeleton/table";
 import Pagination from "@/shared/components/comon/pagination";
 import { Chamado } from "@/domain/chamado/entities/chamado.entity";
 import { useState } from "react";
 import ViewChamado from "./view-chamado";
-import { ConfirmDialog } from "@/shared/components/comon/confirm-dialog";
 
 const TableChamados = ({
   loading,

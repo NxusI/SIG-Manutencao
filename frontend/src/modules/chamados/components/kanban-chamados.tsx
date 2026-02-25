@@ -20,9 +20,11 @@ import { useUpateChamado } from "../hooks/use-chamado";
 const KanbanChamados = ({
   columns,
   loading,
+  refetch,
 }: {
   columns: Column[];
   loading: boolean;
+  refetch: () => void;
 }) => {
   const [activeCardId, setActiveCardId] = useState<string | null>(null);
   const [internalColumns, setInternalColumns] = useState<Column[]>(columns);
@@ -119,7 +121,7 @@ const KanbanChamados = ({
         ) : (
           <>
             {internalColumns.map((column) => (
-              <ColumnKanban key={column.id} column={column} />
+              <ColumnKanban refetch={refetch} key={column.id} column={column} />
             ))}
           </>
         )}
@@ -131,9 +133,9 @@ const KanbanChamados = ({
               },
             }),
           }}
-        >
+        > 
           {activeCardId ? (
-            <div className="bg-white rounded-md p-3 shadow-lg text-sm">
+            <div className="bg-white rounded-md p-3 shadow-lg text-sm h-20">
               {
                 columns
                   .flatMap((col) => col.cards)
