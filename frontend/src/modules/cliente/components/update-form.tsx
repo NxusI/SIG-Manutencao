@@ -67,16 +67,16 @@ const UpdateForm = ({
   };
 
   useEffect(() => {
-      if(cliente.idEmpresa){
-        const find = empresas.find((e) => e.idEmpresa === cliente.idEmpresa);
-        if (find) {
-          setEmpresa({
-            value: String(find.idEmpresa),
-            label: find.nomeFantasia,
-          });
-        }
+    if (cliente.idEmpresa) {
+      const find = empresas.find((e) => e.idEmpresa === cliente.idEmpresa);
+      if (find) {
+        setEmpresa({
+          value: String(find.idEmpresa),
+          label: find.nomeFantasia,
+        });
       }
-    },[]);
+    }
+  }, [cliente, empresas]);
 
   return (
     <div className="grid gap-5">

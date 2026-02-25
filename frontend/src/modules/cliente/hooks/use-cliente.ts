@@ -1,31 +1,34 @@
 import { ClienteService } from "@/domain/cliente/cliente.service";
 import { Cliente } from "@/domain/cliente/entities/cliente.entity";
 import { ICreateClienteParams } from "@/domain/cliente/params/create-cliente.params";
+import { IGetAllClienteParams } from "@/domain/cliente/params/get-all-cliente.params";
 import { queryClient } from "@/lib/query-client";
 import { useMutation } from "@tanstack/react-query";
 import { useCallback, useEffect, useState } from "react";
 
-export function useGetAllCliente() {
+export function useGetAllCliente(params: IGetAllClienteParams) {
   const [clientes, setClientes] = useState<Cliente[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const [total, setTotal] = useState<number>(0);
 
   const service = new ClienteService();
 
   const fetchClientes = useCallback(async () => {
     setLoading(true);
     await service
-      .getAll()
+      .getAll(params)
       .then((res) => {
-        setClientes(res);
+        setClientes(res.data);
+        setTotal(res.meta.totalPages);
       })
       .catch((err) => {
-        setError(err.response.data.message);
+        setError(err?.response?.data?.message || "Ocorreu uma inconsistência ao buscar clientes cadastrados");
       })
       .finally(() => {
         setLoading(false);
       });
-  }, []);
+  }, [params]);
 
   useEffect(() => {
     fetchClientes();
@@ -36,6 +39,7 @@ export function useGetAllCliente() {
     loading,
     error,
     refetch: fetchClientes,
+    total,
   };
 }
 

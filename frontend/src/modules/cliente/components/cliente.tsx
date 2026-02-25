@@ -19,33 +19,31 @@ const Clientes = () => {
   const [nome, setNome] = useState<string>("");
   const [telefone, setTelefone] = useState<string>("");
   const [email, setEmail] = useState<string>("");
-
-  const { clientes, error, loading, refetch } = useGetAllCliente();
-  const { delete: deleteCliente } = useDeleteCliente();
-
   const [page, setPage] = useState<number>(1);
   const [alertConfig, setAlertConfig] = useState<{
     icon: "success" | "error" | "warning" | "info";
     title: string;
   } | null>(null);
 
-  const currentRows = useMemo(() => {
-    const start = (page - 1) * 10;
-    const end = start + 10;
-    return clientes.slice(start, end);
-  }, [page, clientes]);
-  const total = useMemo(() => Math.ceil(clientes.length / 10), [clientes]);
+  const params = useMemo(() => {
+    return {
+      nome,
+      telefone,
+      email,
+      page,
+      limit: 7,
+    };
+  }, [nome, telefone, email, page]);
 
-  const onFilter = (
-    nome: string,
-    telefone: string,
-    email: string
-  ) => {
+  const { clientes, error, loading, refetch, total } = useGetAllCliente(params);
+  const { delete: deleteCliente } = useDeleteCliente();
+
+  const onFilter = (nome: string, telefone: string, email: string) => {
     setNome(nome);
     setTelefone(telefone);
     setEmail(email);
     setPage(1);
-  }
+  };
 
   const handleDelete = (c: Cliente) => {
     const { showDialog } = ConfirmDialog({
@@ -93,7 +91,7 @@ const Clientes = () => {
           <CreateUsuario refetch={refetch} />
         </BaseModal>
       </div>
-      <FilterCliente onFilter={onFilter}/>
+      <FilterCliente onFilter={onFilter} />
       {loading ? (
         <TableSkeleton columns={5} rows={7} />
       ) : error ? (
@@ -115,7 +113,7 @@ const Clientes = () => {
             edit: "Editar",
             delete: "Excluir",
           }}
-          data={currentRows.map((d) => ({
+          data={clientes.map((d) => ({
             ...d,
             telefone: formatTelefone(d.telefone),
             edit: (

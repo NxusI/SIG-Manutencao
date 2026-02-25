@@ -48,6 +48,7 @@ const CreateForm = ({ refetch }: { refetch: () => void }) => {
         setEmail("");
         setTelefone("");
         setNome("");
+        setEmpresa(null);
         setTimeout(() => refetch(), 2000);
       })
       .catch(() => {
