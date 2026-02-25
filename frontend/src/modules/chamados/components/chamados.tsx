@@ -77,7 +77,7 @@ const Chamados = () => {
           total={total}
         />
       ) : (
-        <KanbanChamados loading={kanbanLoading} columns={columns} />
+        <KanbanChamados refetch={refetch} loading={kanbanLoading} columns={columns} />
       )}
     </div>
   );
