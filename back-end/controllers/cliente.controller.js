@@ -29,13 +29,12 @@ export const registrar = async (req, res) => {
       return res.status(401).json({ message: "Token inválido ou expirado." });
     }
 
-    if (req.usuario.tipo !== "GESTOR") {
-      return res
-        .status(403)
-        .json({
-          message:
-            "Acesso negado. Apenas gestores podem cadastrar novos clientes.",
-        });
+    const perfisPermitidos = ["GESTOR", "TECNICO"];
+    if (!perfisPermitidos.includes(req.usuario.tipo)) {
+      return res.status(403).json({
+        message:
+          "Acesso negado. Apenas gestores podem cadastrar novos clientes.",
+      });
     }
 
     const { nome, email, telefone, idEmpresa, endereco } = req.body;
@@ -160,14 +159,11 @@ export const editarCliente = async (req, res) => {
     const { nome, email, telefone, endereco, idEmpresa } = req.body;
     const { id } = req.params;
 
-    const verificaTipo = req.usuario.tipo;
-
-    if (verificaTipo !== "GESTOR") {
-      return res
-        .status(403)
-        .json({
-          message: "Acesso negado. Apenas gestores podem editar clientes.",
-        });
+    const perfisPermitidos = ["GESTOR", "TECNICO"];
+    if (!perfisPermitidos.includes(req.usuario.tipo)) {
+      return res.status(403).json({
+        message: "Acesso negado. Apenas gestores podem editar clientes.",
+      });
     }
 
     const idCliente = parseInt(id);
@@ -225,9 +221,9 @@ export const editarCliente = async (req, res) => {
 export const excluirCliente = async (req, res) => {
   try {
     const { id } = req.params;
-    const usuarioLogado = req.usuario;
 
-    if (usuarioLogado.tipo !== "GESTOR") {
+    const perfisPermitidos = ["GESTOR", "TECNICO"];
+    if (!perfisPermitidos.includes(req.usuario.tipo)) {
       return res.status(403).json({ message: "Acesso negado." });
     }
 

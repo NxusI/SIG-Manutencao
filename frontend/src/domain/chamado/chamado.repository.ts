@@ -28,7 +28,7 @@ export class ChamadoRepository implements IChamadoRepository {
   }
 
   async status(): Promise<Status[]> {
-    const res = await apiClient.get(`chamado/lista/status`);
+    const res = await apiClient.get(`chamado/listar-status`);
     return res.data;
   }
 }

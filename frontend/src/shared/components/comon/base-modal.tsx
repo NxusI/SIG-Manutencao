@@ -64,7 +64,7 @@ export default function BaseModal({
             overflow-y-auto 
             px-6 
             pb-10 
-            min-h-[150px] 
+            min-h-[50px] 
             space-y-6
           "
         >

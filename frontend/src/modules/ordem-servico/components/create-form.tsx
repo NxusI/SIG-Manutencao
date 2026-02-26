@@ -37,7 +37,7 @@ const CreateOS = ({ refetch }: { refetch: () => void }) => {
   } | null>(null);
 
   const handleSubmit = async () => {
-    if (!chamado || !dataPrazo || produtos.length === 0) return;
+    if (!chamado || !dataPrazo ) return;
 
     await create({
       data: {
