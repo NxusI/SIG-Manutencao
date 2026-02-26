@@ -1,9 +1,10 @@
 import { IGetPaginatedParams } from "@/shared/types/paginated-request.types";
 
 export interface IGetAllChamadoParams extends IGetPaginatedParams {
-  clienteId?: number;
-  tecnicoId?: number;
+  idCliente?: number;
+  idResponsavel?: number;
   idStatus?: number;
   dataInicio?: string;
   dataFim?: string;
+  titulo?: string;
 }

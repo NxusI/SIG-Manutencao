@@ -78,7 +78,7 @@ export function useKanbanChamados(params?: IGetAllChamadoParams) {
     load();
 
 
-  }, []);
+  }, [params]);
 
   return { columns, loading };
 }

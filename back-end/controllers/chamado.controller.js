@@ -40,7 +40,16 @@ export const criarChamado = async (req, res) => {
 
 export const listarChamados = async (req, res) => {
     try {
-        let { page = 1, limit = 10, idCliente, idResponsavel, idStatus, dataInicio, dataFim, titulo } = req.query;
+        let { 
+            page = 1, 
+            limit = 10, 
+            idCliente, 
+            idResponsavel, 
+            idStatus, 
+            dataInicio, 
+            dataFim, 
+            titulo 
+        } = req.query;
 
         page = parseInt(page) || 1;
         limit = parseInt(limit) || 10;
@@ -54,33 +63,37 @@ export const listarChamados = async (req, res) => {
 
         if (titulo) {
             where.titulo = {
-                contains: titulo
+                contains: titulo,
             };
         }
 
-        if (dataInicio || dataFim) {
-            where.createdAt = {};
-            
-            if (dataInicio) where.createdAt.gte = new Date(dataInicio);
-            if (dataFim) {
-                const dataFimDate = new Date(dataFim);
-                dataFimDate.setHours(23, 59, 59, 999);
-                where.createdAt.lte = dataFimDate;
-            }
+        if ((dataInicio && !dataFim) || (!dataInicio && dataFim)) {
+            return res.status(400).json({
+                message: "Para filtrar por data, envie dataInicio e dataFim juntos."
+            });
+        }
+
+        if (dataInicio && dataFim) {
+            const inicio = new Date(dataInicio);
+            const fim = new Date(dataFim);
+            fim.setHours(23, 59, 59, 999);
+
+            where.createdAt = {
+                gte: inicio,
+                lte: fim
+            };
         }
 
         const chamados = await prisma.chamado.findMany({
-            skip: skip,     
-            take: limit,    
-            where: where, 
-            orderBy: { 
-                idChamado: 'desc'
-            },
+            skip: skip,
+            take: limit,
+            where: where,
+            orderBy: { idChamado: 'desc' },
             include: {
                 cliente: { 
                     select: { nome: true, telefone: true } 
                 },
-                status: true, 
+                status: true,
                 responsavel: { 
                     select: { nome: true } 
                 },
@@ -90,15 +103,12 @@ export const listarChamados = async (req, res) => {
             }
         });
 
-
-        const totalRegistros = await prisma.chamado.count({ where: where });
+        const totalRegistros = await prisma.chamado.count({ where });
         const totalPaginas = Math.ceil(totalRegistros / limit);
 
-        //console.log(where)
-
         return res.status(200).json({
-            data: chamados,       
-            meta: {  
+            data: chamados,
+            meta: {
                 total: totalRegistros,
                 page: page,
                 limit: limit,
@@ -110,7 +120,7 @@ export const listarChamados = async (req, res) => {
         console.error("Erro ao listar chamados:", error);
         return res.status(500).json({ message: "Erro interno." });
     }
-}
+};
 
 export const editarChamado = async (req, res) => {
     try {

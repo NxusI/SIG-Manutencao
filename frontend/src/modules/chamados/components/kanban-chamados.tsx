@@ -32,9 +32,9 @@ const KanbanChamados = ({
   const { update } = useUpateChamado();
 
   useEffect(() => {
-    setInternalColumns(columns);
+    setInternalColumns([...columns]);
   }, [columns]);
-  
+
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
@@ -133,7 +133,7 @@ const KanbanChamados = ({
               },
             }),
           }}
-        > 
+        >
           {activeCardId ? (
             <div className="bg-white rounded-md p-3 shadow-lg text-sm h-20">
               {
