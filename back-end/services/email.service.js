@@ -1,116 +1,181 @@
-import nodemailer from 'nodemailer';
+import nodemailer from "nodemailer";
 
-const BASE_URL = process.env.API_URL || 'http://localhost:3001';
+const BASE_URL = process.env.API_URL || "http://localhost:3001";
 const EMAIL_USER = process.env.EMAIL_USER;
 const EMAIL_PASS = process.env.EMAIL_PASS;
 
 const criarTransporter = async () => {
-    if (!EMAIL_USER || !EMAIL_PASS) {
-        console.error("❌ ERRO: As variáveis EMAIL_USER e EMAIL_PASS não estão no arquivo .env");
-        return null;
-    }
+  if (!EMAIL_USER || !EMAIL_PASS) {
+    console.error(
+      "❌ ERRO: As variáveis EMAIL_USER e EMAIL_PASS não estão no arquivo .env",
+    );
+    return null;
+  }
 
-    return nodemailer.createTransport({
-        host: "smtp.gmail.com",
-        port: 465,
-        secure: true,
-        auth: {
-            user: EMAIL_USER,
-            pass: EMAIL_PASS
-        },
-        tls: {
-            rejectUnauthorized: false
-        }
-    });
+  return nodemailer.createTransport({
+    host: "smtp.gmail.com",
+    port: 465,
+    secure: true,
+    auth: {
+      user: EMAIL_USER,
+      pass: EMAIL_PASS,
+    },
+    tls: {
+      rejectUnauthorized: false,
+    },
+  });
 };
 
-export const enviarEmailOrcamento = async (destinatario, nomeCliente, dadosOS) => {
-    try {
-        const transporter = await criarTransporter();
+export const enviarEmailOrcamento = async (
+  destinatario,
+  nomeCliente,
+  dadosOS,
+) => {
+  try {
+    const transporter = await criarTransporter();
 
-        if (!transporter) return;
+    if (!transporter) return;
 
-        const linkAprovar = `${BASE_URL}/api/os/resposta/${dadosOS.idOS}/APROVADO`;
-        const linkRecusar = `${BASE_URL}/api/os/resposta/${dadosOS.idOS}/REPROVADO`;
+    const linkAprovar = `${BASE_URL}/api/os/resposta/${dadosOS.idOS}/APROVADO`;
+    const linkRecusar = `${BASE_URL}/api/os/resposta/${dadosOS.idOS}/REPROVADO`;
 
-        let itensHtml = '';
-        if (dadosOS.itens && dadosOS.itens.length > 0) {
-            itensHtml = `
+    let itensHtml = "";
+    if (dadosOS.itens && dadosOS.itens.length > 0) {
+      itensHtml = `
                 <div style="background-color: #fff; padding: 10px; border-radius: 4px; margin-bottom: 10px;">
                     <h3 style="margin: 0 0 10px 0; font-size: 16px; color: #555;">📦 Peças e Produtos:</h3>
                     <ul style="padding-left: 20px; margin: 0;">
-                        ${dadosOS.itens.map(item => `
+                        ${dadosOS.itens
+                          .map(
+                            (item) => `
                             <li style="margin-bottom: 5px;">
                                 <strong>${item.produto.descricao}</strong> <br>
                                 <span style="font-size: 12px; color: #666;">
                                     ${item.quantidade}x R$ ${item.produto.preco.toFixed(2)}
                                 </span>
                             </li>
-                        `).join('')}
+                        `,
+                          )
+                          .join("")}
                     </ul>
                 </div>
             `;
-        }
-
-        const htmlBody = `
-            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #333; line-height: 1.6;">
-                <div style="background-color: #28a745; color: white; padding: 20px; text-align: center; border-radius: 5px 5px 0 0;">
-                    <h1 style="margin: 0; font-size: 24px;">Orçamento Disponível</h1>
-                </div>
-                
-                <div style="padding: 20px; border: 1px solid #ddd; border-top: none; border-radius: 0 0 5px 5px;">
-                    <p>Olá, <strong>${nomeCliente}</strong>!</p>
-                    <p>A análise do seu equipamento (<strong>${dadosOS.chamado.equipamento}</strong>) referente ao chamado #${dadosOS.chamado.idChamado} foi concluída.</p>
-                    
-                    <div style="background-color: #f8f9fa; padding: 15px; border-radius: 5px; margin: 20px 0;">
-                        <p style="margin-top: 0;"><strong>🛠️ Diagnóstico / Observações:</strong><br>
-                        ${dadosOS.obs || 'Nenhuma observação registrada.'}</p>
-                        
-                        ${itensHtml}
-
-                        <hr style="border: 0; border-top: 1px solid #ddd; margin: 15px 0;">
-                        
-                        <div style="text-align: right;">
-                            <span style="font-size: 14px; color: #666;">Valor Total do Serviço:</span><br>
-                            <span style="font-size: 24px; font-weight: bold; color: #28a745;">R$ ${dadosOS.valor.toFixed(2)}</span>
-                        </div>
-                        
-                        <p style="font-size: 13px; margin-top: 10px;">
-                            <strong>Prazo Estimado:</strong> ${dadosOS.dataPrazo ? new Date(dadosOS.dataPrazo).toLocaleDateString('pt-BR') : 'A combinar'}
-                        </p>
-                    </div>
-
-                    <p style="text-align: center; font-weight: bold; margin-bottom: 20px;">
-                        O que deseja fazer?
-                    </p>
-
-                    <div style="text-align: center; margin-bottom: 30px;">
-                        <a href="${linkAprovar}" style="background-color: #28a745; color: white; padding: 12px 25px; text-decoration: none; border-radius: 5px; font-weight: bold; margin: 0 10px; display: inline-block;">
-                            ✅ APROVAR
-                        </a>
-                        <a href="${linkRecusar}" style="background-color: #dc3545; color: white; padding: 12px 25px; text-decoration: none; border-radius: 5px; font-weight: bold; margin: 0 10px; display: inline-block;">
-                            ❌ RECUSAR
-                        </a>
-                    </div>
-
-                    <p style="font-size: 12px; color: #888; text-align: center; margin-top: 40px; border-top: 1px solid #eee; padding-top: 20px;">
-                        Este é um e-mail automático. Por favor, não responda.<br>
-                        Caso tenha dúvidas, entre em contato com a nossa equipe.
-                    </p>
-                </div>
-            </div>
-        `;
-
-        const info = await transporter.sendMail({
-            from: `"SIG Manutenção" <${EMAIL_USER}>`,
-            to: destinatario,
-            subject: `Orçamento Aprovado: OS #${dadosOS.idOS}`,
-            html: htmlBody,
-        });
-
-        console.log(`📧 E-mail enviado para ${destinatario} (ID: ${info.messageId})`);
-    
-    } catch (error) {
-        console.error("❌ Erro ao enviar e-mail:", error);
     }
+
+    const htmlBody = `
+        <div style="background:#f5f7f9;padding:40px 20px;font-family:Arial, sans-serif;">
+        <div style="max-width:600px;margin:0 auto;background:#ffffff;border-radius:10px;overflow:hidden;box-shadow:0 8px 25px rgba(0,0,0,0.05);">
+
+            <!-- Header -->
+            <div style="background:#28a745;padding:28px;text-align:center;">
+            <h1 style="margin:0;color:#fff;font-size:22px;">Orçamento Disponível</h1>
+            <p style="margin:6px 0 0 0;color:#dff5e5;font-size:13px;">
+                Avaliação concluída
+            </p>
+            </div>
+
+            <!-- Conteúdo -->
+            <div style="padding:28px;">
+            <p style="margin-top:0;font-size:15px;">
+                Olá, <strong>${nomeCliente}</strong> 👋
+            </p>
+
+            <p style="color:#555;font-size:14px;">
+                Finalizamos a análise do equipamento 
+                <strong>${dadosOS.chamado.equipamento}</strong>
+                referente ao chamado <strong>#${dadosOS.chamado.idChamado}</strong>.
+            </p>
+
+            <!-- Card Diagnóstico -->
+            <div style="background:#f8f9fa;border-radius:8px;padding:18px;margin:25px 0;">
+                <p style="margin:0 0 8px 0;font-weight:bold;">Diagnóstico</p>
+                <p style="margin:0;color:#555;font-size:14px;">
+                ${dadosOS.obs || "Nenhuma observação registrada."}
+                </p>
+            </div>
+
+            ${itensHtml}
+
+            <!-- Valor -->
+            <div style="border-top:1px solid #eee;padding-top:20px;margin-top:20px;">
+                <div style="text-align:center;">
+                <p style="margin:0;color:#777;font-size:13px;">
+                    Valor total do serviço
+                </p>
+                <p style="margin:5px 0 0 0;font-size:28px;font-weight:bold;color:#28a745;">
+                    R$ ${dadosOS.valor.toFixed(2)}
+                </p>
+                </div>
+
+                <p style="text-align:center;margin-top:10px;font-size:13px;color:#666;">
+                Prazo estimado: 
+                <strong>
+                ${
+                  dadosOS.dataPrazo
+                    ? new Date(dadosOS.dataPrazo).toLocaleDateString("pt-BR")
+                    : "A combinar"
+                }
+                </strong>
+                </p>
+            </div>
+
+            <!-- Ação -->
+            <div style="text-align:center;margin-top:30px;">
+                <p style="font-weight:bold;margin-bottom:18px;">
+                O que deseja fazer?
+                </p>
+
+                <a href="${linkAprovar}" 
+                style="
+                    background:#28a745;
+                    color:#fff;
+                    padding:14px 26px;
+                    border-radius:6px;
+                    text-decoration:none;
+                    font-weight:bold;
+                    margin-right:10px;
+                    display:inline-block;
+                ">
+                Aprovar orçamento
+                </a>
+
+                <a href="${linkRecusar}" 
+                style="
+                    background:#dc3545;
+                    color:#fff;
+                    padding:14px 26px;
+                    border-radius:6px;
+                    text-decoration:none;
+                    font-weight:bold;
+                    display:inline-block;
+                ">
+                Recusar
+                </a>
+            </div>
+
+            </div>
+
+            <!-- Footer -->
+            <div style="padding:20px;text-align:center;font-size:12px;color:#888;border-top:1px solid #eee;">
+            Este é um e-mail automático do sistema <strong>SIG Manutenção</strong>.<br>
+            Caso tenha dúvidas, entre em contato com nossa equipe.
+            </div>
+
+        </div>
+        </div>
+`;
+
+    const info = await transporter.sendMail({
+      from: `"SIG Manutenção" <${EMAIL_USER}>`,
+      to: destinatario,
+      subject: `Orçamento Aprovado: OS #${dadosOS.idOS}`,
+      html: htmlBody,
+    });
+
+    console.log(
+      `📧 E-mail enviado para ${destinatario} (ID: ${info.messageId})`,
+    );
+  } catch (error) {
+    console.error("❌ Erro ao enviar e-mail:", error);
+  }
 };

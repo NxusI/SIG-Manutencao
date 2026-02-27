@@ -94,6 +94,11 @@ const ViewChamado = ({
               <strong>Responsável</strong>
               <span>{chamado.responsavel?.nome || "Não atribuído"}</span>
             </div>
+
+            <div className="flex gap-3 items-center">
+              <strong>Confirmação Cliente</strong>
+              <span>{formatDateString(chamado.dataConfirmacao || undefined) || "-"}</span>
+            </div>
           </div>
 
           <EditDescription

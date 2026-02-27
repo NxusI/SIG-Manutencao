@@ -4,4 +4,5 @@ export interface ICreateChamadoParams {
   idResponsavel: number | null;
   equipamento: string;
   descricao: string;
+  idStatus?: number;
 }

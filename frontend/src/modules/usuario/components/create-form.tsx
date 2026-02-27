@@ -94,6 +94,7 @@ const CreateUsuario = ({ refetch }: { refetch: () => void }) => {
         setLogin("");
         setNome("");
         setTipo(null);
+        setEmpresa(null);
 
         setTimeout(() => refetch(), 2000);
       })

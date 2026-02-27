@@ -84,7 +84,6 @@ export const gerarOS = async (req, res) => {
         });
 
         if (dispararEmail) {
-            // CORREÇÃO AQUI 👇: Troquei findUnique por findFirst
             osFinal = await prisma.oS.findFirst({
                 where: { idChamado: idChamadoInt },
                 include: { 

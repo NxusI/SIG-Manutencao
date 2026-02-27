@@ -1,7 +1,7 @@
 import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
 import { LayoutGrid, Plus, Table } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import TableChamados from "./table-chamados";
 import KanbanChamados from "./kanban-chamados";
 import BaseModal from "@/shared/components/comon/base-modal";
@@ -13,12 +13,58 @@ const Chamados = () => {
   const [page, setPage] = useState<number>(1);
   const [viewMode, setViewMode] = useState<"table" | "grid">("table");
   const [open, setOpen] = useState<boolean>(false);
+  const [searchTitulo, setSearchTitulo] = useState("");
+  const [debouncedTitulo, setDebouncedTitulo] = useState("");
+
+  const [inicio, setInicio] = useState<string>("");
+  const [fim, setFim] = useState<string>("");
+  const [responsavel, setResponsavel] = useState<number | undefined>(undefined);
+  const [cliente, setCliente] = useState<number | undefined>(undefined);
+  const [status, setStatus] = useState<number | undefined>(undefined);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedTitulo(searchTitulo);
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, [searchTitulo]);
+
+  const params = useMemo(() => {
+    return {
+      page,
+      titulo: debouncedTitulo,
+      dataInicio: inicio,
+      dataFim: fim,
+      idResponsavel: responsavel,
+      idCliente: cliente,
+      idStatus: status,
+    };
+  }, [page, debouncedTitulo, inicio, fim, responsavel, cliente, status]);
 
   const { chamados, error, loading, total, refetch } = useGetAllChamados({
+    ...params,
     limit: 7,
-    page,
   });
-  const { columns, loading: kanbanLoading } = useKanbanChamados();
+  const { columns, loading: kanbanLoading } = useKanbanChamados({
+    ...params,
+    limit: 25,
+  });
+
+  const handleFilter = (
+    dataInicio: string,
+    dataFim: string,
+    responsavel: number | undefined,
+    cliente: number | undefined,
+    status: number | undefined,
+  ) => {
+    setInicio(dataInicio);
+    setFim(dataFim);
+    setResponsavel(responsavel);
+    setCliente(cliente);
+    setStatus(status);
+    setPage(1);
+  };
 
   return (
     <div className="grid gap-5">
@@ -47,10 +93,16 @@ const Chamados = () => {
         </div>
 
         <div className="flex flex-col lg:flex-row justify-end gap-2">
-          <FilterChamados open={open} setOpen={setOpen} />
+          <FilterChamados
+            onFilter={handleFilter}
+            open={open}
+            setOpen={setOpen}
+          />
           <Input
             placeholder="Pesquisar Chamado..."
             className="lg:max-w-[350px]"
+            value={searchTitulo}
+            onChange={(e) => setSearchTitulo(e.target.value)}
           />
           <BaseModal
             size="xl"
@@ -77,7 +129,11 @@ const Chamados = () => {
           total={total}
         />
       ) : (
-        <KanbanChamados loading={kanbanLoading} columns={columns} />
+        <KanbanChamados
+          refetch={refetch}
+          loading={kanbanLoading}
+          columns={columns}
+        />
       )}
     </div>
   );

@@ -79,7 +79,7 @@ const UpdateUsuario = ({
         });
       }
     }
-  },[]);
+  },[usuario, empresas]);
 
   return (
     <div className="grid gap-5">

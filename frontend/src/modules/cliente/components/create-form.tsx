@@ -48,12 +48,13 @@ const CreateForm = ({ refetch }: { refetch: () => void }) => {
         setEmail("");
         setTelefone("");
         setNome("");
+        setEmpresa(null);
         setTimeout(() => refetch(), 2000);
       })
-      .catch(() => {
+      .catch((err) => {
         setAlertConfig({
           icon: "error",
-          title: "Erro ao cadastrar cliente",
+          title: err.response.data.message || "Erro ao cadastrar cliente",
         });
       })
       .finally(() => setTimeout(() => setAlertConfig(null), 2000));

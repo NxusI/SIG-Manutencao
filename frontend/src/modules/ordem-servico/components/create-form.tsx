@@ -9,11 +9,7 @@ import { useState } from "react";
 import ProdutosOrdem, { ProdutoOS } from "./produtos";
 import { useGetAllChamados } from "@/modules/chamados/hooks/use-chamado";
 import { useCreateOrdem } from "../hooks/use-ordem-servico";
-import { formatDate } from "@/utils/formatters";
-
-/* ======================
-   Utils locais
-====================== */
+import { ToastAlert } from "@/shared/components/comon/alert";
 
 const formatMoney = (value: number) =>
   value.toLocaleString("pt-BR", {
@@ -41,18 +37,18 @@ const CreateOS = ({ refetch }: { refetch: () => void }) => {
   } | null>(null);
 
   const handleSubmit = async () => {
-    if (!chamado || !dataPrazo || produtos.length === 0) return;
+    if (!chamado || !dataPrazo ) return;
 
     await create({
       data: {
         idChamado: Number(chamado.value),
         dataPrazo: dataPrazo,
-        maoDeObra: valorServico, // 👈 NUMBER LIMPO
+        maoDeObra: valorServico,
         obs: observacao,
         produtos: produtos.map((p) => ({
           nome: p.produto,
           quantidade: p.quantidade,
-          preco: p.valorUnitario, // 👈 NUMBER LIMPO
+          preco: p.valorUnitario, 
         })),
       },
     })
@@ -131,6 +127,8 @@ const CreateOS = ({ refetch }: { refetch: () => void }) => {
       <Button onClick={handleSubmit} disabled={loading}>
         Salvar
       </Button>
+
+      {alertConfig && <ToastAlert key={alertConfig.id} {...alertConfig}/>}
     </div>
   );
 };
