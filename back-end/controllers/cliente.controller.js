@@ -117,8 +117,6 @@ export const listarClientes = async (req, res) => {
         });
         const totalPaginas = Math.ceil(totalRegistros / limit);
 
-        //console.log(where)
-
         return res.status(200).json({
             data: clientes,       
             meta: {               

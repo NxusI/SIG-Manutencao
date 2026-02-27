@@ -94,8 +94,6 @@ export const listarChamados = async (req, res) => {
         const totalRegistros = await prisma.chamado.count({ where: where });
         const totalPaginas = Math.ceil(totalRegistros / limit);
 
-        //console.log(where)
-
         return res.status(200).json({
             data: chamados,       
             meta: {  

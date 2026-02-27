@@ -1,6 +1,5 @@
 import express from 'express';
-import { 
-    criarEmpresa, listarEmpresas, buscarEmpresaPorId, editarEmpresa,  excluirEmpresa } from '../controllers/empresa.controller.js';
+import { criarEmpresa, listarEmpresas, buscarEmpresaPorId, editarEmpresa,  excluirEmpresa } from '../controllers/empresa.controller.js';
 import { verificarToken } from '../middlewares/auth.middleware.js';
 
 const router = express.Router();

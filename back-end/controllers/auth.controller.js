@@ -288,8 +288,6 @@ export const listarUsuarios = async (req, res) => {
         });
         const totalPaginas = Math.ceil(totalRegistros / limit);
 
-        //console.log(where)
-
         return res.status(200).json({
             data: usuarios,       
             meta: {               
