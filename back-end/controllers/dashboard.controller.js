@@ -182,7 +182,6 @@ export const graficoBarra = async (req, res) => {
 }
 
 export const graficoArea = async (req, res) => {
-    
 
 }
 
