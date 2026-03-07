@@ -2,6 +2,7 @@ import prisma from '../prismaClient.js';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { json } from 'stream/consumers';
+import { forEachChild } from 'typescript';
 
 export const graficoPizza = async (req, res) => {
     try {
@@ -314,5 +315,140 @@ export const graficoArea = async (req, res) => {
 }
 
 export const graficoCards = async (req, res) => {
+  try {
 
+        let { idResponsavel, dataInicio, dataFim } = req.query;
+
+        if (!dataInicio || !dataFim) {
+            return res.status(400).json({
+                error: 'Informe dataInicio e dataFim no formato DD-MM-YYYY'
+            });
+        }
+
+        // Converter datas DD-MM-YYYY para Date
+        const [diaIni, mesIni, anoIni] = dataInicio.split('-');
+        const [diaFim, mesFim, anoFim] = dataFim.split('-');
+
+        const inicio = new Date(anoIni, mesIni - 1, diaIni);
+        const fim = new Date(anoFim, mesFim - 1, diaFim);
+
+        inicio.setHours(0,0,0,0);
+        fim.setHours(23,59,59,999);
+
+        // Filtro base para chamados
+        const whereChamado = {
+            deletedAt: null,
+            createdAt: { gte: inicio, lte: fim }
+        };
+
+        if (idResponsavel) whereChamado.idResponsavel = parseInt(idResponsavel);
+
+        // Buscar IDs dos status
+        const statusList = await prisma.status.findMany({
+            where: {
+                descricao: {
+                    in: ['Pendente', 'Aberto', 'Em Andamento', 'Concluído', 'Cancelado']
+                }
+            },
+            select: {
+                idStatus: true,
+                descricao: true
+            }
+        });
+
+        // for(let i=0;i<statusList.length;i++){
+        //     console.log(statusList[i].descricao)
+        // }
+
+        const statusMap = {};
+        statusList.forEach(s => statusMap[s.descricao] = s.idStatus);
+
+        console.log(statusMap.descricao)
+
+        // Contagem de chamados
+        const pendentes = await prisma.chamado.count({
+            where: {
+                ...whereChamado,
+                idStatus: {
+                    in: [
+                        statusMap['Pendente'],
+                        statusMap['Aberto'],
+                        statusMap['Em Andamento']
+                    ]
+                }
+            }
+        });
+
+        const finalizados = await prisma.chamado.count({
+            where: {
+                ...whereChamado,
+                idStatus: statusMap['Concluído']
+            }
+        });
+
+        const cancelados = await prisma.chamado.count({
+            where: {
+                ...whereChamado,
+                idStatus: statusMap['Cancelado']
+            }
+        });
+
+        // Buscar chamados finalizados
+        const chamadosFinalizados = await prisma.chamado.findMany({
+            where: {
+                ...whereChamado,
+                idStatus: statusMap['Concluído']
+            },
+            select: { idChamado: true }
+        });
+
+        // 🔹 Buscar todas as OS de uma vez
+        const osList = await prisma.oS.findMany({
+            where: { idChamado: { in: chamadosFinalizados.map(c => c.idChamado) } },
+            select: { idOS: true, valor: true }
+        });
+
+        let valorTotalOS = 0;
+        let custoTotal = 0;
+        let idsOS = [];
+
+        // Iterar sobre as OS
+        for (const os of osList) {
+            idsOS.push(os.idOS);
+            valorTotalOS += os.valor || 0;
+
+            const produtosOS = await prisma.osProduto.findMany({
+                where: { idOS: os.idOS },
+                select: { idProduto: true, quantidade: true }
+            });
+
+            for (const op of produtosOS) {
+                const produto = await prisma.produto.findUnique({
+                    where: { idProduto: op.idProduto },
+                    select: { preco: true }
+                });
+
+                const preco = produto?.preco || 0;
+                custoTotal += op.quantidade * preco;
+            }
+        }
+
+        const lucroTotal = valorTotalOS - custoTotal;
+
+        return res.status(200).json({
+            pendentes,
+            finalizados,
+            cancelados,
+            valorTotalOS,
+            idsOS,
+            custoTotal,
+            lucroTotal
+        });
+
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            error: 'Erro ao gerar dashboard'
+        });
+    }
 }

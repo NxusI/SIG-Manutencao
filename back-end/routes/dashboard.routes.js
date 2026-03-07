@@ -4,7 +4,7 @@ import { verificarToken } from '../middlewares/auth.middleware.js';
 
 const router = express.Router();
 
-//router.get('/cards', verificarToken, graficoCards);
+router.get('/cards', /*verificarToken,*/ graficoCards);
 router.get('/area', verificarToken, graficoArea);
 router.get('/pizza', verificarToken, graficoPizza);
 router.get('/barra', verificarToken, graficoBarra);
