@@ -4,7 +4,7 @@ import CardsDash from "./cards";
 import { ChartPieStatus } from "./pie-chart";
 import SearchDash from "./search-filter";
 import { OptionFormatted } from "@/shared/types/components.types";
-import { useAreaChart, useBarChart, usePieChart } from "../hooks/use-dashboard";
+import { useAreaChart, useBarChart, useGetCards, usePieChart } from "../hooks/use-dashboard";
 import { ChartBarTecnicos } from "./bar-chart";
 import { formatDateToYMD } from "@/utils/formatters";
 
@@ -31,6 +31,7 @@ const Dash = () => {
 
   const { barData, error: barError, loading: barLoading } = useBarChart(params);
   const { pieData, error: pieError, loading: pieLoading } = usePieChart(params);
+  const { cards, error, loading } = useGetCards(params);
   const {
     areaData,
     loading: areaLoading,
@@ -52,7 +53,7 @@ const Dash = () => {
   return (
     <div className="grid gap-5">
       <SearchDash onFilter={onFilter} />
-      <CardsDash />
+      <CardsDash data={cards} loading={loading} error={error} />
       <ChartAreaInteractive
         data={areaData}
         error={areaError}

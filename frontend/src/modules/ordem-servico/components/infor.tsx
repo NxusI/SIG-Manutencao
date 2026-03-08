@@ -26,14 +26,14 @@ const Infor = ({ os }: { os: OrdemServico }) => {
       ))}
       <Textarea value={os.obs} readOnly />
       <div className="flex justify-between mt-2">
-        <span>Serviço</span>
+        <span>Valor Cobrado</span>
         <span>{formatCurrency(os.valor - (os.itens.map((i) => i.produto.preco).reduce((a, b) => a + b, 0)))}</span>
       </div>
       <Separator/>
-      <div className="flex justify-between mb-[-10]">
+      {/* <div className="flex justify-between mb-[-10]">
         <strong>TOTAL</strong>
         <span>{formatCurrency(os.valor)}</span>
-      </div>
+      </div> */}
     </div>
   );
 };

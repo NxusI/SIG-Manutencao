@@ -41,11 +41,16 @@ const SearchDash = ({ onFilter }: Props) => {
   };
 
   const handleClear = () => {
-    setInicio(undefined);
-    setFim(undefined);
+    setInicio(trintaDiasAtras);
+    setFim(hoje);
     setStatus(null);
     setTecnico(null);
-    onFilter("", "", null, null);
+    onFilter(
+      formatDateToYMD(trintaDiasAtras),
+      formatDateToYMD(hoje),
+      null,
+      null,
+    );
   };
 
   return (

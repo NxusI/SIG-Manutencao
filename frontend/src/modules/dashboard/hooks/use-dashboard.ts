@@ -1,6 +1,7 @@
-import { DashboardService } from "@/domain/dashboard/dashboard.serevice";
+import { DashboardService } from "@/domain/dashboard/dashboard.service";
 import { AreaChart } from "@/domain/dashboard/entities/area-chart.entity";
 import { BarChart } from "@/domain/dashboard/entities/bar-chart.entity";
+import { Cards } from "@/domain/dashboard/entities/cards.entity";
 import { PieChart } from "@/domain/dashboard/entities/pie-chart";
 import { IDashboardParams } from "@/domain/dashboard/params/dashboard-params.params";
 import { useCallback, useEffect, useState } from "react";
@@ -101,5 +102,39 @@ export function useBarChart(params: IDashboardParams) {
     loading,
     error,
     refetch: fetchBarData,
+  };
+}
+
+export function useGetCards(params: IDashboardParams) {
+  const [error, setError] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
+  const [cards, setCards] = useState<Cards | null>(null);
+
+  const service = new DashboardService();
+  const fetchCards = useCallback(async () => {
+    setLoading(true);
+    await service
+      .getCards(params)
+      .then((res) => {
+        setCards(res);
+        console.log("lero",res)
+      })
+      .catch((err) => {
+        setError(err.response.data.message || "Ocorreu uma inconsistência ao buscar dados");
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, [params]);
+
+  useEffect(() => {
+    fetchCards();
+  }, [fetchCards]);
+
+  return {
+    cards,
+    loading,
+    error,
+    refetch: fetchCards,
   };
 }

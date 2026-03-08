@@ -1,6 +1,7 @@
 import { DashboardRepository } from "./dashboard.repository";
 import { AreaChart } from "./entities/area-chart.entity";
 import { BarChart } from "./entities/bar-chart.entity";
+import { Cards } from "./entities/cards.entity";
 import { PieChart } from "./entities/pie-chart";
 import { IDashboardParams } from "./params/dashboard-params.params";
 
@@ -21,5 +22,9 @@ export class DashboardService {
 
   async barChart(params: IDashboardParams): Promise<BarChart[]> {
     return this.repository.barChart(params);
+  }
+
+  async getCards(params: IDashboardParams): Promise<Cards> {
+    return this.repository.getCards(params);
   }
 }

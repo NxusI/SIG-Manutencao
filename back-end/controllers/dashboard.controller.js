@@ -334,4 +334,116 @@ export const graficoArea = async (req, res) => {
   }
 };
 
-export const graficoCards = async (req, res) => {};
+export const graficoCards = async (req, res) => {
+  try {
+    let { dataInicio, dataFim, idStatus, idResponsavel } = req.query;
+
+    if (!dataInicio || !dataFim) {
+      return res.status(400).json({
+        error:
+          "Os parâmetros dataInicio e dataFim são obrigatórios (YYYY-MM-DD)",
+      });
+    }
+
+    const inicio = new Date(dataInicio);
+    const fim = new Date(dataFim);
+
+    if (isNaN(inicio.getTime()) || isNaN(fim.getTime())) {
+      return res.status(400).json({
+        error: "Formato de data inválido. Use YYYY-MM-DD",
+      });
+    }
+
+    inicio.setHours(0, 0, 0, 0);
+    fim.setHours(23, 59, 59, 999);
+
+    const diffTime = fim.getTime() - inicio.getTime();
+    const diffDias = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+
+    if (diffDias > 30) {
+      return res.status(400).json({
+        error: "O intervalo entre as datas deve ser de no máximo 30 dias",
+      });
+    }
+
+    const whereChamado = {
+      deletedAt: null,
+      createdAt: {
+        gte: inicio,
+        lte: fim,
+      },
+    };
+
+    if (idStatus) whereChamado.idStatus = parseInt(idStatus);
+    if (idResponsavel) whereChamado.idResponsavel = parseInt(idResponsavel);
+
+    const chamados = await prisma.chamado.findMany({
+      where: whereChamado,
+      select: {
+        idChamado: true,
+        idStatus: true,
+      },
+    });
+
+    let pendentes = 0;
+    let finalizados = 0;
+    let cancelados = 0;
+
+    for (const chamado of chamados) {
+      if ([1, 2, 3].includes(chamado.idStatus)) pendentes++;
+      if (chamado.idStatus === 4) finalizados++;
+      if (chamado.idStatus === 5) cancelados++;
+    }
+
+    let custo = 0;
+    let lucro = 0;
+
+    for (const chamado of chamados) {
+      const osList = await prisma.oS.findMany({
+        where: { idChamado: chamado.idChamado },
+        select: {
+          idOS: true,
+          valor: true,
+        },
+      });
+
+      for (const os of osList) {
+        let custoOS = 0;
+
+        const osProdutos = await prisma.osProduto.findMany({
+          where: { idOS: os.idOS },
+          select: {
+            idProduto: true,
+            quantidade: true,
+          },
+        });
+
+        for (const op of osProdutos) {
+          const produto = await prisma.produto.findUnique({
+            where: { idProduto: op.idProduto },
+            select: { preco: true },
+          });
+
+          const preco = produto?.preco || 0;
+          custoOS += preco * op.quantidade;
+        }
+
+        custo += custoOS;
+        lucro += (os.valor || 0) - custoOS;
+      }
+    }
+
+    return res.status(200).json({
+      pendentes,
+      finalizados,
+      cancelados,
+      lucro,
+      custo,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      error: "Erro ao gerar relatório",
+    });
+  }
+};
