@@ -104,7 +104,7 @@ const CreateOS = ({ refetch }: { refetch: () => void }) => {
         </div>
 
         <div className="grid gap-2">
-          <Label>Valor Serviço*</Label>
+          <Label>Valor Total Cobrado*</Label>
           <Input
             value={formatMoney(valorServico)}
             onChange={(e) => setValorServico(parseMoney(e.target.value))}

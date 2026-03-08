@@ -7,6 +7,15 @@ export function formatDate(date?: Date): string {
   return `${day}/${month}/${year}`;
 }
 
+export function formatDateToYMD(date?: Date): string {
+  if (!date) return "";
+  const year = date.getFullYear();
+  const month = `${date.getMonth() + 1}`.padStart(2, "0");
+  const day = `${date.getDate()}`.padStart(2, "0");
+
+  return `${year}-${month}-${day}`;
+}
+
 export function formatCurrency(value?: number | string): string {
   return Number(value).toLocaleString("pt-BR", {
     style: "currency",
