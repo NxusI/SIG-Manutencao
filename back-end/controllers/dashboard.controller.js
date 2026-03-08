@@ -1,7 +1,8 @@
-import prisma from "../prismaClient.js";
-import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
-import { json } from "stream/consumers";
+import prisma from '../prismaClient.js';
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import { json } from 'stream/consumers';
+import { forEachChild } from 'typescript';
 
 export const graficoPizza = async (req, res) => {
   try {
