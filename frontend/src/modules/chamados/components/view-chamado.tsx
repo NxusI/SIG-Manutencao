@@ -105,10 +105,6 @@ const ViewChamado = ({
             description={chamado.descricao}
             onUpdate={(descricao) => handleUpdateChamado({ descricao })}
           />
-
-          <Button variant="outline" onClick={onClose}>
-            Fechar
-          </Button>
         </div>
 
         {alertConfig && <ToastAlert key={alertConfig.id} {...alertConfig} />}

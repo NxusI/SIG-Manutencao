@@ -8,8 +8,7 @@ export const gerarOS = async (req, res) => {
         if (!idChamado) return res.status(400).json({ message: "ID do chamado obrigatório." });
 
         const idChamadoInt = parseInt(idChamado);
-
-        // Aqui usa findFirst, então tá ok
+        
         const osExistente = await prisma.oS.findFirst({ where: { idChamado: idChamadoInt } });
         if (osExistente) return res.status(400).json({ message: "Já existe uma OS para este chamado." });
 

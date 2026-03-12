@@ -1,6 +1,6 @@
 import nodemailer from "nodemailer";
 
-const BASE_URL = process.env.API_URL || "http://localhost:3001";
+const BASE_URL = process.env.API_URL;
 const EMAIL_USER = process.env.EMAIL_USER;
 const EMAIL_PASS = process.env.EMAIL_PASS;
 

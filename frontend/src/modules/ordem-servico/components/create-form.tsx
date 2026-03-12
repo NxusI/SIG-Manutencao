@@ -5,7 +5,7 @@ import { Label } from "@/shared/components/ui/label";
 import { Textarea } from "@/shared/components/ui/textarea";
 import { OptionFormatted } from "@/shared/types/components.types";
 import { Button } from "@/shared/components/ui/button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ProdutosOrdem, { ProdutoOS } from "./produtos";
 import { useGetAllChamados } from "@/modules/chamados/hooks/use-chamado";
 import { useCreateOrdem } from "../hooks/use-ordem-servico";
@@ -21,14 +21,18 @@ const parseMoney = (value: string): number =>
   Number(value.replace(/\D/g, "")) / 100;
 
 const CreateOS = ({ refetch }: { refetch: () => void }) => {
-  const { chamados } = useGetAllChamados();
-  const { create, loading } = useCreateOrdem();
-
   const [chamado, setChamado] = useState<OptionFormatted | null>(null);
   const [produtos, setProdutos] = useState<ProdutoOS[]>([]);
   const [dataPrazo, setDataPrazo] = useState<Date | undefined>();
   const [valorServico, setValorServico] = useState<number>(0);
   const [observacao, setObservacao] = useState("");
+  const [search, setSearch] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
+
+  const { chamados } = useGetAllChamados({
+    titulo: debouncedSearch,
+  });
+  const { create, loading } = useCreateOrdem();
 
   const [alertConfig, setAlertConfig] = useState<{
     id: number;
@@ -36,8 +40,16 @@ const CreateOS = ({ refetch }: { refetch: () => void }) => {
     title: string;
   } | null>(null);
 
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setDebouncedSearch(search);
+    }, 1000);
+
+    return () => clearTimeout(timeout);
+  }, [search]);
+
   const handleSubmit = async () => {
-    if (!chamado || !dataPrazo ) return;
+    if (!chamado || !dataPrazo) return;
 
     await create({
       data: {
@@ -48,7 +60,7 @@ const CreateOS = ({ refetch }: { refetch: () => void }) => {
         produtos: produtos.map((p) => ({
           nome: p.produto,
           quantidade: p.quantidade,
-          preco: p.valorUnitario, 
+          preco: p.valorUnitario,
         })),
       },
     })
@@ -94,6 +106,7 @@ const CreateOS = ({ refetch }: { refetch: () => void }) => {
           }))}
           value={chamado}
           onChange={setChamado}
+          onSearchInputChange={setSearch}
         />
       </div>
 
@@ -128,7 +141,7 @@ const CreateOS = ({ refetch }: { refetch: () => void }) => {
         Salvar
       </Button>
 
-      {alertConfig && <ToastAlert key={alertConfig.id} {...alertConfig}/>}
+      {alertConfig && <ToastAlert key={alertConfig.id} {...alertConfig} />}
     </div>
   );
 };

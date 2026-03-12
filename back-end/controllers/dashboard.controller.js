@@ -1,12 +1,35 @@
-import prisma from '../prismaClient.js';
-import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
-import { json } from 'stream/consumers';
-import { forEachChild } from 'typescript';
+import prisma from "../prismaClient.js";
+
+function aplicarFiltroResponsavel(req, idResponsavel) {
+  const usuario = req.usuario;
+
+  if (!usuario) {
+    throw {
+      status: 401,
+      message: "Usuário não autenticado",
+    };
+  }
+
+  if (usuario.tipo !== "GESTOR") {
+    if (idResponsavel && parseInt(idResponsavel) !== usuario.idUsuario) {
+      throw {
+        status: 403,
+        message:
+          "Você não tem permissão para visualizar dados de outros técnicos",
+      };
+    }
+
+    return usuario.idUsuario;
+  }
+
+  return idResponsavel ? parseInt(idResponsavel) : undefined;
+}
 
 export const graficoPizza = async (req, res) => {
   try {
     let { idResponsavel, idStatus, dataInicio, dataFim } = req.query;
+
+    idResponsavel = aplicarFiltroResponsavel(req, idResponsavel);
 
     if (!dataInicio || !dataFim) {
       return res.status(400).json({
@@ -16,16 +39,17 @@ export const graficoPizza = async (req, res) => {
 
     const inicio = new Date(dataInicio);
     const fim = new Date(dataFim);
-    fim.setHours(23, 59, 59, 999);
 
-    const diffTime = fim.getTime() - inicio.getTime();
-    const diffDias = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-
-    if (diffDias > 30) {
+    if (isNaN(inicio.getTime()) || isNaN(fim.getTime())) {
       return res.status(400).json({
-        error: "O intervalo entre as datas deve ser de no máximo 30 dias",
+        error: "Formato de data inválido. Use YYYY-MM-DD",
       });
     }
+
+    inicio.setHours(0, 0, 0, 0);
+    fim.setHours(23, 59, 59, 999);
+
+    const diffDias = Math.floor((fim - inicio) / (1000 * 60 * 60 * 24));
 
     if (diffDias > 30) {
       return res.status(400).json({
@@ -43,26 +67,20 @@ export const graficoPizza = async (req, res) => {
     };
 
     if (idStatus) where.idStatus = parseInt(idStatus);
-    if (idResponsavel) where.idResponsavel = parseInt(idResponsavel);
+    if (idResponsavel) where.idResponsavel = idResponsavel;
 
     const resultado = await prisma.chamado.groupBy({
       where,
       by: ["idStatus"],
-      _count: {
-        idChamado: true,
-      },
+      _count: { idChamado: true },
       orderBy: {
-        _count: {
-          idChamado: "desc",
-        },
+        _count: { idChamado: "desc" },
       },
     });
 
     const status = await prisma.status.findMany({
       where: {
-        idStatus: {
-          in: resultado.map((r) => r.idStatus),
-        },
+        idStatus: { in: resultado.map((r) => r.idStatus) },
       },
       select: {
         idStatus: true,
@@ -80,10 +98,12 @@ export const graficoPizza = async (req, res) => {
       quantidadeChamados: r._count.idChamado,
     }));
 
-    return res.status(200).json({
-      data: dadosGrafico,
-    });
+    return res.status(200).json({ data: dadosGrafico });
   } catch (error) {
+    if (error.status) {
+      return res.status(error.status).json({ error: error.message });
+    }
+
     console.error(error);
     return res.status(500).json({
       error: "Erro ao gerar relatório",
@@ -94,6 +114,8 @@ export const graficoPizza = async (req, res) => {
 export const graficoBarra = async (req, res) => {
   try {
     let { idResponsavel, idStatus, dataInicio, dataFim } = req.query;
+
+    idResponsavel = aplicarFiltroResponsavel(req, idResponsavel);
 
     if (!dataInicio || !dataFim) {
       return res.status(400).json({
@@ -123,12 +145,6 @@ export const graficoBarra = async (req, res) => {
       });
     }
 
-    if (diffDias > 30) {
-      return res.status(400).json({
-        error: "O intervalo entre as datas deve ser de no máximo 30 dias",
-      });
-    }
-
     const where = {
       deletedAt: null,
       idResponsavel: { not: null },
@@ -139,7 +155,7 @@ export const graficoBarra = async (req, res) => {
     };
 
     if (idStatus) where.idStatus = parseInt(idStatus);
-    if (idResponsavel) where.idResponsavel = parseInt(idResponsavel);
+    if (idResponsavel) where.idResponsavel = idResponsavel;
 
     const resultado = await prisma.chamado.groupBy({
       where,
@@ -181,6 +197,10 @@ export const graficoBarra = async (req, res) => {
       data: dadosGrafico,
     });
   } catch (error) {
+    if (error.status) {
+      return res.status(error.status).json({ error: error.message });
+    }
+
     console.error(error);
     return res.status(500).json({
       error: "Erro ao gerar relatório",
@@ -191,6 +211,8 @@ export const graficoBarra = async (req, res) => {
 export const graficoArea = async (req, res) => {
   try {
     let { dataInicio, dataFim, idStatus, idResponsavel } = req.query;
+
+    idResponsavel = aplicarFiltroResponsavel(req, idResponsavel);
 
     if (!dataInicio || !dataFim) {
       return res.status(400).json({
@@ -254,7 +276,7 @@ export const graficoArea = async (req, res) => {
     };
 
     if (idStatus) whereChamado.idStatus = parseInt(idStatus);
-    if (idResponsavel) whereChamado.idResponsavel = parseInt(idResponsavel);
+    if (idResponsavel) whereChamado.idResponsavel = idResponsavel;
 
     const chamados = await prisma.chamado.findMany({
       where: whereChamado,
@@ -337,6 +359,8 @@ export const graficoArea = async (req, res) => {
 export const graficoCards = async (req, res) => {
   try {
     let { dataInicio, dataFim, idStatus, idResponsavel } = req.query;
+
+    idResponsavel = aplicarFiltroResponsavel(req, idResponsavel);
 
     if (!dataInicio || !dataFim) {
       return res.status(400).json({

@@ -1,3 +1,5 @@
+import { Empresa } from "@/domain/empresa/entities/empresa.entity";
+
 export interface Usuario {
   idUsuario: number;
   nome: string;
@@ -7,6 +9,7 @@ export interface Usuario {
   createdAt: string;
   idEmpresa: number;
   tipo: TipoUsuario;
+  empresa: Empresa;
 }
 
 export enum TipoUsuario {

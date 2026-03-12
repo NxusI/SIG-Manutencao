@@ -3,4 +3,5 @@ export interface ICreateClienteParams {
   email: string;
   telefone: string;
   idEmpresa: number;
+  endereco: string;
 }

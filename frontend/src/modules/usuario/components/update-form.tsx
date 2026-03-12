@@ -20,7 +20,10 @@ const UpdateUsuario = ({
 }) => {
   const [nome, setNome] = useState<string>(usuario.nome);
   const [email, setEmail] = useState<string>(usuario.email);
-  const [empresa, setEmpresa] = useState<OptionFormatted | null>(null);
+  const [empresa, setEmpresa] = useState<OptionFormatted | null>({
+    value: String(usuario.idEmpresa),
+    label: usuario.empresa.nomeFantasia
+  });
   const [tipo, setTipo] = useState<OptionFormatted | null>({
     value: usuario.tipo,
     label: usuario.tipo,
@@ -68,18 +71,6 @@ const UpdateUsuario = ({
       })
       .finally(() => setTimeout(() => setAlertConfig(null), 3000));
   };
-
-  useEffect(() => {
-    if(usuario.idEmpresa){
-      const find = empresas.find((e) => e.idEmpresa === usuario.idEmpresa);
-      if (find) {
-        setEmpresa({
-          value: String(find.idEmpresa),
-          label: find.nomeFantasia,
-        });
-      }
-    }
-  },[usuario, empresas]);
 
   return (
     <div className="grid gap-5">

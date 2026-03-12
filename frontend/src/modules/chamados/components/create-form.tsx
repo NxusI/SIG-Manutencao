@@ -6,7 +6,7 @@ import { Input } from "@/shared/components/ui/input";
 import { Label } from "@/shared/components/ui/label";
 import { Textarea } from "@/shared/components/ui/textarea";
 import { OptionFormatted } from "@/shared/types/components.types";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useCreateChamado } from "../hooks/use-chamado";
 import { Loader2 } from "lucide-react";
 import { ToastAlert } from "@/shared/components/comon/alert";
@@ -17,6 +17,10 @@ const CreateChamado = ({ refetch }: { refetch: () => void }) => {
   const [descricao, setDescricao] = useState<string>("");
   const [cliente, setCliente] = useState<OptionFormatted | null>(null);
   const [responsavel, setResponsavel] = useState<OptionFormatted | null>(null);
+  const [clienteSearch, setClienteSearch] = useState("");
+  const [debouncedClienteSearch, setDebouncedClienteSearch] = useState("");
+  const [usuarioSearch, setUsuarioSearch] = useState("");
+  const [debouncedUsuarioSearch, setDebouncedUsuarioSearch] = useState("");
 
   const [alertConfig, setAlertConfig] = useState<{
     id: number;
@@ -25,11 +29,28 @@ const CreateChamado = ({ refetch }: { refetch: () => void }) => {
   } | null>(null);
 
   const { create, loading } = useCreateChamado();
-  const { clientes, loading: loadingClientes } = useGetAllCliente();
-  const { usuarios, loading: loadingUsuarios } = useGetAllUsuarios({
-    limit: 1000,
-    page: 1,
+  const { clientes, loading: loadingClientes } = useGetAllCliente({
+    nome: debouncedClienteSearch,
   });
+  const { usuarios, loading: loadingUsuarios } = useGetAllUsuarios({
+    nome: debouncedUsuarioSearch,
+  });
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setDebouncedClienteSearch(clienteSearch);
+    }, 1000);
+
+    return () => clearTimeout(timeout);
+  }, [clienteSearch]);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setDebouncedUsuarioSearch(usuarioSearch);
+    }, 1000);
+
+    return () => clearTimeout(timeout);
+  }, [usuarioSearch]);
 
   const handleSubmit = async () => {
     if (!title || !equipamento || !descricao || !cliente) {
@@ -103,6 +124,7 @@ const CreateChamado = ({ refetch }: { refetch: () => void }) => {
             }))}
             value={cliente}
             loading={loadingClientes}
+            onSearchInputChange={setClienteSearch}
           />
         </div>
         <div className="grid gap-2">
@@ -116,6 +138,7 @@ const CreateChamado = ({ refetch }: { refetch: () => void }) => {
             }))}
             value={responsavel}
             loading={loadingUsuarios}
+            onSearchInputChange={setUsuarioSearch}
           />
         </div>
         <div className="grid gap-2 col-span-2">

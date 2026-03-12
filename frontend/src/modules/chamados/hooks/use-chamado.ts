@@ -52,35 +52,43 @@ export function useKanbanChamados(params?: IGetAllChamadoParams) {
 
   const service = new ChamadoService();
 
-  useEffect(() => {
-    async function load() {
-      setLoading(true);
+  const load = async () => {
+    setLoading(true);
 
-      const data = await Promise.all(
-        STATUS_COLUMNS.map(async (status) => {
-          const response = await service.getAll({
-            ...params,
-            idStatus: status.id,
-          });
-
-          console.log(status.id, response.data);
+    const data = await Promise.all(
+      STATUS_COLUMNS.map(async (status) => {
+        if (params?.idStatus && params.idStatus !== status.id) {
           return {
             ...status,
-            cards: response.data,
+            cards: [],
           };
-        }),
-      );
+        }
 
-      setColumns(data);
-      setLoading(false);
-    }
+        const response = await service.getAll({
+          ...params,
+          idStatus: status.id,
+        });
 
+        return {
+          ...status,
+          cards: response.data,
+        };
+      }),
+    );
+
+    setColumns(data);
+    setLoading(false);
+  };
+
+  useEffect(() => {
     load();
-
-
   }, [params]);
 
-  return { columns, loading };
+  return {
+    columns,
+    loading,
+    refetch: load,
+  };
 }
 
 export function useCreateChamado() {

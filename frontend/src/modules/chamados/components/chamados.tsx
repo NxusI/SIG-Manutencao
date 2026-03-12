@@ -46,7 +46,11 @@ const Chamados = () => {
     ...params,
     limit: 7,
   });
-  const { columns, loading: kanbanLoading } = useKanbanChamados({
+  const {
+    columns,
+    loading: kanbanLoading,
+    refetch: refetchKanban,
+  } = useKanbanChamados({
     ...params,
     limit: 25,
   });
@@ -114,13 +118,21 @@ const Chamados = () => {
             }
             description="Preencha as informações abaixo para criar um novo chamado"
           >
-            <CreateChamado refetch={refetch} />
+            <CreateChamado
+              refetch={() => {
+                refetch();
+                refetchKanban();
+              }}
+            />
           </BaseModal>
         </div>
       </div>
       {viewMode === "table" ? (
         <TableChamados
-          refetch={refetch}
+          refetch={() => {
+            refetch();
+            refetchKanban();
+          }}
           chamados={chamados}
           error={error}
           loading={loading}
@@ -130,7 +142,10 @@ const Chamados = () => {
         />
       ) : (
         <KanbanChamados
-          refetch={refetch}
+          refetch={() => {
+            refetch();
+            refetchKanban();
+          }}
           loading={kanbanLoading}
           columns={columns}
         />
