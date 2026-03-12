@@ -150,12 +150,12 @@ Abaixo, a lista de Requisitos Funcionais (RF) ativos no projeto, alinhados com a
 ### 📨 5. Automação e Gestão
 | ID | Funcionalidade | Status |
 | :--- | :--- | :---: |
-| `RF023` | **Disparo de Orçamento:** E-mail automático para aprovação. | 📝 Backlog |
-| `RF024` | **Coleta de Decisão:** Interface de Aceite/Recusa do cliente. | 📝 Backlog |
-| `RF026` | **Aviso de Retirada:** E-mail automático de serviço concluído. | 📝 SUSPENSO |
-| `RF029` | **Dashboard:** Volumetria (Abertos vs. Fechados). | 📝 Backlog |
-| `RF030` | **Financeiro:** Lucro Líquido vs. Custos Operacionais. | 📝 Backlog |
-| `RF031` | **KPI:** Tempo Médio de Resolução. | 📝 Backlog |
+| `RF023` | **Disparo de Orçamento:** E-mail automático para aprovação. | ✅ Feito |
+| `RF024` | **Coleta de Decisão:** Interface de Aceite/Recusa do cliente. | ✅ Feito |
+| `RF026` | **Aviso de Retirada:** E-mail automático de serviço concluído. | ✅ Feito |
+| `RF029` | **Dashboard:** Volumetria (Abertos vs. Fechados). | ✅ Feito |
+| `RF030` | **Financeiro:** Lucro Líquido vs. Custos Operacionais. | ✅ Feito |
+| `RF031` | **KPI:** Tempo Médio de Resolução. | ✅ Feito |
 
 ---
 
