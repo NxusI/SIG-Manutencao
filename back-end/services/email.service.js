@@ -30,6 +30,7 @@ export const enviarEmailOrcamento = async (
   destinatario,
   nomeCliente,
   dadosOS,
+  pdfBuffer,
 ) => {
   try {
     const transporter = await criarTransporter();
@@ -170,6 +171,14 @@ export const enviarEmailOrcamento = async (
       to: destinatario,
       subject: `Orçamento Aprovado: OS #${dadosOS.idOS}`,
       html: htmlBody,
+      attachments: pdfBuffer
+        ? [
+            {
+              filename: `OS-${dadosOS.idOS}.pdf`,
+              content: pdfBuffer,
+            },
+          ]
+        : [],
     });
 
     console.log(
@@ -177,5 +186,33 @@ export const enviarEmailOrcamento = async (
     );
   } catch (error) {
     console.error("❌ Erro ao enviar e-mail:", error);
+  }
+};
+
+export const enviarEmailTecnico = async (
+  destinatario,
+  tituloChamado,
+  idChamado,
+  pdfBuffer,
+) => {
+  try {
+    const transporter = await criarTransporter();
+
+    await transporter.sendMail({
+      from: `"SIG Manutenção" <${EMAIL_USER}>`,
+      to: destinatario,
+      subject: `Ordem de Serviço - Chamado #${idChamado} ${tituloChamado}`,
+      text: "Segue a ordem de serviço em anexo.",
+
+      attachments: [
+        {
+          filename: `OS-${idChamado}.pdf`,
+          content: pdfBuffer,
+        },
+      ],
+    });
+    console.log("Email enviado ao técnico responsável");
+  } catch (e) {
+    console.error("❌ Erro ao enviar e-mail:", e);
   }
 };
