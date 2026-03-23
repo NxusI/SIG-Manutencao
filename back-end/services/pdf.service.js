@@ -1,4 +1,6 @@
 import puppeteer from "puppeteer";
+import fs from "fs";
+import path from "path";
 
 export const gerarPdfOS = async (dadosOS) => {
   const browser = await puppeteer.launch();
@@ -29,6 +31,8 @@ export const gerarPdfOS = async (dadosOS) => {
     return telefone;
   };
 
+  const logoPath = path.resolve("assets/icon.png");
+  const logoBase64 = fs.readFileSync(logoPath).toString("base64");
   const html = `
   <html>
 
@@ -73,6 +77,20 @@ color:#444;
 margin-bottom:10px;
 border-bottom:1px solid #eee;
 padding-bottom:4px;
+}
+
+.logo{
+display:flex;
+align-items:center;
+gap:10px;
+font-size:20px;
+font-weight:bold;
+color:#1f2937;
+}
+
+.logo img{
+width:40px;
+height:auto;
 }
 
 .row{
@@ -135,7 +153,8 @@ text-align:center;
 <div class="header">
 
 <div class="logo">
-SIG MANUTENÇÃO
+  <img src="data:image/png;base64,${logoBase64}" />
+  SIG MANUTENÇÃO
 </div>
 
 <div class="os-title">
