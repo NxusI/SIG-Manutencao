@@ -5,6 +5,7 @@ export interface PaginatedResponse<T> {
     page: number;
     limit: number;
     totalPages: number;
+    lastPage: number;
   };
 }
 

@@ -160,21 +160,49 @@ export const gerarOS = async (req, res) => {
 
 export const listarOS = async (req, res) => {
   try {
-    const lista = await prisma.oS.findMany({
-      orderBy: { idOS: "desc" },
-      include: {
-        chamado: {
-          include: {
-            cliente: { select: { nome: true, telefone: true, email: true } },
-            status: true,
-            responsavel: { select: { nome: true } },
+    const page = Number(req.query.page) || 1;
+    const limit = Number(req.query.limit) || 10;
+
+    const skip = (page - 1) * limit;
+
+    const [lista, total] = await Promise.all([
+      prisma.oS.findMany({
+        orderBy: { idOS: "desc" },
+        skip,
+        take: limit,
+        include: {
+          chamado: {
+            include: {
+              cliente: { select: { nome: true, telefone: true, email: true } },
+              status: true,
+              responsavel: { select: { nome: true } },
+            },
+          },
+          itens: {
+            include: { produto: true },
+          },
+          pagamento: {
+            select: {
+              dataPagamento: true,
+            },
           },
         },
-        itens: { include: { produto: true } },
+      }),
+
+      prisma.oS.count(),
+    ]);
+
+    return res.status(200).json({
+      data: lista,
+      meta: {
+        total,
+        page,
+        lastPage: Math.ceil(total / limit),
+        limit,
       },
     });
-    return res.status(200).json(lista);
   } catch (error) {
+    console.error(error);
     return res.status(500).json({ message: "Erro interno." });
   }
 };
@@ -359,5 +387,88 @@ export const responderOrcamento = async (req, res) => {
   } catch (error) {
     console.error("Erro na resposta:", error);
     return res.status(500).send("Erro ao processar.");
+  }
+};
+
+export const darBaixaPagamento = async (req, res) => {
+  try {
+    const { idOS } = req.params;
+
+    const os = await prisma.oS.findUnique({
+      where: { idOS: Number(idOS) },
+      select: { idOS: true, valor: true },
+    });
+
+    if (!os) {
+      return res.status(404).json({ message: "OS não encontrada." });
+    }
+
+    const pagamentoExistente = await prisma.pagamento.findUnique({
+      where: { idOS: os.idOS },
+    });
+
+    if (pagamentoExistente) {
+      return res
+        .status(400)
+        .json({ message: "Pagamento já realizado para esta OS." });
+    }
+
+    const pagamento = await prisma.pagamento.create({
+      data: {
+        idOS: os.idOS,
+        valorPago: os.valor || 0,
+        dataPagamento: new Date(),
+      },
+    });
+
+    return res.status(201).json({
+      message: "Pagamento registrado com sucesso.",
+      pagamento,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Erro interno." });
+  }
+};
+
+export const registrarGarantia = async (req, res) => {
+  try {
+    const { idOS } = req.params;
+    const { prazoGarantiaDias } = req.body;
+
+    if (!prazoGarantiaDias || prazoGarantiaDias <= 0) {
+      return res.status(400).json({ message: "Prazo de garantia inválido." });
+    }
+
+    const os = await prisma.oS.findUnique({
+      where: { idOS: Number(idOS) },
+      select: { idOS: true, dataEnvioGarantia: true },
+    });
+
+    if (!os) {
+      return res.status(404).json({ message: "OS não encontrada." });
+    }
+
+    if (os.dataEnvioGarantia) {
+      return res.status(400).json({
+        message: "Garantia já registrada para esta OS.",
+      });
+    }
+
+    const osAtualizada = await prisma.oS.update({
+      where: { idOS: os.idOS },
+      data: {
+        dataEnvioGarantia: new Date(),
+        prazoGarantiaDias: Number(prazoGarantiaDias),
+      },
+    });
+
+    return res.status(200).json({
+      message: "Garantia registrada com sucesso.",
+      os: osAtualizada,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Erro interno." });
   }
 };

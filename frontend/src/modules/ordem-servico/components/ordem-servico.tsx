@@ -1,6 +1,13 @@
 import BaseModal from "@/shared/components/comon/base-modal";
 import { Button } from "@/shared/components/ui/button";
-import { Check, Info, Loader2, Plus } from "lucide-react";
+import {
+  CalendarClock,
+  Check,
+  DollarSign,
+  Info,
+  Loader2,
+  Plus,
+} from "lucide-react";
 import CreateOS from "./create-form";
 import {
   useFinalizarOrdem,
@@ -10,17 +17,28 @@ import TableSkeleton from "@/shared/components/skeleton/table";
 import { DataTable } from "@/shared/components/comon/data-table";
 import { formatCurrency, formatDateString } from "@/utils/formatters";
 import Infor from "./infor";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { ToastAlert } from "@/shared/components/comon/alert";
+import Pagination from "@/shared/components/comon/pagination";
+import GarantiaForm from "./garantia-form";
 
 const OrdemServico = () => {
+  const [page, setPage] = useState<number>(1);
   const [alertconfig, setalertconfig] = useState<{
     id: number;
     title: string;
     icon: "success" | "error" | "warning" | "info";
   } | null>(null);
 
-  const { error, loading, ordens, refetch } = useGetAllOrdemServico();
+  const params = useMemo(() => {
+    return {
+      limit: 7,
+      page,
+    };
+  }, [page]);
+
+  const { error, loading, ordens, refetch, total } =
+    useGetAllOrdemServico(params);
   const { finalizar, loading: loadingFinalizar } = useFinalizarOrdem();
 
   const handleSubmit = async (id: number) => {
@@ -76,17 +94,27 @@ const OrdemServico = () => {
             "chamado",
             "createdAt",
             "dataPrazo",
+            "prazoGarantiaDias",
+            "dataEnvioGarantia",
+            "dataPagamento",
             "valor",
             "infor",
             "confirm",
+            "clock",
+            "money",
           ]}
           columnLabels={{
             chamado: "Chamado",
             createdAt: "Data Emissão",
             dataPrazo: "Data Prazo",
+            prazoGarantiaDias: "Garantia",
+            dataEnvioGarantia: "Envio Garantia",
+            dataPagamento: "Data Pagamento",
             valor: "Valor Total",
             infor: "Infor",
             confirm: "Finalizar",
+            clock: "Garantia",
+            money: "Pagamento",
           }}
           data={ordens.map((d) => ({
             ...d,
@@ -94,6 +122,9 @@ const OrdemServico = () => {
             createdAt: formatDateString(d.createdAt),
             dataPrazo: formatDateString(d.dataPrazo),
             valor: formatCurrency(d.valor),
+            prazoGarantiaDias: d.prazoGarantiaDias || "-",
+            dataEnvioGarantia: formatDateString(d.dataEnvioGarantia),
+            dataPagamento: formatDateString(d?.pagamento?.dataPagamento),
             infor: (
               <BaseModal
                 size="lg"
@@ -131,8 +162,43 @@ const OrdemServico = () => {
                 </Button>
               </BaseModal>
             ),
+            clock: (
+              <BaseModal
+                size="md"
+                title="Emitir Garantia"
+                description="Informe ao cliente o prazo de garantia para o serviço realizado"
+                trigger={
+                  <Button variant={"secondary"}>
+                    <CalendarClock />
+                  </Button>
+                }
+              >
+                <GarantiaForm id={d.idOS} />
+              </BaseModal>
+            ),
+            money: (
+              <BaseModal
+                size="md"
+                title="Registrar Pagamento"
+                description="Realize a baixa do pagamento para confirmar o recebimento do valor integral determinado na OS."
+                trigger={
+                  <Button variant={"outline"}>
+                    <DollarSign />
+                  </Button>
+                }
+              >
+                <Button className="w-full">Registrar</Button>
+              </BaseModal>
+            ),
           }))}
           getRowId={(d) => d.idOS}
+        />
+      )}
+      {total > 1 && (
+        <Pagination
+          currentPage={page}
+          onPageChange={setPage}
+          totalPages={total}
         />
       )}
 

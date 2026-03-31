@@ -8,8 +8,11 @@ export interface OrdemServico {
   valor: number;
   createdAt: string;
   updatedAt: string;
+  dataEnvioGarantia?: string;
+  prazoGarantiaDias?: string;
   chamado: Chamado;
   itens: Produto[];
+  pagamento?: { dataPagamento: string }
 }
 
 export interface Produto {

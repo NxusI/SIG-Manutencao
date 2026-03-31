@@ -2,6 +2,10 @@ import { apiClient } from "@/infraestructure/api/api-client";
 import { IOrdemServicoRepository } from "./contracts/ordem-servico-repository.interface";
 import { OrdemServico } from "./entities/ordem-servico.entity";
 import { ICreareOSParams } from "./params/create-os.params";
+import {
+  IGetPaginatedParams,
+  PaginatedResponse,
+} from "@/shared/types/paginated-request.types";
 
 export class OrdemServicoRepository implements IOrdemServicoRepository {
   async create(data: ICreareOSParams): Promise<OrdemServico> {
@@ -9,8 +13,12 @@ export class OrdemServicoRepository implements IOrdemServicoRepository {
     return res.data;
   }
 
-  async getAll(): Promise<OrdemServico[]> {
-    const res = await apiClient.get(`os`);
+  async getAll(
+    params: IGetPaginatedParams,
+  ): Promise<PaginatedResponse<OrdemServico>> {
+    const res = await apiClient.get(`os`, {
+      params,
+    });
     return res.data;
   }
 
@@ -38,5 +46,17 @@ export class OrdemServicoRepository implements IOrdemServicoRepository {
   ): Promise<OrdemServico> {
     const res = await apiClient.get(`os/responder/${id}/${resposta}`);
     return res.data;
+  }
+
+  async pagamento(id: number): Promise<void> {
+    const res = await apiClient.post(`os/${id}/pagamento`, {});
+    return res.data;
+  }
+
+  async garantia(id: number, garantia: string): Promise<void> {
+    const res = await apiClient.post(`os/${id}/garantia`,{
+      prazoGarantiaDias: garantia
+    });
+    return res.data
   }
 }

@@ -121,11 +121,15 @@ model OS {
   obs         String?
   dataPrazo   DateTime?
   valor       Float?    @default(0)
+  
+  dataEnvioGarantia   DateTime?
+  prazoGarantiaDias   Int?
 
   createdAt   DateTime  @default(now()) 
   updatedAt   DateTime  @updatedAt 
 
   itens       OsProduto[]
+  pagamento Pagamento?
 
   @@map("OS")
 }
@@ -142,4 +146,18 @@ model OsProduto {
   quantidade  Int
 
   @@map("OS_PRODUTO")
+}
+
+model Pagamento {
+  idPagamento   Int      @id @default(autoincrement())
+
+  idOS          Int      @unique
+  os            OS       @relation(fields: [idOS], references: [idOS])
+
+  valorPago     Float
+  dataPagamento DateTime
+
+  createdAt     DateTime @default(now())
+
+  @@map("PAGAMENTO")
 }

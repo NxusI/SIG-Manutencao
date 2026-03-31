@@ -2,22 +2,25 @@ import { OrdemServico } from "@/domain/ordem-servico/entities/ordem-servico.enti
 import { OrdemServicoService } from "@/domain/ordem-servico/ordem-servico.service";
 import { ICreareOSParams } from "@/domain/ordem-servico/params/create-os.params";
 import { queryClient } from "@/lib/query-client";
+import { IGetPaginatedParams } from "@/shared/types/paginated-request.types";
 import { useMutation } from "@tanstack/react-query";
 import { useCallback, useEffect, useState } from "react";
 
-export const useGetAllOrdemServico = () => {
+export const useGetAllOrdemServico = (params: IGetPaginatedParams) => {
   const [ordens, setOrdens] = useState<OrdemServico[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const [total, setTotal] = useState<number>(1);
 
   const fetchOrdens = useCallback(async () => {
     const service = new OrdemServicoService();
 
     setLoading(true);
     await service
-      .getAll()
+      .getAll(params)
       .then((res) => {
-        setOrdens(res);
+        setOrdens(res.data);
+        setTotal(res.meta.lastPage);
       })
       .catch((err) => {
         setError(err.response.data.message);
@@ -25,7 +28,7 @@ export const useGetAllOrdemServico = () => {
       .finally(() => {
         setLoading(false);
       });
-  }, []);
+  }, [params]);
 
   useEffect(() => {
     fetchOrdens();
@@ -35,6 +38,7 @@ export const useGetAllOrdemServico = () => {
     ordens,
     loading,
     error,
+    total,
     refetch: fetchOrdens,
   };
 };
@@ -147,4 +151,35 @@ export const useResponderOrdem = () => {
     responder: mutation.mutateAsync,
     loading: mutation.isPending,
   };
+};
+
+export const usePagamento = () => {
+  const service = new OrdemServicoService();
+
+  const mutation = useMutation({
+    mutationFn: ({ id }: { id: number }) => service.pagamento(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["ordens"] });
+    },
+  });
+
+  return{
+    pagamento: mutation.mutateAsync,
+    loading: mutation.isPending
+  }
+};
+export const useGarantia = () => {
+  const service = new OrdemServicoService();
+
+  const mutation = useMutation({
+    mutationFn: ({ id, garantia }: { id: number, garantia: string }) => service.garantia(id, garantia),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["ordens"] });
+    },
+  });
+
+  return{
+    garantia: mutation.mutateAsync,
+    loading: mutation.isPending
+  }
 };
