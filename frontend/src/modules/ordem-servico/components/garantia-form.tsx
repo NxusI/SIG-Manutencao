@@ -6,7 +6,7 @@ import { useGarantia } from "../hooks/use-ordem-servico";
 import { Loader2 } from "lucide-react";
 import { ToastAlert } from "@/shared/components/comon/alert";
 
-const GarantiaForm = ({ id }: { id: number }) => {
+const GarantiaForm = ({ id, refetch }: { id: number, refetch: () => void }) => {
   const [garantia, setGarantia] = useState<string>("");
   const [alert, setAlert] = useState<{
     id: number;
@@ -25,6 +25,7 @@ const GarantiaForm = ({ id }: { id: number }) => {
           title:
             "Garantia enviada com sucesso! Um e-mail de aviso acaba de ser enviado ao cliente!",
         });
+        refetch();
       })
       .catch(() => {
         setAlert({

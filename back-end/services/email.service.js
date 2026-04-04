@@ -216,3 +216,72 @@ export const enviarEmailTecnico = async (
     console.error("❌ Erro ao enviar e-mail:", e);
   }
 };
+
+export const enviarEmailGarantia = async (
+  destinatario,
+  nomeCliente,
+  idOS,
+  prazoGarantiaDias,
+) => {
+  try {
+    const transporter = await criarTransporter();
+    if (!transporter) return;
+
+    const htmlBody = `
+  <div style="background:#f5f7f9;padding:40px 20px;font-family:Arial, sans-serif;">
+    <div style="max-width:600px;margin:0 auto;background:#ffffff;border-radius:10px;overflow:hidden;box-shadow:0 8px 25px rgba(0,0,0,0.05);">
+
+      <!-- Header -->
+      <div style="background:#28a745;padding:28px;text-align:center;">
+        <h1 style="margin:0;color:#fff;font-size:22px;">Garantia Registrada</h1>
+        <p style="margin:6px 0 0 0;color:#dff5e5;font-size:13px;">
+          Sua garantia foi ativada com sucesso
+        </p>
+      </div>
+
+      <!-- Conteúdo -->
+      <div style="padding:28px;">
+        <p style="margin-top:0;font-size:15px;">
+          Olá, <strong>${nomeCliente}</strong> 👋
+        </p>
+
+        <p style="color:#555;font-size:14px;">
+          Informamos que a garantia da sua Ordem de Serviço 
+          <strong>#${idOS}</strong> foi registrada com sucesso.
+        </p>
+
+        <div style="background:#f8f9fa;border-radius:8px;padding:18px;margin:25px 0;text-align:center;">
+          <p style="margin:0;color:#777;font-size:13px;">
+            Prazo de garantia
+          </p>
+          <p style="margin:5px 0 0 0;font-size:26px;font-weight:bold;color:#28a745;">
+            ${prazoGarantiaDias} dias
+          </p>
+        </div>
+
+        <p style="font-size:13px;color:#666;">
+          Caso precise acionar a garantia, entre em contato com nossa equipe informando o número da OS.
+        </p>
+      </div>
+
+      <!-- Footer -->
+      <div style="padding:20px;text-align:center;font-size:12px;color:#888;border-top:1px solid #eee;">
+        Este é um e-mail automático do sistema <strong>SIG Manutenção</strong>.
+      </div>
+
+    </div>
+  </div>
+`;
+
+    await transporter.sendMail({
+      from: `"SIG Manutenção" <${EMAIL_USER}>`,
+      to: destinatario,
+      subject: `Garantia registrada - OS #${idOS}`,
+      html: htmlBody,
+    });
+
+    console.log(`📧 Garantia enviada para ${destinatario}`);
+  } catch (error) {
+    console.error("❌ Erro ao enviar e-mail de garantia:", error);
+  }
+};

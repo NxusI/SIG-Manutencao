@@ -12,6 +12,7 @@ import CreateOS from "./create-form";
 import {
   useFinalizarOrdem,
   useGetAllOrdemServico,
+  usePagamento,
 } from "../hooks/use-ordem-servico";
 import TableSkeleton from "@/shared/components/skeleton/table";
 import { DataTable } from "@/shared/components/comon/data-table";
@@ -39,6 +40,7 @@ const OrdemServico = () => {
 
   const { error, loading, ordens, refetch, total } =
     useGetAllOrdemServico(params);
+  const { pagamento, loading: loadingPagamento } = usePagamento();
   const { finalizar, loading: loadingFinalizar } = useFinalizarOrdem();
 
   const handleSubmit = async (id: number) => {
@@ -60,6 +62,27 @@ const OrdemServico = () => {
         });
       })
       .finally(() => setTimeout(() => setalertconfig(null), 1000));
+  };
+
+  const handlePagamento = async (id: number) => {
+    await pagamento({ id })
+      .then(() => {
+        setalertconfig({
+          id: Date.now(),
+          icon: "success",
+          title: "Pagamento registrado com sucesso!",
+        });
+        refetch();
+      })
+      .catch((err) => {
+        setalertconfig({
+          id: Date.now(),
+          icon: "error",
+          title:
+            err.response.data.message ||
+            "Houve uma inconsistência ao registrar o pagamento!",
+        });
+      });
   };
 
   return (
@@ -168,12 +191,15 @@ const OrdemServico = () => {
                 title="Emitir Garantia"
                 description="Informe ao cliente o prazo de garantia para o serviço realizado"
                 trigger={
-                  <Button variant={"secondary"}>
+                  <Button
+                    variant={"secondary"}
+                    disabled={d.prazoGarantiaDias ? true : false}
+                  >
                     <CalendarClock />
                   </Button>
                 }
               >
-                <GarantiaForm id={d.idOS} />
+                <GarantiaForm refetch={refetch} id={d.idOS} />
               </BaseModal>
             ),
             money: (
@@ -182,12 +208,18 @@ const OrdemServico = () => {
                 title="Registrar Pagamento"
                 description="Realize a baixa do pagamento para confirmar o recebimento do valor integral determinado na OS."
                 trigger={
-                  <Button variant={"outline"}>
+                  <Button variant={"outline"} disabled={d.pagamento ? true : false}>
                     <DollarSign />
                   </Button>
                 }
               >
-                <Button className="w-full">Registrar</Button>
+                <Button
+                  className="w-full"
+                  onClick={() => handlePagamento(d.idOS)}
+                  disabled={loadingPagamento}
+                >
+                  {loading ? <Loader2 className="animate-spin" /> : "Registrar"}
+                </Button>
               </BaseModal>
             ),
           }))}

@@ -3,6 +3,7 @@ import { gerarPdfOS } from "../services/pdf.service.js";
 import {
   enviarEmailOrcamento,
   enviarEmailTecnico,
+  enviarEmailGarantia,
 } from "../services/email.service.js";
 
 export const gerarOS = async (req, res) => {
@@ -442,14 +443,28 @@ export const registrarGarantia = async (req, res) => {
 
     const os = await prisma.oS.findUnique({
       where: { idOS: Number(idOS) },
-      select: { idOS: true, dataEnvioGarantia: true },
+      select: {
+        idOS: true,
+        dataEnvioGarantia: true,
+        prazoGarantiaDias: true,
+        chamado: {
+          select: {
+            cliente: {
+              select: {
+                nome: true,
+                email: true,
+              },
+            },
+          },
+        },
+      },
     });
 
     if (!os) {
       return res.status(404).json({ message: "OS não encontrada." });
     }
 
-    if (os.dataEnvioGarantia) {
+    if (os.dataEnvioGarantia || os.prazoGarantiaDias) {
       return res.status(400).json({
         message: "Garantia já registrada para esta OS.",
       });
@@ -462,6 +477,23 @@ export const registrarGarantia = async (req, res) => {
         prazoGarantiaDias: Number(prazoGarantiaDias),
       },
     });
+
+    const cliente = os.chamado?.cliente;
+
+    if (cliente?.email) {
+      console.log(`📨 Enviando email de garantia para: ${cliente.email}`);
+
+      enviarEmailGarantia(
+        cliente.email,
+        cliente.nome,
+        os.idOS,
+        prazoGarantiaDias,
+      );
+
+      console.log(`✅ Função de envio de email chamada com sucesso`);
+    } else {
+      console.log("⚠️ Cliente sem email, envio não realizado");
+    }
 
     return res.status(200).json({
       message: "Garantia registrada com sucesso.",

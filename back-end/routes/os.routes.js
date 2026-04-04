@@ -7,6 +7,7 @@ import {
   finalizarOS,
   responderOrcamento,
   darBaixaPagamento,
+  registrarGarantia
 } from "../controllers/os.controller.js";
 import { verificarToken } from "../middlewares/auth.middleware.js";
 

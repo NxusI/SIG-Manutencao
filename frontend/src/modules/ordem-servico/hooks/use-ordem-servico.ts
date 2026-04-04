@@ -168,6 +168,7 @@ export const usePagamento = () => {
     loading: mutation.isPending
   }
 };
+
 export const useGarantia = () => {
   const service = new OrdemServicoService();
 
