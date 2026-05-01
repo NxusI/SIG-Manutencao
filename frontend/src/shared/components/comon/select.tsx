@@ -1,5 +1,8 @@
+"use client"
+
 import Select, { StylesConfig } from "react-select";
 import { OptionFormatted, SelectProps } from "@/shared/types/components.types";
+import { useEffect, useState } from "react";
 
 const customStyles: StylesConfig<OptionFormatted, false> = {
   menuPortal: (base) => ({
@@ -65,13 +68,21 @@ export default function CustomSelect({
   className,
   onSearchInputChange,
 }: SelectProps) {
+  const [menuPortalTarget, setMenuPortalTarget] = useState<HTMLElement | null>(
+    null
+  );
+
+  useEffect(() => {
+    setMenuPortalTarget(document.body);
+  }, []);
+
   return (
     <Select
       placeholder={label}
       isLoading={loading}
       isDisabled={disable}
       styles={customStyles}
-      menuPortalTarget={document.body}
+      menuPortalTarget={menuPortalTarget ?? undefined}
       menuPosition="fixed"
       classNamePrefix="react-select"
       options={options}

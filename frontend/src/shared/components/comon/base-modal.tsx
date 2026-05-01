@@ -1,3 +1,5 @@
+"use client"
+
 import clsx from "clsx";
 import {
   Dialog,
@@ -31,14 +33,17 @@ export default function BaseModal({
 
       <DialogContent
         onInteractOutside={(e) => {
-          if (document.body.classList.contains("select-open")) {
+          if (
+            typeof document !== "undefined" &&
+            document.body.classList.contains("select-open")
+          ) {
             e.preventDefault();
           }
         }}
         className={clsx(
           "w-full rounded-lg p-0",
           "!max-h-[90vh] overflow-hidden flex flex-col",
-          sizeClasses[size]
+          sizeClasses[size],
         )}
         style={{
           backgroundColor: "var(--color-card)",
